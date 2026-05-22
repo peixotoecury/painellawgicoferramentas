@@ -54,7 +54,7 @@ body::before{
 .logo-gico-col{display:flex;flex-direction:column;align-items:flex-start;}
 .logo-module{font-size:10px;font-weight:400;color:rgba(255,255,255,.8);letter-spacing:1px;align-self:flex-end;margin-bottom:-1px;}
 .logo-gico{font-size:44px;font-weight:300;color:#fff;letter-spacing:-2px;line-height:1;}
-.logo-tagline{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:3px;font-weight:300;margin-top:3px;}
+.logo-tagline{font-size:9px;color:rgba(255,255,255,.75);letter-spacing:3px;font-weight:400;margin-top:3px;}
 .header-right{text-align:right;}
 .firm-name{font-size:13px;font-weight:600;color:#fff;opacity:.85;}
 .firm-sub{font-size:11px;color:var(--muted);margin-top:3px;}
@@ -205,10 +205,31 @@ body::before{
 .footer strong{color:var(--cyan);}
 
 @media(max-width:768px){
-  .header,.hero,.grid-section,.footer{padding-left:24px;padding-right:24px;}
-  .footer{margin-left:24px;margin-right:24px;flex-direction:column;gap:8px;text-align:center;}
-  .hero-title{font-size:32px;}
+  /* Header */
+  .header{padding:18px 20px;flex-wrap:wrap;gap:12px;}
+  .logo-law,.logo-gico{font-size:32px;}
+  .logo-module{font-size:9px;}
+  .header-right{text-align:left;}
+  .firm-name{font-size:12px;}
+  .firm-sub{font-size:10px;}
+
+  /* Hero */
+  .hero{padding:40px 20px 32px;}
+  .hero-title{font-size:28px;letter-spacing:-1px;}
+  .hero-desc{font-size:13px;}
+
+  /* Grid */
+  .grid-section{padding:24px 16px 40px;}
   .cards-grid{grid-template-columns:1fr;}
+
+  /* Cards */
+  .card-body{padding:20px 18px 16px;}
+  .card-docs{padding:14px 18px 16px;}
+  .card-name{font-size:16px;}
+  .btn-open{width:100%;justify-content:center;}
+
+  /* Footer */
+  .footer{margin:0 16px 32px;padding:16px 20px;flex-direction:column;gap:6px;text-align:center;}
 }
 </style>
 </head>
