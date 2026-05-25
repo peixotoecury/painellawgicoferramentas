@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<title>LAWgico Prazos & Agendas — Infográfico</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',Arial,sans-serif;background:#F4FAFD;color:#1A2E3B;width:1100px;margin:0 auto;padding:32px 24px 48px;}
+
+  /* HEADER */
+  .header{background:linear-gradient(135deg,#002236 0%,#003B5C 55%,#004E7C 100%);border-radius:16px;padding:40px 48px;display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;position:relative;overflow:hidden;}
+  .header::before{content:'';position:absolute;right:-40px;top:-60px;width:280px;height:280px;border-radius:50%;background:rgba(0,174,239,.12);}
+  .header::after{content:'';position:absolute;right:60px;bottom:-50px;width:180px;height:180px;border-radius:50%;background:rgba(0,174,239,.10);}
+  .logo{font-size:54px;font-weight:900;color:#fff;line-height:1;letter-spacing:-1px;}
+  .logo span{color:#00AEEF;}
+  .logo-sub{font-size:13px;font-weight:300;color:rgba(255,255,255,.55);letter-spacing:4px;text-transform:uppercase;margin-top:4px;}
+  .header-right{text-align:right;position:relative;z-index:1;}
+  .header-tagline{font-size:20px;font-weight:600;color:#fff;line-height:1.3;max-width:360px;}
+  .header-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:8px;}
+  .header-badge{display:inline-block;margin-top:14px;background:#00AEEF;color:#fff;font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:.5px;}
+
+  /* SECTION TITLE */
+  .sec-title{font-size:11px;font-weight:700;color:#00AEEF;text-transform:uppercase;letter-spacing:2px;margin:28px 0 14px;}
+
+  /* HIGHLIGHTS */
+  .highlights{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
+  .hl-card{background:#003B5C;border-radius:10px;padding:18px 16px;text-align:center;}
+  .hl-num{font-size:36px;font-weight:900;color:#00AEEF;line-height:1;}
+  .hl-label{font-size:11px;color:rgba(255,255,255,.7);margin-top:6px;line-height:1.4;}
+
+  /* STATUS */
+  .status-row{display:flex;gap:10px;margin-bottom:28px;}
+  .st-card{flex:1;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:10px;}
+  .st-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+  .st-name{font-size:12px;font-weight:700;}
+  .st-desc{font-size:10px;margin-top:2px;opacity:.75;}
+  .st-vencido{background:#fdecea;} .st-vencido .st-dot{background:#c62828;} .st-vencido .st-name{color:#c62828;}
+  .st-fatal{background:#ffebee;} .st-fatal .st-dot{background:#7b0000;} .st-fatal .st-name{color:#7b0000;}
+  .st-d1{background:#fff3e0;} .st-d1 .st-dot{background:#e65100;} .st-d1 .st-name{color:#e65100;}
+  .st-d2{background:#fffde7;} .st-d2 .st-dot{background:#f57f17;} .st-d2 .st-name{color:#f57f17;}
+  .st-futuro{background:#e8f5e9;} .st-futuro .st-dot{background:#2d7d46;} .st-futuro .st-name{color:#2d7d46;}
+
+  /* MODULOS */
+  .mod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;}
+  .mod-card{background:#fff;border:1px solid #BFD6E4;border-radius:10px;padding:14px 14px 12px;position:relative;transition:box-shadow .2s;}
+  .mod-card:hover{box-shadow:0 6px 20px rgba(0,59,92,.10);}
+  .mod-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .mod-icon{width:34px;height:34px;border-radius:8px;background:#E8F4FA;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+  .mod-name{font-size:12px;font-weight:700;color:#003B5C;line-height:1.3;}
+  .mod-desc{font-size:10.5px;color:#557789;line-height:1.5;}
+  .mod-tag{position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;color:#00AEEF;background:#E8F4FA;padding:2px 7px;border-radius:10px;}
+  .mod-tag.admin{color:#C0392B;background:#fdecea;}
+
+  /* PERFIS */
+  .perfis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
+  .perfil-card{border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(0,59,92,.08);}
+  .perfil-head{padding:18px 20px 14px;color:#fff;}
+  .perfil-head.admin{background:#C0392B;}
+  .perfil-head.gestor{background:#00AEEF;}
+  .perfil-head.colaborador{background:#27AE60;}
+  .perfil-role{font-size:18px;font-weight:700;margin-bottom:4px;}
+  .perfil-sub{font-size:11px;opacity:.85;}
+  .perfil-body{background:#fff;border:1px solid #BFD6E4;border-top:none;padding:14px 18px;}
+  .perfil-item{font-size:11px;color:#1A2E3B;padding:5px 0;border-bottom:1px solid #EFF6FA;display:flex;gap:8px;align-items:flex-start;}
+  .perfil-item:last-child{border-bottom:none;}
+  .perfil-item::before{content:"✓";color:#00AEEF;font-weight:700;flex-shrink:0;}
+
+  /* FLUXO */
+  .fluxo-row{display:flex;align-items:center;gap:0;margin-bottom:28px;}
+  .fluxo-card{flex:1;background:#fff;border:1px solid #BFD6E4;border-radius:10px;padding:16px;text-align:center;}
+  .fluxo-icon{font-size:26px;margin-bottom:6px;}
+  .fluxo-name{font-size:11px;font-weight:700;color:#003B5C;}
+  .fluxo-desc{font-size:9.5px;color:#557789;margin-top:3px;line-height:1.4;}
+  .fluxo-arrow{font-size:20px;color:#00AEEF;padding:0 8px;flex-shrink:0;}
+
+  /* FOOTER */
+  .footer{background:#003B5C;border-radius:12px;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;color:rgba(255,255,255,.6);font-size:11px;}
+  .footer strong{color:#00AEEF;}
+
+  /* ACESSO */
+  .acesso-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;}
+  .acesso-card{background:#fff;border:1px solid #BFD6E4;border-radius:10px;padding:14px;display:flex;align-items:flex-start;gap:12px;}
+  .acesso-icon{width:36px;height:36px;border-radius:8px;background:#003B5C;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .acesso-t{font-size:12px;font-weight:700;color:#003B5C;margin-bottom:3px;}
+  .acesso-d{font-size:10.5px;color:#557789;line-height:1.4;}
+
+  @media print{body{width:100%;padding:0;}.mod-card:hover{box-shadow:none;}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="logo">LAW<span>gico</span></div>
+    <div style="font-size:19px;font-weight:300;color:rgba(255,255,255,.6);letter-spacing:2px;margin-top:2px;">prazos &amp; agendas</div>
+    <div class="logo-sub">Peixoto &amp; Cury Advogados</div>
+  </div>
+  <div class="header-right">
+    <div class="header-tagline">Base Diária de Prazos<br/>Processuais e Agendas</div>
+    <div class="header-sub">Atualização diária · Acesso por perfil · Importação Excel</div>
+    <div class="header-badge">Controladoria 2026</div>
+  </div>
+</div>
+
+<!-- HIGHLIGHTS -->
+<div class="sec-title">Visão Geral do Sistema</div>
+<div class="highlights">
+  <div class="hl-card">
+    <div class="hl-num">9</div>
+    <div class="hl-label">Módulos e abas funcionais</div>
+  </div>
+  <div class="hl-card">
+    <div class="hl-num">3</div>
+    <div class="hl-label">Perfis de acesso distintos</div>
+  </div>
+  <div class="hl-card">
+    <div class="hl-num">100%</div>
+    <div class="hl-label">Web · sem instalação</div>
+  </div>
+  <div class="hl-card">
+    <div class="hl-num">5</div>
+    <div class="hl-label">Classificações de urgência</div>
+  </div>
+</div>
+
+<!-- CLASSIFICAÇÃO DE URGÊNCIA -->
+<div class="sec-title">Classificação de Urgência de Prazos e Agendas</div>
+<div class="status-row">
+  <div class="st-card st-fatal">
+    <div class="st-dot"></div>
+    <div><div class="st-name">Fatal</div><div class="st-desc">Prazo improrrogável · risco máximo</div></div>
+  </div>
+  <div class="st-card st-vencido">
+    <div class="st-dot"></div>
+    <div><div class="st-name">Vencido</div><div class="st-desc">Prazo já expirado</div></div>
+  </div>
+  <div class="st-card st-d1">
+    <div class="st-dot"></div>
+    <div><div class="st-name">D-1</div><div class="st-desc">Vence amanhã · atenção imediata</div></div>
+  </div>
+  <div class="st-card st-d2">
+    <div class="st-dot"></div>
+    <div><div class="st-name">D-2</div><div class="st-desc">Vence em 2 dias · atenção</div></div>
+  </div>
+  <div class="st-card st-futuro">
+    <div class="st-dot"></div>
+    <div><div class="st-name">Futuro</div><div class="st-desc">Prazo dentro do calendário normal</div></div>
+  </div>
+</div>
+
+<!-- MÓDULOS -->
+<div class="sec-title">Módulos do Sistema</div>
+<div class="mod-grid">
+
+  <div class="mod-card">
+    <div class="mod-tag">Aba 1</div>
+    <div class="mod-top"><div class="mod-icon">📋</div><div class="mod-name">Dashboard Executivo</div></div>
+    <div class="mod-desc">KPIs em tempo real: prazos gerais, vencidos, fatais, D-1, D-2; agendas e audiências do dia. Ranking de responsáveis com mais fatais e tarefas críticas.</div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-tag">Aba 2</div>
+    <div class="mod-top"><div class="mod-icon">📅</div><div class="mod-name">Agendas</div></div>
+    <div class="mod-desc">Listagem completa das agendas da Controladoria com filtros por profissional, grupo e status de urgência.</div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-tag">Aba 3</div>
+    <div class="mod-top"><div class="mod-icon">👥</div><div class="mod-name">Agenda Equipe</div></div>
+    <div class="mod-desc">Visão consolidada da agenda de cada membro da equipe. Facilita o acompanhamento individual da carga de trabalho.</div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-tag">Aba 4</div>
+    <div class="mod-top"><div class="mod-icon">⚖️</div><div class="mod-name">Audiências</div></div>
+    <div class="mod-desc">Controle das audiências com indicadores de status, filtros e visão por período e responsável.</div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-tag">Aba 5</div>
+    <div class="mod-top"><div class="mod-icon">🚫</div><div class="mod-name">Redesignadas/Canceladas</div></div>
+    <div class="mod-desc">Registro e acompanhamento de audiências redesignadas ou canceladas para controle histórico e rastreio.</div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-tag">Aba 6</div>
+    <div class="mod-top"><div class="mod-icon">📊</div><div class="mod-name">Quadro Geral</div></div>
+    <div class="mod-desc">Visão consolidada da carteira para gestores e sócios. Resumo executivo com totais por grupo e profissional.</div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-tag admin">Admin</div>
+    <div class="mod-top"><div class="mod-icon">⚙️</div><div class="mod-name">Gestão de Usuários</div></div>
+    <div class="mod-desc">Painel exclusivo para o administrador: criação de usuários, redefinição de senhas e controle de perfis de acesso.</div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-tag">Aba 8</div>
+    <div class="mod-top"><div class="mod-icon">📈</div><div class="mod-name">Exposição por Grupo</div></div>
+    <div class="mod-desc">Análise da exposição de prazos e agendas por grupo de trabalho, com ranking e identificação de pontos críticos.</div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-tag">Pessoal</div>
+    <div class="mod-top"><div class="mod-icon">👤</div><div class="mod-name">Meu Painel</div></div>
+    <div class="mod-desc">Visão personalizada do colaborador: seus próprios prazos, agendas e audiências, sem acesso às informações dos demais.</div>
+  </div>
+
+</div>
+
+<!-- PERFIS -->
+<div class="sec-title">Perfis de Acesso</div>
+<div class="perfis">
+  <div class="perfil-card">
+    <div class="perfil-head admin">
+      <div class="perfil-role">⚙️ Administrador</div>
+      <div class="perfil-sub">Acesso e controle total do sistema</div>
+    </div>
+    <div class="perfil-body">
+      <div class="perfil-item">Acessa todos os módulos e abas</div>
+      <div class="perfil-item">Gerencia usuários, senhas e perfis</div>
+      <div class="perfil-item">Visualiza Quadro Geral e Exposição</div>
+      <div class="perfil-item">Faz upload da planilha diária</div>
+    </div>
+  </div>
+  <div class="perfil-card">
+    <div class="perfil-head gestor">
+      <div class="perfil-role">📊 Sócio / Gestor</div>
+      <div class="perfil-sub">Visão gerencial completa</div>
+    </div>
+    <div class="perfil-body">
+      <div class="perfil-item">Dashboard executivo com todos os KPIs</div>
+      <div class="perfil-item">Agendas, audiências e exposição por grupo</div>
+      <div class="perfil-item">Quadro Geral da carteira</div>
+      <div class="perfil-item">Sem acesso à gestão de usuários</div>
+    </div>
+  </div>
+  <div class="perfil-card">
+    <div class="perfil-head colaborador">
+      <div class="perfil-role">👤 Colaborador</div>
+      <div class="perfil-sub">Visão restrita ao próprio painel</div>
+    </div>
+    <div class="perfil-body">
+      <div class="perfil-item">Acessa apenas o Meu Painel</div>
+      <div class="perfil-item">Visualiza seus próprios prazos e agendas</div>
+      <div class="perfil-item">Consulta audiências próprias</div>
+      <div class="perfil-item">Sem acesso a dados de terceiros</div>
+    </div>
+  </div>
+</div>
+
+<!-- ACESSO E SEGURANÇA -->
+<div class="sec-title">Acesso e Segurança</div>
+<div class="acesso-grid">
+  <div class="acesso-card">
+    <div class="acesso-icon">🔐</div>
+    <div><div class="acesso-t">Login por e-mail</div><div class="acesso-d">Autenticação com e-mail corporativo @peixotoecury.com.br e senha individual</div></div>
+  </div>
+  <div class="acesso-card">
+    <div class="acesso-icon">🔑</div>
+    <div><div class="acesso-t">Alteração de senha</div><div class="acesso-d">Cada usuário pode alterar sua senha. O admin pode redefinir qualquer senha.</div></div>
+  </div>
+  <div class="acesso-card">
+    <div class="acesso-icon">📥</div>
+    <div><div class="acesso-t">Importação Excel</div><div class="acesso-d">Upload diário da planilha .xlsx com todos os prazos e agendas do escritório</div></div>
+  </div>
+  <div class="acesso-card">
+    <div class="acesso-icon">🔍</div>
+    <div><div class="acesso-t">Filtros avançados</div><div class="acesso-d">Filtre por profissional, grupo e status de urgência em qualquer aba</div></div>
+  </div>
+  <div class="acesso-card">
+    <div class="acesso-icon">🛡️</div>
+    <div><div class="acesso-t">Controle por perfil</div><div class="acesso-d">Cada usuário acessa apenas o que seu perfil permite — dados protegidos por nível</div></div>
+  </div>
+  <div class="acesso-card">
+    <div class="acesso-icon">🌐</div>
+    <div><div class="acesso-t">Acesso pelo navegador</div><div class="acesso-d">100% web — nenhuma instalação necessária. Funciona em qualquer dispositivo</div></div>
+  </div>
+</div>
+
+<!-- FLUXO DE USO -->
+<div class="sec-title">Fluxo de Uso Diário</div>
+<div class="fluxo-row">
+  <div class="fluxo-card">
+    <div class="fluxo-icon">📊</div>
+    <div class="fluxo-name">Exportar planilha</div>
+    <div class="fluxo-desc">Controladoria exporta o Excel com prazos e agendas do dia</div>
+  </div>
+  <div class="fluxo-arrow">→</div>
+  <div class="fluxo-card">
+    <div class="fluxo-icon">📥</div>
+    <div class="fluxo-name">Upload no sistema</div>
+    <div class="fluxo-desc">Admin faz o upload da planilha na barra superior</div>
+  </div>
+  <div class="fluxo-arrow">→</div>
+  <div class="fluxo-card">
+    <div class="fluxo-icon">⚡</div>
+    <div class="fluxo-name">Dados atualizados</div>
+    <div class="fluxo-desc">Sistema processa e atualiza todos os KPIs e tabelas automaticamente</div>
+  </div>
+  <div class="fluxo-arrow">→</div>
+  <div class="fluxo-card">
+    <div class="fluxo-icon">🔍</div>
+    <div class="fluxo-name">Sócios consultam</div>
+    <div class="fluxo-desc">Sócios acessam o dashboard executivo com a visão do dia</div>
+  </div>
+  <div class="fluxo-arrow">→</div>
+  <div class="fluxo-card">
+    <div class="fluxo-icon">👤</div>
+    <div class="fluxo-name">Equipe consulta</div>
+    <div class="fluxo-desc">Colaboradores acessam o Meu Painel com seus próprios prazos</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>Peixoto &amp; Cury Advogados &nbsp;·&nbsp; <strong>Controladoria</strong> &nbsp;·&nbsp; 2026</div>
+  <div>LAWgico Prazos &amp; Agendas &nbsp;·&nbsp; Acesso: <strong>peixotoecury.github.io/dashboard-juridico/</strong></div>
+</div>
+
+</body>
+</html>

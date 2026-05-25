@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Manual — Protocolados | Peixoto &amp; Cury</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=DM+Mono:wght@400;600&display=swap');
+
+:root{
+  --navy:   #051520;
+  --navy2:  #0a2235;
+  --navy3:  #0e2f48;
+  --cyan:   #00A9E0;
+  --cyan2:  #1ae3ff;
+  --white:  #FFFFFF;
+  --text:   #e8edf3;
+  --muted:  #7a9bb5;
+  --border: rgba(0,169,224,.18);
+  --card:   rgba(255,255,255,.04);
+  --card-h: rgba(255,255,255,.07);
+  --green:  #27AE60;
+  --amber:  #E67E22;
+  --red:    #e74c3c;
+  --red2:   #c0392b;
+  --purple: #A78BFA;
+  --shadow: 0 8px 32px rgba(0,0,0,.4);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%, rgba(0,169,224,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 100%, rgba(0,59,92,.15) 0%, transparent 55%);
+  pointer-events:none;
+}
+
+/* ── HEADER ───────────────────────────────────── */
+.header{
+  position:relative;z-index:10;
+  padding:20px 48px;
+  border-bottom:1px solid var(--border);
+  background:rgba(5,21,32,.8);
+  backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  position:sticky;top:0;
+}
+.logo-area{display:flex;align-items:center;gap:14px;}
+.logo-area img{height:38px;width:auto;object-fit:contain;}
+.logo-text .brand{font-size:20px;font-weight:900;color:#fff;letter-spacing:-0.5px;}
+.logo-text .brand span{color:var(--cyan);}
+.logo-text .sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:1px;}
+.header-right{text-align:right;}
+.firm-name{font-size:12px;font-weight:600;color:var(--white);opacity:.85;}
+.firm-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.manual-badge{
+  display:inline-block;margin-top:8px;
+  background:rgba(0,169,224,.15);border:1px solid var(--border);
+  color:var(--cyan);font-size:10px;font-weight:700;
+  padding:3px 12px;border-radius:20px;letter-spacing:.5px;
+}
+
+/* ── HERO ─────────────────────────────────────── */
+.hero{
+  position:relative;z-index:5;
+  padding:56px 48px 40px;
+  border-bottom:1px solid var(--border);
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,169,224,.10);border:1px solid rgba(0,169,224,.25);
+  color:var(--cyan);font-size:10px;font-weight:700;
+  padding:5px 16px;border-radius:20px;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:20px;
+}
+.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.hero h1{font-size:38px;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-1px;margin-bottom:12px;}
+.hero h1 span{color:var(--cyan);}
+.hero p{font-size:15px;color:var(--muted);line-height:1.7;max-width:680px;}
+
+/* ── NAV ÍNDICE ───────────────────────────────── */
+.toc{
+  position:relative;z-index:5;
+  padding:32px 48px;
+  border-bottom:1px solid var(--border);
+  background:var(--card);
+}
+.toc-title{font-size:10px;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;}
+.toc-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:10px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  text-decoration:none;color:var(--muted);font-size:12px;font-weight:500;
+  transition:all .2s;
+}
+.toc-item:hover{background:rgba(0,169,224,.10);border-color:var(--cyan);color:var(--cyan);}
+.toc-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--cyan);font-weight:600;width:18px;flex-shrink:0;}
+
+/* ── CONTEÚDO ─────────────────────────────────── */
+.content{position:relative;z-index:5;max-width:900px;margin:0 auto;padding:0 48px 80px;}
+
+.section{margin-top:60px;}
+.sec-anchor{display:block;position:relative;top:-80px;visibility:hidden;}
+.sec-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;}
+.sec-num{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:rgba(0,169,224,.15);border:1px solid rgba(0,169,224,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:13px;font-weight:600;color:var(--cyan);
+}
+.sec-title{font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.3px;}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+
+p{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:14px;}
+p strong{color:var(--text);}
+
+/* ── CARD INFO ────────────────────────────────── */
+.info-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:22px 26px;margin-bottom:16px;
+}
+.info-card.cyan-l{border-left:3px solid var(--cyan);}
+.info-card.green-l{border-left:3px solid var(--green);}
+.info-card.amber-l{border-left:3px solid var(--amber);}
+.info-card.red-l{border-left:3px solid var(--red);}
+.info-card.purple-l{border-left:3px solid var(--purple);}
+.info-card h3{font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;}
+.info-card p{margin-bottom:0;font-size:13px;}
+
+/* ── KPI GRID ─────────────────────────────────── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:24px;}
+.kpi-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px;transition:all .2s;
+}
+.kpi-card:hover{background:var(--card-h);border-color:rgba(0,169,224,.35);}
+.kpi-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.kpi-icon{font-size:22px;}
+.kpi-color{
+  font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px;letter-spacing:.5px;
+}
+.kpi-color.cyan {background:rgba(0,169,224,.12);color:var(--cyan);border:1px solid rgba(0,169,224,.3);}
+.kpi-color.red  {background:rgba(231,76,60,.15);color:var(--red);border:1px solid rgba(231,76,60,.3);}
+.kpi-color.red2 {background:rgba(192,57,43,.15);color:var(--red2);border:1px solid rgba(192,57,43,.3);}
+.kpi-color.yel  {background:rgba(230,126,34,.12);color:#d4a017;border:1px solid rgba(230,126,34,.25);}
+.kpi-color.green{background:rgba(39,174,96,.12);color:var(--green);border:1px solid rgba(39,174,96,.25);}
+.kpi-color.org  {background:rgba(230,126,34,.12);color:var(--amber);border:1px solid rgba(230,126,34,.25);}
+.kpi-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;}
+.kpi-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+.kpi-example{
+  margin-top:10px;padding:8px 12px;border-radius:8px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;
+}
+.kpi-example b{color:var(--cyan);}
+
+/* ── FILTRO CARDS ─────────────────────────────── */
+.filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:24px;}
+.filter-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px 18px;
+}
+.filter-tag{
+  display:inline-block;border-radius:6px;padding:3px 10px;font-size:10px;font-weight:700;
+  margin-bottom:10px;letter-spacing:.3px;
+}
+.filter-tag.fatal {background:rgba(231,76,60,.2);color:var(--red);border:1px solid rgba(231,76,60,.4);}
+.filter-tag.vencido{background:rgba(192,57,43,.2);color:var(--red2);border:1px solid rgba(192,57,43,.4);}
+.filter-tag.d1    {background:rgba(230,126,34,.15);color:#d4a017;border:1px solid rgba(230,126,34,.3);}
+.filter-tag.combo {background:rgba(231,76,60,.15);color:var(--red);border:1px solid rgba(231,76,60,.35);}
+.filter-tag.grupo {background:rgba(0,169,224,.12);color:var(--cyan);border:1px solid rgba(0,169,224,.3);}
+.filter-card p{font-size:12px;color:var(--muted);line-height:1.6;margin:0;}
+
+/* ── TABLE ────────────────────────────────────── */
+.manual-table{width:100%;border-collapse:collapse;margin:16px 0 24px;border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.manual-table th{
+  text-align:left;padding:10px 14px;font-size:10px;font-weight:700;
+  letter-spacing:.5px;text-transform:uppercase;color:var(--muted);
+  background:rgba(255,255,255,.05);border-bottom:1px solid var(--border);
+}
+.manual-table td{
+  padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);
+  font-size:12px;color:var(--muted);line-height:1.6;
+}
+.manual-table td:first-child{color:#fff;font-weight:600;}
+.manual-table tr:last-child td{border-bottom:none;}
+.manual-table tr:hover td{background:rgba(0,169,224,.04);}
+
+/* ── STEPS ────────────────────────────────────── */
+.steps{display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
+.step{display:flex;align-items:flex-start;gap:14px;}
+.step-num{
+  width:28px;height:28px;border-radius:8px;flex-shrink:0;
+  background:rgba(0,169,224,.15);border:1px solid rgba(0,169,224,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--cyan);
+}
+.step-body h4{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;}
+.step-body p{font-size:12px;color:var(--muted);margin:0;line-height:1.6;}
+
+/* ── ALERT ────────────────────────────────────── */
+.alert{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:16px 20px;border-radius:12px;margin-bottom:20px;
+}
+.alert.info{background:rgba(0,169,224,.08);border:1px solid rgba(0,169,224,.25);}
+.alert.warn{background:rgba(230,126,34,.08);border:1px solid rgba(230,126,34,.25);}
+.alert.danger{background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.25);}
+.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.alert-body{font-size:13px;color:var(--muted);line-height:1.7;}
+.alert-body strong{color:var(--text);}
+.alert.info .alert-body strong{color:var(--cyan);}
+.alert.warn .alert-body strong{color:var(--amber);}
+.alert.danger .alert-body strong{color:var(--red);}
+
+/* ── GLOSSÁRIO ────────────────────────────────── */
+.glossary{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.gterm{
+  display:flex;gap:16px;align-items:flex-start;
+  padding:14px 18px;border-radius:12px;
+  background:var(--card);border:1px solid var(--border);
+}
+.gword{
+  font-family:'DM Mono',monospace;font-size:11px;font-weight:600;
+  color:var(--cyan);min-width:130px;flex-shrink:0;padding-top:2px;
+}
+.gdef{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* ── FOOTER ───────────────────────────────────── */
+.footer{
+  position:relative;z-index:5;
+  margin:0 48px 40px;padding:20px 28px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:14px;display:flex;align-items:center;justify-content:space-between;
+  font-size:11px;color:var(--muted);flex-wrap:wrap;gap:10px;
+}
+.footer strong{color:var(--cyan);}
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(0,169,224,.12);border:1px solid rgba(0,169,224,.3);
+  color:var(--cyan);font-size:11px;font-weight:700;
+  padding:6px 16px;border-radius:8px;text-decoration:none;
+  transition:all .2s;
+}
+.back-btn:hover{background:rgba(0,169,224,.22);}
+
+@media(max-width:768px){
+  .header,.hero,.toc,.content,.footer{padding-left:20px;padding-right:20px;}
+  .hero h1{font-size:28px;}
+  .kpi-grid,.filter-grid{grid-template-columns:1fr;}
+  .toc-grid{grid-template-columns:1fr 1fr;}
+  .footer{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-area">
+    <img src="10.png" alt="Peixoto &amp; Cury">
+    <div class="logo-text">
+      <div class="brand">LAW<span>gico</span></div>
+      <div class="sub">Manual do Usuário</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="firm-name">Peixoto &amp; Cury Advogados</div>
+    <div class="firm-sub">Controladoria — Time B</div>
+    <div class="manual-badge">Protocolados</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag"><span>Manual do Usuário</span></div>
+  <h1>Protocolados<br/><span>Gestão de Protocolados</span></h1>
+  <p>Guia completo para utilização do sistema de gestão de protocolados do escritório. Entenda cada indicador, saiba como filtrar dados e como importar planilhas Excel.</p>
+</div>
+
+<!-- ÍNDICE -->
+<div class="toc">
+  <div class="toc-title">Índice</div>
+  <div class="toc-grid">
+    <a class="toc-item" href="#sec1"><span class="toc-num">01</span>O que é o sistema</a>
+    <a class="toc-item" href="#sec2"><span class="toc-num">02</span>Como acessar</a>
+    <a class="toc-item" href="#sec3"><span class="toc-num">03</span>Cabeçalho e badges</a>
+    <a class="toc-item" href="#sec4"><span class="toc-num">04</span>Indicadores (KPIs)</a>
+    <a class="toc-item" href="#sec5"><span class="toc-num">05</span>Filtros por situação</a>
+    <a class="toc-item" href="#sec6"><span class="toc-num">06</span>Filtros por grupo</a>
+    <a class="toc-item" href="#sec7"><span class="toc-num">07</span>Tabelas de análise</a>
+    <a class="toc-item" href="#sec8"><span class="toc-num">08</span>Importar e exportar Excel</a>
+    <a class="toc-item" href="#sec9"><span class="toc-num">09</span>Seção acumulado</a>
+    <a class="toc-item" href="#sec10"><span class="toc-num">10</span>Glossário</a>
+  </div>
+</div>
+
+<!-- CONTEÚDO -->
+<div class="content">
+
+  <!-- 1. O QUE É -->
+  <div class="section" id="sec1">
+    <span class="sec-anchor"></span>
+    <div class="sec-header">
+      <div class="sec-num">01</div>
+      <div class="sec-title">O que é o sistema</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <p>O <strong>Protocolados</strong> é um painel de gestão desenvolvido internamente pela Controladoria do escritório Peixoto &amp; Cury Advogados para monitorar e controlar os processos protocolados.</p>
+
+    <p>Toda semana, após o fechamento do período, a Controladoria importa uma planilha Excel com os dados de prazos realizados. O sistema processa automaticamente essas informações e apresenta indicadores de performance por responsável e por grupo, destacando situações de risco como protocolos no dia fatal e trabalhos fora do horário comercial.</p>
+
+    <div class="info-card cyan-l">
+      <h3>Objetivo principal</h3>
+      <p>Dar visibilidade à gestão sobre <strong>quem protocola no limite</strong> (dia fatal), <strong>quem antecipa prazos</strong> com qualidade e <strong>onde estão os maiores riscos</strong> processuais da semana.</p>
+    </div>
+
+    <div class="info-card green-l">
+      <h3>Público-alvo</h3>
+      <p>Controladoria Jurídica, coordenadores de grupo e sócios responsáveis pela supervisão da área trabalhista.</p>
+    </div>
+  </div>
+
+  <!-- 2. COMO ACESSAR -->
+  <div class="section" id="sec2">
+    <span class="sec-anchor"></span>
+    <div class="sec-header">
+      <div class="sec-num">02</div>
+      <div class="sec-title">Como acessar</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <p>O sistema funciona diretamente no navegador, sem necessidade de instalação. Basta abrir o arquivo <strong>index.html</strong> localizado na pasta <strong>Baixados</strong> dentro do OneDrive compartilhado da Controladoria.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Acesse o OneDrive compartilhado</h4>
+          <p>Navegue até a pasta: <strong>Pastas - Time B &gt; Controladoria &gt; Baixados</strong></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Abra o arquivo index.html</h4>
+          <p>Dê duplo clique no arquivo <strong>index.html</strong>. Ele abrirá automaticamente no navegador padrão.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Importe a planilha da semana (se necessário)</h4>
+          <p>Se os dados ainda não estiverem carregados, use o botão <strong>Importar Excel</strong> no topo para carregar a planilha semanal.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert info">
+      <span class="alert-icon">ℹ️</span>
+      <div class="alert-body"><strong>Compatibilidade:</strong> O sistema funciona nos navegadores Google Chrome, Microsoft Edge e Firefox. Recomenda-se o uso do Chrome ou Edge para melhor desempenho.</div>
+    </div>
+  </div>
+
+  <!-- 3. CABEÇALHO -->
+  <div class="section" id="sec3">
+    <span class="sec-anchor"></span>
+    <div class="sec-header">
+      <div class="sec-num">03</div>
+      <div class="sec-title">Cabeçalho e badges</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <p>O cabeçalho do sistema exibe as informações gerais da semana analisada e fica fixo no topo da tela durante a navegação.</p>
+
+    <table class="manual-table">
+      <thead><tr><th>Elemento</th><th>O que mostra</th></tr></thead>
+      <tbody>
+        <tr><td>Título</td><td>Nome do sistema e período analisado (ex.: 11/05/2026 a 17/05/2026)</td></tr>
+        <tr><td>Badge azul</td><td>Total de prazos e agendas do período (ex.: 1.396 PRAZOS · 3.788 AGENDAS)</td></tr>
+        <tr><td>Badge vermelho</td><td>Quantidade de prazos fatais e trabalhos fora do horário (ex.: 183 FATAIS · 162 FORA HORÁRIO)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="alert warn">
+      <span class="alert-icon">⚠️</span>
+      <div class="alert-body"><strong>Atenção:</strong> O período exibido no cabeçalho reflete sempre a semana da planilha mais recente importada. Verifique se o período está correto antes de usar os dados em reuniões ou relatórios.</div>
+    </div>
+  </div>
+
+  <!-- 4. KPIs -->
+  <div class="section" id="sec4">
+    <span class="sec-anchor"></span>
+    <div class="sec-header">
+      <div class="sec-num">04</div>
+      <div class="sec-title">Indicadores (KPIs)</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <p>Logo abaixo do cabeçalho, o sistema exibe <strong>7 indicadores principais</strong> em cards clicáveis. Clicar em um KPI filtra automaticamente todas as tabelas para mostrar apenas os registros daquela categoria.</p>
+
+    <div class="kpi-grid">
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-icon">📋</span>
+          <span class="kpi-color cyan">Total</span>
+        </div>
+        <div class="kpi-name">Total Baixado</div>
+        <div class="kpi-desc">Quantidade total de prazos realizados na semana, independente do prazo ou horário de protocolo.</div>
+        <div class="kpi-example">Exemplo: <b>1.396</b> prazos realizados</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-icon">🔥</span>
+          <span class="kpi-color red">Fatal</span>
+        </div>
+        <div class="kpi-name">Fatais</div>
+        <div class="kpi-desc">Prazos protocolados no próprio dia do vencimento (dia fatal). Situação de alto risco — qualquer imprevisto poderia resultar em perda do prazo.</div>
+        <div class="kpi-example">Exemplo: <b>183</b> fatais — 13,1% do total</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-icon">🚨</span>
+          <span class="kpi-color red2">Vencido</span>
+        </div>
+        <div class="kpi-name">Vencidos</div>
+        <div class="kpi-desc">Prazos protocolados após o dia de vencimento. Situação crítica — indica prazo perdido ou com fundamento especial para protocolo tardio.</div>
+        <div class="kpi-example">Exemplo: <b>0</b> vencidos — 0,0%</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-icon">⏱️</span>
+          <span class="kpi-color yel">D-1</span>
+        </div>
+        <div class="kpi-name">D-1 (no dia)</div>
+        <div class="kpi-desc">Prazos cumpridos exatamente no dia em que deveriam ser protocolados (D-1 do vencimento). Dentro do prazo, mas sem margem de segurança.</div>
+        <div class="kpi-example">Exemplo: <b>618</b> D-1 — cumpridos no prazo</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-icon">✅</span>
+          <span class="kpi-color green">Antecipado</span>
+        </div>
+        <div class="kpi-name">Antecipados</div>
+        <div class="kpi-desc">Prazos protocolados antes do dia de vencimento. Indica boa gestão e qualidade no cumprimento. Quanto maior esse percentual, melhor.</div>
+        <div class="kpi-example">Exemplo: <b>595</b> antecipados — 42,6%</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-icon">🌙</span>
+          <span class="kpi-color org">Fora HR</span>
+        </div>
+        <div class="kpi-name">Fora do Horário</div>
+        <div class="kpi-desc">Protocolos realizados antes das 9h ou após as 19h. Indica sobrecarga ou urgência de trabalho fora do expediente comercial.</div>
+        <div class="kpi-example">Exemplo: <b>162</b> fora do horário</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-icon">⚠️</span>
+          <span class="kpi-color red">Fatal + Fora HR</span>
+        </div>
+        <div class="kpi-name">Fatal + Fora do Horário</div>
+        <div class="kpi-desc">Combinação mais crítica: prazo protocolado no dia fatal <strong>e</strong> fora do horário comercial. Requer atenção imediata da coordenação.</div>
+        <div class="kpi-example">Exemplo: <b>17</b> casos fatais fora do horário</div>
+      </div>
+
+    </div>
+
+    <div class="alert danger">
+      <span class="alert-icon">🔥</span>
+      <div class="alert-body"><strong>Casos Fatal + Fora Horário</strong> são a combinação mais preocupante do painel. Um protocolo nessas condições significa que o advogado trabalhou fora do expediente no limite máximo do prazo — qualquer falha técnica resultaria em perda processual. Esses casos devem ser revistos com os coordenadores.</div>
+    </div>
+  </div>
+
+  <!-- 5. FILTROS POR SITUAÇÃO -->
+  <div class="section" id="sec5">
+    <span class="sec-anchor"></span>
+    <div class="sec-header">
+      <div class="sec-num">05</div>
+      <div class="sec-title">Filtros por situação</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <p>Abaixo dos KPIs, a <strong>barra de filtros</strong> permite cruzar os dados por situação processual. Os filtros são cumulativos — você pode combinar situação com grupo.</p>
+
+    <div class="filter-grid">
+      <div class="filter-card">
+        <span class="filter-tag fatal">🔥 Fatal</span>
+        <p>Exibe apenas os responsáveis com ao menos um protocolo no dia fatal na semana analisada.</p>
+      </div>
+      <div class="filter-card">
+        <span class="filter-tag vencido">🚨 Vencido</span>
+        <p>Filtra somente prazos protocolados após o dia de vencimento. Quando há 0 vencidos, o botão não altera a tabela.</p>
+      </div>
+      <div class="filter-card">
+        <span class="filter-tag d1">⏱ D-1</span>
+        <p>Mostra os responsáveis com protocolos realizados exatamente no dia (sem antecipação).</p>
+      </div>
+      <div class="filter-card">
+        <span class="filter-tag combo">⏰ Fatal + Fora HR</span>
+        <p>Combinação dos casos mais críticos: dia fatal <strong>e</strong> fora do horário comercial simultaneamente.</p>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Clique em um filtro de situação</h4>
+          <p>O botão ficará destacado e as tabelas serão atualizadas imediatamente.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Combine com filtro de grupo (opcional)</h4>
+          <p>Clique em um botão de grupo (A2, B1, etc.) para restringir ainda mais a visualização.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Para limpar, clique em "Todos"</h4>
+          <p>O botão <strong>Todos</strong> remove todos os filtros e restaura a visualização completa.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. FILTROS POR GRUPO -->
+  <div class="section" id="sec6">
+    <span class="sec-anchor"></span>
+    <div class="sec-header">
+      <div class="sec-num">06</div>
+      <div class="sec-title">Filtros por grupo</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <p>Os filtros de grupo permitem visualizar os dados de um time específico. Os grupos disponíveis correspondem às equipes da área trabalhista do escritório.</p>
+
+    <div class="filter-grid">
+      <div class="filter-card"><span class="filter-tag grupo">Grupo A2</span><p>Equipe A2 da área trabalhista.</p></div>
+      <div class="filter-card"><span class="filter-tag grupo">Grupo A3</span><p>Equipe A3 da área trabalhista.</p></div>
+      <div class="filter-card"><span class="filter-tag grupo">Grupo B1</span><p>Equipe B1 da área trabalhista.</p></div>
+      <div class="filter-card"><span class="filter-tag grupo">Grupo B2</span><p>Equipe B2 da área trabalhista.</p></div>
+      <div class="filter-card"><span class="filter-tag grupo">Grupo B3</span><p>Equipe B3 da área trabalhista.</p></div>
+      <div class="filter-card"><span class="filter-tag grupo">Grupo C</span><p>Equipe C da área trabalhista.</p></div>
+      <div class="filter-card"><span class="filter-tag grupo">Grupo D1</span><p>Equipe D1 da área trabalhista.</p></div>
+      <div class="filter-card"><span class="filter-tag grupo">Grupo E1</span><p>Equipe E1 da área trabalhista.</p></div>
+      <div class="filter-card"><span class="filter-tag grupo">Grupo E2</span><p>Equipe E2 da área trabalhista.</p></div>
+    </div>
+
+    <div class="alert info">
+      <span class="alert-icon">💡</span>
+      <div class="alert-body"><strong>Dica:</strong> Para apresentações em reuniões de grupo, ative o filtro do grupo antes de abrir o sistema. Todos os indicadores e tabelas já aparecerão filtrados para aquele time.</div>
+    </div>
+  </div>
+
+  <!-- 7. TABELAS -->
+  <div class="section" id="sec7">
+    <span class="sec-anchor"></span>
+    <div class="sec-header">
+      <div class="sec-num">07</div>
+      <div class="sec-title">Tabelas de análise</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <p>O sistema apresenta duas tabelas principais exibidas lado a lado, com ranking de responsáveis por critérios de risco e de qualidade.</p>
+
+    <div class="info-card red-l">
+      <h3>Quem Mais Protocola no Fatal</h3>
+      <p>Ranking dos advogados que mais protocolaram no dia fatal na semana. Ordenado da maior para a menor quantidade de fatais.</p>
+    </div>
+
+    <table class="manual-table">
+      <thead><tr><th>Coluna</th><th>O que representa</th></tr></thead>
+      <tbody>
+        <tr><td>#</td><td>Posição no ranking (1 = mais fatais)</td></tr>
+        <tr><td>Responsável</td><td>Nome completo e sigla do advogado</td></tr>
+        <tr><td>Grupo</td><td>Equipe a que pertence</td></tr>
+        <tr><td>Fatal</td><td>Quantidade de protocolos no dia fatal (vermelho)</td></tr>
+        <tr><td>Vencido</td><td>Protocolos após o vencimento (bordô escuro)</td></tr>
+        <tr><td>D-1</td><td>Protocolos no dia (amarelo)</td></tr>
+        <tr><td>Total</td><td>Total de prazos realizados pelo profissional na semana</td></tr>
+        <tr><td>% Fatal</td><td>Percentual de fatais sobre o total do profissional</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-card green-l">
+      <h3>Quem Mais Antecipou Prazos</h3>
+      <p>Ranking dos advogados com maior número de protocolos realizados antes do dia de vencimento. Indica qualidade e organização no trabalho.</p>
+    </div>
+
+    <table class="manual-table">
+      <thead><tr><th>Coluna</th><th>O que representa</th></tr></thead>
+      <tbody>
+        <tr><td>#</td><td>Posição no ranking (1 = mais antecipados)</td></tr>
+        <tr><td>Responsável</td><td>Nome completo e sigla do advogado</td></tr>
+        <tr><td>Grupo</td><td>Equipe a que pertence</td></tr>
+        <tr><td>Antecipados</td><td>Quantidade de protocolos antes do vencimento (verde)</td></tr>
+        <tr><td>D-1</td><td>Protocolos no dia (amarelo)</td></tr>
+        <tr><td>Total</td><td>Total de prazos realizados pelo profissional na semana</td></tr>
+        <tr><td>% Antecip.</td><td>Percentual de antecipados sobre o total do profissional</td></tr>
+      </tbody>
+    </table>
+
+    <div class="alert info">
+      <span class="alert-icon">💡</span>
+      <div class="alert-body"><strong>Dica de uso:</strong> As tabelas possuem scroll interno — role para baixo dentro delas para ver todos os profissionais sem perder os cabeçalhos das colunas.</div>
+    </div>
+  </div>
+
+  <!-- 8. EXCEL -->
+  <div class="section" id="sec8">
+    <span class="sec-anchor"></span>
+    <div class="sec-header">
+      <div class="sec-num">08</div>
+      <div class="sec-title">Importar e exportar Excel</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <p>O sistema atualiza os dados semanalmente por meio de importação de planilha Excel. Também é possível exportar os dados atuais para análise externa.</p>
+
+    <div class="info-card cyan-l">
+      <h3>Importar Excel (atualizar dados)</h3>
+      <p>Use o botão <strong>📥 Importar Excel</strong> no topo do painel para carregar a planilha da semana. Os dados são processados automaticamente e todos os indicadores e tabelas são atualizados em tempo real, sem necessidade de recarregar a página.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Clique em "Importar Excel"</h4>
+          <p>O seletor de arquivos abrirá automaticamente.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Selecione a planilha .xlsx ou .xls</h4>
+          <p>Localize o arquivo exportado do sistema de prazos do escritório.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Aguarde o processamento</h4>
+          <p>Uma mensagem de confirmação aparecerá ao lado do botão quando os dados forem carregados com sucesso.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card amber-l">
+      <h3>Exportar Excel</h3>
+      <p>Use o botão <strong>📥 Exportar Excel</strong> para baixar os dados atualmente exibidos em formato de planilha. Útil para encaminhar o relatório semanal por e-mail ou salvar histórico.</p>
+    </div>
+
+    <div class="alert warn">
+      <span class="alert-icon">⚠️</span>
+      <div class="alert-body"><strong>Formato da planilha:</strong> A planilha importada deve seguir o formato padrão gerado pelo sistema de prazos do escritório. Planilhas com estrutura diferente podem não ser processadas corretamente. Em caso de erro, verifique a mensagem exibida ao lado do botão de importação.</div>
+    </div>
+  </div>
+
+  <!-- 9. ACUMULADO -->
+  <div class="section" id="sec9">
+    <span class="sec-anchor"></span>
+    <div class="sec-header">
+      <div class="sec-num">09</div>
+      <div class="sec-title">Seção acumulado</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <p>Abaixo das tabelas principais, o sistema exibe uma <strong>seção de análise acumulada</strong> com dados consolidados ao longo do período disponível na planilha.</p>
+
+    <div class="info-card cyan-l">
+      <h3>O que a seção acumulado mostra</h3>
+      <p>Visão histórica dos prazos por responsável, permitindo identificar padrões recorrentes de comportamento — profissionais que sistematicamente protocolam no fatal ou que sistematicamente antecipam. Essa visão vai além da semana e ajuda na análise de desempenho de médio prazo.</p>
+    </div>
+
+    <div class="alert info">
+      <span class="alert-icon">📊</span>
+      <div class="alert-body"><strong>Nota:</strong> A seção acumulado utiliza os dados históricos disponíveis na planilha importada. Para uma análise acumulada mais completa, importe planilhas com períodos mais longos.</div>
+    </div>
+  </div>
+
+  <!-- 10. GLOSSÁRIO -->
+  <div class="section" id="sec10">
+    <span class="sec-anchor"></span>
+    <div class="sec-header">
+      <div class="sec-num">10</div>
+      <div class="sec-title">Glossário</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="glossary">
+      <div class="gterm">
+        <span class="gword">Prazo Fatal</span>
+        <span class="gdef">Último dia para protocolo de um ato processual. O cumprimento no próprio dia fatal é considerado de alto risco pois qualquer falha técnica (queda de sistema, falta de energia, etc.) resultaria em perda do prazo.</span>
+      </div>
+      <div class="gterm">
+        <span class="gword">Prazo Vencido</span>
+        <span class="gdef">Protocolo realizado após o dia de vencimento. Situação crítica que pode indicar perda de prazo ou protocolo com justificativa judicial específica.</span>
+      </div>
+      <div class="gterm">
+        <span class="gword">D-1</span>
+        <span class="gdef">Abreviação de "um dia antes do vencimento". No sistema, indica protocolos realizados no dia em que deveriam ser feitos — cumprimento correto, mas sem margem de segurança.</span>
+      </div>
+      <div class="gterm">
+        <span class="gword">Antecipado</span>
+        <span class="gdef">Protocolo realizado antes do dia de vencimento. Indica planejamento e qualidade na gestão dos prazos pelo responsável.</span>
+      </div>
+      <div class="gterm">
+        <span class="gword">Fora do Horário</span>
+        <span class="gdef">Protocolo realizado antes das 9h ou após as 19h. Indica trabalho fora do expediente comercial padrão do escritório.</span>
+      </div>
+      <div class="gterm">
+        <span class="gword">Fatal + Fora HR</span>
+        <span class="gdef">Combinação de prazo fatal protocolado fora do horário comercial. É o cenário de maior risco mapeado pelo sistema.</span>
+      </div>
+      <div class="gterm">
+        <span class="gword">Baixa de Prazo</span>
+        <span class="gdef">Registro da realização de um ato processual dentro do prazo estabelecido. "Baixar um prazo" significa protocolar o documento ou peça dentro do vencimento.</span>
+      </div>
+      <div class="gterm">
+        <span class="gword">Grupo</span>
+        <span class="gdef">Equipe de advogados da área trabalhista. O escritório divide os advogados em grupos (A2, A3, B1, B2, B3, C, D1, E1, E2) para fins de gestão e coordenação.</span>
+      </div>
+      <div class="gterm">
+        <span class="gword">% Fatal</span>
+        <span class="gdef">Percentual de prazos fatais sobre o total de prazos do profissional na semana. Quanto menor, melhor a antecipação do responsável.</span>
+      </div>
+      <div class="gterm">
+        <span class="gword">% Antecip.</span>
+        <span class="gdef">Percentual de prazos antecipados sobre o total do profissional. Quanto maior, melhor a qualidade de gestão do responsável.</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>Peixoto &amp; Cury Advogados &nbsp;·&nbsp; <strong>Controladoria — Time B</strong> &nbsp;·&nbsp; Desenvolvido internamente</div>
+  <a class="back-btn" href="../LAWgico_Hub.html">← Voltar ao Hub</a>
+</div>
+
+</body>
+</html>
