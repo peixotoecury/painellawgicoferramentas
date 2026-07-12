@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Manual — Controle de Decisões e Inclusão de Valores | Peixoto &amp; Cury</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:   #051520;
+  --navy2:  #0a2235;
+  --cyan:   #00A9E0;
+  --white:  #FFFFFF;
+  --text:   #e8edf3;
+  --muted:  #7a9bb5;
+  --border: rgba(0,169,224,.18);
+  --card:   rgba(255,255,255,.04);
+  --card-h: rgba(255,255,255,.07);
+  --green:  #27AE60;
+  --amber:  #E67E22;
+  --red:    #e74c3c;
+  --red2:   #c0392b;
+  --purple: #A78BFA;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Sora',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:13px;}
+
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%, rgba(0,169,224,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 100%, rgba(0,59,92,.15) 0%, transparent 55%);
+  pointer-events:none;
+}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(0,169,224,.25);border-radius:4px;}
+
+/* ── HEADER ───────────────────────────────────── */
+.header{
+  position:relative;z-index:10;position:sticky;top:0;
+  padding:20px 48px;
+  border-bottom:1px solid var(--border);
+  background:rgba(5,21,32,.85);
+  backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.lw-mark{display:flex;flex-direction:column;line-height:1;}
+.lw-wordmark{display:flex;align-items:flex-end;}
+.lw-law{font-size:26px;font-weight:800;color:#fff;letter-spacing:-1px;font-family:'Sora',sans-serif;}
+.lw-col{display:flex;flex-direction:column;align-items:flex-start;}
+.lw-mod{font-size:9px;font-weight:400;color:rgba(255,255,255,.75);letter-spacing:.8px;align-self:flex-end;}
+.lw-gico{font-size:26px;font-weight:300;color:#fff;letter-spacing:-1px;line-height:1;}
+.lw-tag{font-size:8px;color:rgba(255,255,255,.6);letter-spacing:3px;font-weight:400;margin-top:2px;}
+.header-right{text-align:right;}
+.firm-name{font-size:12px;font-weight:600;color:var(--white);opacity:.85;}
+.firm-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.manual-badge{
+  display:inline-block;margin-top:8px;
+  background:rgba(0,169,224,.15);border:1px solid var(--border);
+  color:var(--cyan);font-size:10px;font-weight:700;
+  padding:3px 12px;border-radius:20px;letter-spacing:.5px;
+}
+.open-app-btn{
+  display:inline-flex;align-items:center;gap:6px;margin-top:10px;
+  background:var(--cyan);color:var(--navy);font-size:11px;font-weight:700;
+  padding:7px 16px;border-radius:8px;text-decoration:none;
+}
+
+/* ── HERO ─────────────────────────────────────── */
+.hero{position:relative;z-index:5;padding:56px 48px 40px;border-bottom:1px solid var(--border);}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,169,224,.10);border:1px solid rgba(0,169,224,.25);
+  color:var(--cyan);font-size:10px;font-weight:700;
+  padding:5px 16px;border-radius:20px;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:20px;
+}
+.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.hero h1{font-size:36px;font-weight:800;color:#fff;line-height:1.15;letter-spacing:-.5px;margin-bottom:12px;}
+.hero h1 span{color:var(--cyan);}
+.hero p{font-size:14.5px;color:var(--muted);line-height:1.7;max-width:700px;}
+
+/* ── TOC ──────────────────────────────────────── */
+.toc{position:relative;z-index:5;padding:28px 48px;border-bottom:1px solid var(--border);background:var(--card);}
+.toc-title{font-size:10px;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;}
+.toc-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:10px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  text-decoration:none;color:var(--muted);font-size:12px;font-weight:500;
+  transition:all .2s;
+}
+.toc-item:hover{background:rgba(0,169,224,.10);border-color:var(--cyan);color:var(--cyan);}
+.toc-num{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--cyan);font-weight:600;width:18px;flex-shrink:0;}
+
+/* ── CONTENT ──────────────────────────────────── */
+.content{position:relative;z-index:5;max-width:920px;margin:0 auto;padding:0 48px 80px;}
+.section{margin-top:56px;}
+.sec-anchor{display:block;position:relative;top:-90px;visibility:hidden;}
+.sec-header{display:flex;align-items:center;gap:16px;margin-bottom:26px;}
+.sec-num{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:rgba(0,169,224,.15);border:1px solid rgba(0,169,224,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:var(--cyan);
+}
+.sec-title{font-size:21px;font-weight:700;color:#fff;letter-spacing:-.3px;}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+
+p{font-size:13.5px;color:var(--muted);line-height:1.8;margin-bottom:14px;}
+p strong{color:var(--text);}
+h4.sub{font-size:14px;font-weight:700;color:#fff;margin:22px 0 10px;}
+
+/* ── INFO CARD ────────────────────────────────── */
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:16px;}
+.info-card.cyan-l{border-left:3px solid var(--cyan);}
+.info-card.green-l{border-left:3px solid var(--green);}
+.info-card.amber-l{border-left:3px solid var(--amber);}
+.info-card.red-l{border-left:3px solid var(--red);}
+.info-card.purple-l{border-left:3px solid var(--purple);}
+.info-card h3{font-size:13.5px;font-weight:700;color:#fff;margin-bottom:8px;}
+.info-card p{margin-bottom:0;font-size:12.5px;}
+
+/* ── GRID DE CARDS ────────────────────────────── */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:24px;}
+.mini-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;}
+.mini-card .tag{display:inline-block;border-radius:6px;padding:3px 10px;font-size:10px;font-weight:700;margin-bottom:10px;letter-spacing:.3px;}
+.mini-card .tag.cyan{background:rgba(0,169,224,.15);color:var(--cyan);border:1px solid rgba(0,169,224,.3);}
+.mini-card .tag.amber{background:rgba(230,126,34,.15);color:var(--amber);border:1px solid rgba(230,126,34,.3);}
+.mini-card .tag.red{background:rgba(231,76,60,.15);color:var(--red);border:1px solid rgba(231,76,60,.3);}
+.mini-card .tag.green{background:rgba(39,174,96,.15);color:var(--green);border:1px solid rgba(39,174,96,.3);}
+.mini-card .tag.purple{background:rgba(167,139,250,.15);color:var(--purple);border:1px solid rgba(167,139,250,.3);}
+.mini-card p{font-size:12px;margin:0;line-height:1.6;}
+
+/* ── TABLE ────────────────────────────────────── */
+.manual-table{width:100%;border-collapse:collapse;margin:14px 0 24px;border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.manual-table th{text-align:left;padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.05);border-bottom:1px solid var(--border);}
+.manual-table td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:var(--muted);line-height:1.6;}
+.manual-table td:first-child{color:#fff;font-weight:600;white-space:nowrap;}
+.manual-table tr:last-child td{border-bottom:none;}
+.manual-table tr:hover td{background:rgba(0,169,224,.04);}
+
+/* ── STEPS ────────────────────────────────────── */
+.steps{display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
+.step{display:flex;align-items:flex-start;gap:14px;}
+.step-num{width:28px;height:28px;border-radius:8px;flex-shrink:0;background:rgba(0,169,224,.15);border:1px solid rgba(0,169,224,.3);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--cyan);}
+.step-body h4{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;}
+.step-body p{font-size:12px;color:var(--muted);margin:0;line-height:1.6;}
+
+/* ── FLOW (status) ────────────────────────────── */
+.flow{display:flex;align-items:stretch;gap:0;margin:18px 0 24px;flex-wrap:wrap;}
+.flow-step{flex:1;min-width:170px;background:var(--card);border:1px solid var(--border);padding:16px 18px;position:relative;}
+.flow-step:first-child{border-radius:12px 0 0 12px;}
+.flow-step:last-child{border-radius:0 12px 12px 0;}
+.flow-step .fbadge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
+.flow-step.pendente .fbadge{background:rgba(230,126,34,.15);color:var(--amber);border:1px solid rgba(230,126,34,.3);}
+.flow-step.revisao .fbadge{background:rgba(0,169,224,.15);color:var(--cyan);border:1px solid rgba(0,169,224,.3);}
+.flow-step.revisado .fbadge{background:rgba(39,174,96,.15);color:var(--green);border:1px solid rgba(39,174,96,.3);}
+.flow-step h4{font-size:13px;color:#fff;font-weight:700;margin-bottom:6px;}
+.flow-step p{font-size:11.5px;margin:0;}
+.flow-arrow{display:flex;align-items:center;justify-content:center;width:32px;color:var(--cyan);font-size:18px;flex-shrink:0;}
+@media(max-width:700px){ .flow{flex-direction:column;} .flow-step,.flow-step:first-child,.flow-step:last-child{border-radius:12px;} .flow-arrow{transform:rotate(90deg);width:100%;padding:4px 0;} }
+
+/* ── ALERT ────────────────────────────────────── */
+.alert{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border-radius:12px;margin-bottom:20px;}
+.alert.info{background:rgba(0,169,224,.08);border:1px solid rgba(0,169,224,.25);}
+.alert.warn{background:rgba(230,126,34,.08);border:1px solid rgba(230,126,34,.25);}
+.alert.danger{background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.25);}
+.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.alert-body{font-size:12.5px;color:var(--muted);line-height:1.7;}
+.alert-body strong{color:var(--text);}
+.alert.info .alert-body strong{color:var(--cyan);}
+.alert.warn .alert-body strong{color:var(--amber);}
+.alert.danger .alert-body strong{color:var(--red);}
+
+/* ── FAQ ──────────────────────────────────────── */
+.faq{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.faq-item{padding:16px 20px;border-radius:12px;background:var(--card);border:1px solid var(--border);}
+.faq-q{font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;display:flex;gap:8px;}
+.faq-q::before{content:'?';color:var(--cyan);font-weight:800;}
+.faq-a{font-size:12.5px;color:var(--muted);line-height:1.7;margin:0;}
+
+/* ── GLOSSARY ─────────────────────────────────── */
+.glossary{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.gterm{display:flex;gap:16px;align-items:flex-start;padding:14px 18px;border-radius:12px;background:var(--card);border:1px solid var(--border);}
+.gword{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--cyan);min-width:150px;flex-shrink:0;padding-top:2px;}
+.gdef{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* ── FOOTER ───────────────────────────────────── */
+.footer{position:relative;z-index:5;margin:0 48px 40px;padding:20px 28px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted);flex-wrap:wrap;gap:10px;}
+.footer strong{color:var(--cyan);}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(0,169,224,.12);border:1px solid rgba(0,169,224,.3);color:var(--cyan);font-size:11px;font-weight:700;padding:6px 16px;border-radius:8px;text-decoration:none;transition:all .2s;}
+.back-btn:hover{background:rgba(0,169,224,.22);}
+
+@media(max-width:768px){
+  .header,.hero,.toc,.content,.footer{padding-left:20px;padding-right:20px;}
+  .hero h1{font-size:26px;}
+  .toc-grid{grid-template-columns:1fr 1fr;}
+  .footer{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="lw-mark">
+    <div class="lw-wordmark">
+      <span class="lw-law">LAW</span>
+      <div class="lw-col">
+        <span class="lw-mod">valores</span>
+        <span class="lw-gico">gico</span>
+      </div>
+    </div>
+    <div class="lw-tag">lawyers at work</div>
+  </div>
+  <div class="header-right">
+    <div class="firm-name">Peixoto &amp; Cury Advogados</div>
+    <div class="firm-sub">Controladoria — Time B</div>
+    <div class="manual-badge">Manual do Usuário</div><br>
+    <a class="open-app-btn" href="https://peixotoecury.github.io/controleinsercaovalores/" target="_blank">▶ Abrir o sistema</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Manual do usuário</div>
+  <h1>Controle de Decisões e <span>Inclusão de Valores</span></h1>
+  <p>Este é o guia de uso do módulo que organiza o fluxo entre advogado e assistente para solicitar, lançar e revisar cálculos trabalhistas, cobrar pendências e registrar os valores de cada processo — tudo em tempo real, acessível de qualquer computador.</p>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">Neste manual</div>
+  <div class="toc-grid">
+    <a class="toc-item" href="#visao-geral"><span class="toc-num">01</span> Visão geral</a>
+    <a class="toc-item" href="#solicitacoes"><span class="toc-num">02</span> Aba Solicitações</a>
+    <a class="toc-item" href="#condicionais"><span class="toc-num">03</span> Campos condicionais</a>
+    <a class="toc-item" href="#status"><span class="toc-num">04</span> Fluxo de status</a>
+    <a class="toc-item" href="#cobrancas"><span class="toc-num">05</span> Aba Cobranças</a>
+    <a class="toc-item" href="#valores"><span class="toc-num">06</span> Aba Inserção de Valores</a>
+    <a class="toc-item" href="#emails"><span class="toc-num">07</span> E-mails automáticos</a>
+    <a class="toc-item" href="#faq"><span class="toc-num">08</span> Perguntas frequentes</a>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- 01 VISÃO GERAL -->
+  <div class="section">
+    <span class="sec-anchor" id="visao-geral"></span>
+    <div class="sec-header"><div class="sec-num">01</div><div class="sec-title">Visão Geral</div><div class="sec-line"></div></div>
+    <p>O módulo fica publicado em <strong>peixotoecury.github.io/controleinsercaovalores</strong> e não precisa de instalação — é só abrir no navegador. Todos os dados ficam salvos num banco compartilhado, então qualquer pessoa que abrir o link, em qualquer computador, vê as mesmas informações atualizadas em tempo real.</p>
+    <p>O sistema é dividido em <strong>três abas</strong>, sempre visíveis no topo:</p>
+    <div class="card-grid">
+      <div class="mini-card"><span class="tag cyan">📋 Solicitações</span><p>Onde o advogado registra o pedido de cálculo e o assistente acompanha/lança/revisa cada caso.</p></div>
+      <div class="mini-card"><span class="tag amber">📣 Cobranças</span><p>Painéis prontos com tudo que está pendente de alguém — pra cobrar sem precisar caçar informação.</p></div>
+      <div class="mini-card"><span class="tag green">💰 Inserção de Valores</span><p>Onde entram os valores (provisão, novo valor, link do cálculo) de cada processo, incluindo casos antigos.</p></div>
+    </div>
+    <div class="alert info">
+      <div class="alert-icon">💡</div>
+      <div class="alert-body"><strong>Sem login.</strong> O sistema não tem usuário/senha — qualquer um com o link pode preencher. Por isso, alguns campos pedem pra você mesmo se identificar (ex.: "Responsável pela Informação").</div>
+    </div>
+  </div>
+
+  <!-- 02 ABA SOLICITAÇÕES -->
+  <div class="section">
+    <span class="sec-anchor" id="solicitacoes"></span>
+    <div class="sec-header"><div class="sec-num">02</div><div class="sec-title">Aba Solicitações</div><div class="sec-line"></div></div>
+    <p>É a tela principal. Do lado esquerdo fica o formulário <strong>"Nova Solicitação"</strong>, do lado direito a lista de tudo que já foi cadastrado, com filtros e exportação em Excel.</p>
+
+    <h4 class="sub">Campos sempre obrigatórios</h4>
+    <p>Cliente, Processo (CNJ), Reclamante, Reclamada, Juiz/Desembargador/Ministro, Advogado da Parte Contrária, Vara/Turma/Câmara, Comarca, UF, Nome do Perito do Juízo, Data da Decisão, Tipo de Decisão, Advogado que Solicitou, Assistente Responsável pelo Lançamento, Responsável pela Informação e Observações Adicionais.</p>
+
+    <h4 class="sub">Ações disponíveis na lista</h4>
+    <table class="manual-table">
+      <tr><th>Botão</th><th>O que faz</th></tr>
+      <tr><td>✓ Concluir</td><td>O assistente usa depois de lançar o cálculo no sistema. Muda o status pra "Aguardando Revisão" e dispara e-mail pro advogado.</td></tr>
+      <tr><td>✓ Confirmar Revisão</td><td>O advogado usa pra confirmar que revisou o cálculo lançado. Muda o status pra "Revisado".</td></tr>
+      <tr><td>↺ Reabrir</td><td>Volta o status um passo atrás, caso alguém tenha clicado errado.</td></tr>
+      <tr><td>🗑 Excluir</td><td>Apaga o registro em definitivo (pede confirmação antes) — útil pra remover testes.</td></tr>
+    </table>
+
+    <h4 class="sub">Filtros e exportação</h4>
+    <p>No topo da lista dá pra filtrar por Cliente, Status, Assistente e buscar por Processo/Reclamante/Reclamada. O botão <strong>"⬇ Exportar Excel"</strong> baixa exatamente o que está filtrado na tela, com todos os campos preenchidos.</p>
+  </div>
+
+  <!-- 03 CAMPOS CONDICIONAIS -->
+  <div class="section">
+    <span class="sec-anchor" id="condicionais"></span>
+    <div class="sec-header"><div class="sec-num">03</div><div class="sec-title">Campos Condicionais</div><div class="sec-line"></div></div>
+    <p>Alguns campos só aparecem dependendo da resposta de outro campo, pra não poluir o formulário. Todos os que aparecem passam a ser obrigatórios também.</p>
+
+    <div class="glossary">
+      <div class="gterm"><div class="gword">Tipo de Decisão</div><div class="gdef">Se escolher <strong>"Laudo Desfavorável"</strong>, aparecem checkboxes de Insalubridade / Periculosidade / Médico / Ergonômico (pode marcar mais de um) — e, conforme o que for marcado, campos de Motivo, Doença Detectada, Área do Corpo e Motivos.</div></div>
+      <div class="gterm"><div class="gword">Alteração de Prognóstico</div><div class="gdef">Se responder <strong>Sim</strong>, aparecem "Prognóstico Atual" e "Novo Prognóstico" (Possível/Provável/Remoto).</div></div>
+      <div class="gterm"><div class="gword">Alteração de Fase</div><div class="gdef">Se responder <strong>Sim</strong>, aparecem "Fase Atual" e "Nova Fase" (Inicial, Instrução, Recursal, Recursal TRT, Recursal TST, Recursal com Execução Provisória, Execução).</div></div>
+      <div class="gterm"><div class="gword">Cálculo foi Solicitado?</div><div class="gdef">Tem três respostas: <strong>Sim</strong> (libera Tipo de Cálculo e Data do Retorno do Cálculo), <strong>Não</strong> (libera uma Justificativa) e <strong>N/A</strong> (não libera nada — quando a pergunta simplesmente não se aplica).</div></div>
+    </div>
+
+    <div class="alert warn">
+      <div class="alert-icon">⏰</div>
+      <div class="alert-body">Quando você preenche a <strong>Data do Retorno do Cálculo</strong>, o sistema fica de olho: assim que essa data chegar (ou passar), o caso aparece sozinho na aba Cobranças, na seção "Retorno do Cálculo Vencido".</div>
+    </div>
+  </div>
+
+  <!-- 04 FLUXO DE STATUS -->
+  <div class="section">
+    <span class="sec-anchor" id="status"></span>
+    <div class="sec-header"><div class="sec-num">04</div><div class="sec-title">Fluxo de Status</div><div class="sec-line"></div></div>
+    <p>Toda solicitação passa por até três estágios:</p>
+    <div class="flow">
+      <div class="flow-step pendente"><span class="fbadge">Pendente</span><h4>Aguardando lançamento</h4><p>O advogado enviou o pedido. O assistente responsável precisa lançar o cálculo no sistema.</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step revisao"><span class="fbadge">Aguardando Revisão</span><h4>Cálculo já lançado</h4><p>O assistente clicou em "Concluir". Falta o advogado confirmar que revisou.</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step revisado"><span class="fbadge">Revisado</span><h4>Fechado</h4><p>O advogado confirmou a revisão. Processo concluído no fluxo.</p></div>
+    </div>
+    <p>Os números de cada estágio aparecem nos cartões coloridos no topo da aba Solicitações (Total, Pendentes, Aguardando Revisão, Revisado, Acima de R$400.000,00).</p>
+  </div>
+
+  <!-- 05 ABA COBRANÇAS -->
+  <div class="section">
+    <span class="sec-anchor" id="cobrancas"></span>
+    <div class="sec-header"><div class="sec-num">05</div><div class="sec-title">Aba Cobranças</div><div class="sec-line"></div></div>
+    <p>Reúne, em painéis prontos, tudo que está esperando ação de alguém. Cada item tem um botão <strong>"✉ Cobrar"</strong> que abre um e-mail já pronto pro advogado responsável — só falta clicar em enviar.</p>
+    <div class="card-grid">
+      <div class="mini-card"><span class="tag amber">📝 Solicitação de Cálculo</span><p>Pedidos ainda com status "Pendente" — o cálculo não foi lançado.</p></div>
+      <div class="mini-card"><span class="tag cyan">🔎 Revisão do Cálculo</span><p>Cálculos lançados, esperando o advogado confirmar a revisão.</p></div>
+      <div class="mini-card"><span class="tag purple">⚖️ Inserção de Decisão</span><p>Casos sem o campo "Tipo de Decisão" preenchido ainda.</p></div>
+      <div class="mini-card"><span class="tag red">⏰ Retorno do Cálculo Vencido</span><p>A "Data do Retorno do Cálculo" já chegou ou passou.</p></div>
+      <div class="mini-card"><span class="tag amber">📋 Cálculo Ainda Não Solicitado</span><p>Casos marcados com "Cálculo foi Solicitado? = Não".</p></div>
+    </div>
+
+    <h4 class="sub">🔍 Decisão Identificada sem Solicitação</h4>
+    <p>Use esse formulário quando você (assistente) ficar sabendo, por fora, que saiu uma decisão num processo que nunca teve solicitação de cálculo registrada. Ao cadastrar, o caso passa a existir no sistema (com uma etiqueta "🔍 Identificado" na coluna Origem) e já dispara um e-mail cobrando o advogado responsável.</p>
+    <p>Essa aba também tem seu próprio botão <strong>"⬇ Exportar Excel"</strong>, que baixa tudo que está cadastrado no sistema.</p>
+  </div>
+
+  <!-- 06 ABA INSERÇÃO DE VALORES -->
+  <div class="section">
+    <span class="sec-anchor" id="valores"></span>
+    <div class="sec-header"><div class="sec-num">06</div><div class="sec-title">Aba Inserção de Valores</div><div class="sec-line"></div></div>
+    <p>É onde entram os números de cada processo: Provisão/Accrual Atual, Novo Valor, se está acima de R$ 400.000,00, e o link do PDF do cálculo. Tem dois jeitos de usar:</p>
+
+    <div class="steps">
+      <div class="step"><div class="step-num">A</div><div class="step-body"><h4>Inserir/Atualizar Valores (painel de cima)</h4><p>Serve pra processos que <strong>já existem</strong> no sistema (vieram da aba Solicitações ou já foram cadastrados antes). Escolha o processo no dropdown "Cliente/Processo" — o sistema puxa sozinho quem é o advogado e o assistente — e preencha só os valores.</p></div></div>
+      <div class="step"><div class="step-num">B</div><div class="step-body"><h4>Cadastrar Caso Novo (card de baixo)</h4><p>Serve pra casos antigos que <strong>nunca passaram</strong> pela aba Solicitações. Preenche tudo do zero: Cliente, Processo, Reclamante, Reclamada, Vara, Comarca, UF, Advogado, Assistente, Tipo de Decisão, Tipo da Inserção, valores, se já foi inserido no LM/no Sistema (com data) e se já teve revisão (com justificativa se não). Se você digitar um processo que já existe, aparece um aviso vermelho pra você usar o painel de cima em vez de duplicar.</p></div></div>
+    </div>
+
+    <div class="alert danger">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-body">Se marcar <strong>"Valor acima de R$ 400.000,00"</strong>, o sistema pergunta se já foi enviado pro cliente. Se a resposta for <strong>Não</strong>, pede uma justificativa.</div>
+    </div>
+
+    <p>A tabela "Valores Lançados" mostra tudo já cadastrado, com filtro por Cliente e um botão <strong>"🔗 Selecionar"</strong> em cada linha que carrega aquele processo direto no painel de edição — útil pra conferir os dados antes de cadastrar algo novo.</p>
+  </div>
+
+  <!-- 07 E-MAILS -->
+  <div class="section">
+    <span class="sec-anchor" id="emails"></span>
+    <div class="sec-header"><div class="sec-num">07</div><div class="sec-title">E-mails Automáticos</div><div class="sec-line"></div></div>
+    <div class="alert info">
+      <div class="alert-icon">✉️</div>
+      <div class="alert-body">O sistema <strong>não envia e-mail sozinho</strong>. Ele abre um rascunho pronto (assunto, destinatário e corpo já preenchidos) no seu programa de e-mail padrão — Outlook ou Gmail — e a pessoa só precisa clicar em "Enviar". Isso acontece automaticamente ao enviar uma nova solicitação, ao concluir um cálculo, ao registrar uma decisão identificada, e sempre que clicar em "Cobrar" na aba Cobranças.</div>
+    </div>
+  </div>
+
+  <!-- 08 FAQ -->
+  <div class="section">
+    <span class="sec-anchor" id="faq"></span>
+    <div class="sec-header"><div class="sec-num">08</div><div class="sec-title">Perguntas Frequentes</div><div class="sec-line"></div></div>
+    <div class="faq">
+      <div class="faq-item"><div class="faq-q">A tela não atualizou depois de uma mudança que fizemos no sistema</div><p class="faq-a">É cache do navegador. Aperte <strong>Ctrl+Shift+R</strong> pra recarregar ignorando o cache, ou feche e abra a aba de novo.</p></div>
+      <div class="faq-item"><div class="faq-q">Por que os campos de valor estão cinza e não deixam digitar?</div><p class="faq-a">No painel "Inserir/Atualizar Valores", os campos só liberam depois que você escolhe um processo no dropdown "Cliente/Processo" acima deles. Se o seu caso ainda não existe em lugar nenhum, use o card "Cadastrar Caso Novo" em vez disso.</p></div>
+      <div class="faq-item"><div class="faq-q">O que significa "N/A" numa célula da tabela?</div><p class="faq-a">Que aquele campo está vazio — ninguém preencheu ainda. Não é erro.</p></div>
+      <div class="faq-item"><div class="faq-q">Duas pessoas podem usar o sistema ao mesmo tempo?</div><p class="faq-a">Sim. É tudo em tempo real — o que uma pessoa cadastra aparece na tela da outra sem precisar recarregar a página.</p></div>
+      <div class="faq-item"><div class="faq-q">Apaguei uma solicitação por engano, dá pra recuperar?</div><p class="faq-a">Não — a exclusão é definitiva (por isso pede confirmação antes). Use com cuidado, principalmente fora de testes.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div>Peixoto &amp; Cury Advogados · <strong>LAWgico</strong> · Controle de Decisões e Inclusão de Valores</div>
+  <a class="back-btn" href="../LAWgico_Hub.html">← Voltar ao Hub</a>
+</div>
+
+</body>
+</html>
