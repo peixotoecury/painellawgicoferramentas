@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual — Comunicado de Perícia | LAWgico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --azul-pc:#00A9E0; --cyan-lt:rgba(0,169,224,.10); --escuro-pc:#003B5C; --preto-pc:#2D2926;
+    --bg:#F4F9FC; --surface:#FFFFFF; --surface2:#F7FCFF; --border2:#D8E7F0;
+    --muted:#5F7E92; --muted2:#7E98AA;
+    --green:#117A65; --green-lt:rgba(17,122,101,.08);
+    --amber:#B85C00; --amber-lt:rgba(184,92,0,.08);
+    --shadow:0 8px 22px rgba(0,59,92,.07);
+    --font-head:'Sora',sans-serif; --font-body:'IBM Plex Sans',sans-serif; --font-mono:'IBM Plex Mono',monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--preto-pc);font-family:var(--font-body);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+  ::selection{background:var(--cyan-lt);}
+
+  a{color:var(--azul-pc);}
+
+  .topbar{background:linear-gradient(90deg,var(--escuro-pc),#00557B 72%,var(--azul-pc));padding:22px 32px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow);}
+  .tb-lawgico{display:inline-block;line-height:1;position:relative;}
+  .tb-law{font-family:var(--font-head);font-size:22px;font-weight:800;color:#fff;letter-spacing:-.5px;}
+  .tb-gico{font-family:var(--font-head);font-size:22px;font-weight:300;color:#fff;letter-spacing:-.5px;}
+  .tb-modulo{font-family:var(--font-head);font-size:10px;font-weight:400;color:rgba(255,255,255,.75);position:absolute;top:-12px;right:-2px;white-space:nowrap;letter-spacing:.3px;}
+  .tb-divider{width:1px;height:30px;background:rgba(255,255,255,.25);}
+  .tb-title{font-family:var(--font-head);font-size:15px;font-weight:600;color:#fff;}
+  .tb-sub{font-family:var(--font-body);font-size:12.5px;color:rgba(255,255,255,.75);margin-top:1px;}
+
+  .shell{display:grid;grid-template-columns:260px minmax(0,780px);gap:56px;max-width:1180px;margin:0 auto;padding:44px 32px 96px;}
+  @media (max-width:900px){ .shell{grid-template-columns:1fr;padding:28px 20px 64px;} .toc{position:static !important;} }
+
+  .toc{position:sticky;top:32px;align-self:start;}
+  .toc-label{font-family:var(--font-head);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 14px;}
+  .toc a{display:block;font-size:13.5px;color:var(--preto-pc);text-decoration:none;padding:7px 0 7px 14px;border-left:2px solid var(--border2);transition:all .15s;}
+  .toc a:hover{border-left-color:var(--azul-pc);color:var(--azul-pc);}
+  .toc a.lvl2{padding-left:26px;font-size:12.5px;color:var(--muted);}
+
+  main h1{font-family:var(--font-head);font-size:34px;font-weight:700;color:var(--escuro-pc);margin:0 0 6px;text-wrap:balance;letter-spacing:-.3px;}
+  main .lede{font-size:16px;color:var(--muted);max-width:60ch;margin:0 0 8px;}
+  .meta-row{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--muted2);font-family:var(--font-mono);margin:18px 0 40px;padding-bottom:28px;border-bottom:1px solid var(--border2);}
+  .meta-row b{color:var(--preto-pc);font-weight:600;}
+
+  section{margin-bottom:52px;scroll-margin-top:24px;}
+  section h2{font-family:var(--font-head);font-size:22px;font-weight:700;color:var(--escuro-pc);margin:0 0 6px;display:flex;align-items:baseline;gap:10px;text-wrap:balance;}
+  section h2 .num{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--azul-pc);}
+  section > .sec-lede{color:var(--muted);font-size:14px;margin:0 0 22px;max-width:62ch;}
+  section h3{font-family:var(--font-head);font-size:15.5px;font-weight:600;color:var(--preto-pc);margin:28px 0 10px;}
+  p{margin:0 0 14px;max-width:66ch;}
+  ul,ol{margin:0 0 16px;padding-left:22px;max-width:64ch;}
+  li{margin-bottom:6px;}
+
+  code, .field-name{font-family:var(--font-mono);font-size:12.5px;background:var(--cyan-lt);color:var(--escuro-pc);padding:2px 6px;border-radius:4px;}
+
+  .callout{display:flex;gap:12px;padding:14px 18px;border-radius:10px;font-size:13.5px;line-height:1.6;margin:18px 0;max-width:64ch;}
+  .callout .icon{flex-shrink:0;font-size:15px;line-height:1.5;}
+  .callout-tip{background:var(--green-lt);border:1px solid rgba(17,122,101,.22);color:#0d5f4f;}
+  .callout-warn{background:var(--amber-lt);border:1px solid rgba(184,92,0,.22);color:#8a4400;}
+  .callout-info{background:var(--cyan-lt);border:1px solid rgba(0,169,224,.22);color:#00577d;}
+
+  .steps{list-style:none;margin:0 0 18px;padding:0;max-width:64ch;counter-reset:step;}
+  .steps li{counter-increment:step;position:relative;padding:2px 0 14px 40px;border-left:1px solid var(--border2);margin-left:14px;}
+  .steps li:last-child{border-left-color:transparent;padding-bottom:0;}
+  .steps li::before{content:counter(step);position:absolute;left:-14px;top:0;width:28px;height:28px;border-radius:50%;background:var(--surface);border:2px solid var(--azul-pc);color:var(--escuro-pc);font-family:var(--font-head);font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0 22px;}
+  table th{text-align:left;font-family:var(--font-head);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding:8px 12px;border-bottom:2px solid var(--border2);}
+  table td{padding:9px 12px;border-bottom:1px solid var(--border2);vertical-align:top;}
+  table td:first-child{font-family:var(--font-mono);font-size:12px;white-space:nowrap;color:var(--escuro-pc);font-weight:500;}
+  .table-wrap{overflow-x:auto;}
+
+  .btn-tag{display:inline-flex;align-items:center;gap:5px;background:var(--escuro-pc);color:#fff;font-family:var(--font-head);font-size:12px;font-weight:600;padding:4px 11px;border-radius:6px;white-space:nowrap;}
+  .btn-tag.email{background:var(--azul-pc);}
+  .btn-tag.export{background:var(--green);}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0;max-width:64ch;}
+  @media (max-width:600px){.two-col{grid-template-columns:1fr;}}
+  .card-mini{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:16px 18px;}
+  .card-mini h4{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--escuro-pc);margin:0 0 8px;text-transform:uppercase;letter-spacing:.4px;}
+  .card-mini p{font-size:13px;margin:0;color:var(--muted);}
+
+  footer{max-width:66ch;padding-top:28px;border-top:1px solid var(--border2);font-size:12.5px;color:var(--muted2);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-lawgico">
+    <span class="tb-law">LAW</span><span class="tb-gico">gico</span>
+    <div class="tb-modulo">Perícias</div>
+  </div>
+  <div class="tb-divider"></div>
+  <div>
+    <div class="tb-title">Manual — Comunicado de Perícia</div>
+    <div class="tb-sub">Guia de uso da ferramenta</div>
+  </div>
+</div>
+
+<div class="shell">
+
+  <nav class="toc">
+    <p class="toc-label">Neste manual</p>
+    <a href="#visao-geral">1. Visão geral</a>
+    <a href="#preencher">2. Preenchendo o caso</a>
+    <a href="#cartao-texto">3. Cartão × Texto simples</a>
+    <a href="#assunto">4. Assunto automático</a>
+    <a href="#enviar">5. Enviar e copiar</a>
+    <a href="#historico">6. Salvar e exportar</a>
+    <a href="#pauta">7. Cruzamento com a pauta</a>
+    <a href="#duvidas">8. Dúvidas comuns</a>
+  </nav>
+
+  <main>
+    <h1>Comunicado de Perícia</h1>
+    <p class="lede">Guia rápido pra montar, enviar e arquivar os avisos de perícia da Bridgestone sem precisar redigitar nada a cada caso.</p>
+    <div class="meta-row">
+      <span><b>Ferramenta:</b> comunicadodepericias (GitHub Pages)</span>
+      <span><b>Módulo:</b> LAWgico · Perícias</span>
+      <span><b>Histórico:</b> Supabase (projeto Valores)</span>
+    </div>
+
+    <section id="visao-geral">
+      <h2><span class="num">01</span>Visão geral</h2>
+      <p class="sec-lede">A ferramenta existe pra resolver um problema específico: o aviso de nova perícia pra Bridgestone tem sempre a mesma estrutura e o mesmo texto padrão — só os dados do caso mudam. Em vez de editar um e-mail antigo toda vez, você preenche um formulário e ela monta tudo pronto.</p>
+      <p>A página tem três blocos, de cima pra baixo:</p>
+      <ul>
+        <li><b>Dados da perícia</b> — onde você preenche o caso (à esquerda).</li>
+        <li><b>Pré-visualização do e-mail</b> — o resultado, em duas versões alternáveis (à direita).</li>
+        <li><b>Histórico</b> e <b>Cruzamento com a pauta</b> — o que já foi enviado, e o que ainda falta (embaixo).</li>
+      </ul>
+      <div class="callout callout-info">
+        <span class="icon">ℹ️</span>
+        <span>Nada é enviado sozinho. A ferramenta só monta o conteúdo — quem aperta "Enviar" ou cola no Outlook é você, sempre.</span>
+      </div>
+    </section>
+
+    <section id="preencher">
+      <h2><span class="num">02</span>Preenchendo o caso</h2>
+      <p class="sec-lede">Os campos do formulário correspondem direto ao que aparece no e-mail final. Alguns têm efeito automático nos outros:</p>
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Campo</th><th>O que faz</th></tr></thead>
+        <tbody>
+          <tr><td>Saudação</td><td>Primeiro nome de quem vai <em>receber</em> o e-mail (ex: Rodrigo) — usado só na instrução de encaminhamento, fora do cartão.</td></tr>
+          <tr><td>Perito / Reclamante</td><td>Aparecem no cartão em maiúsculas e no assunto automático.</td></tr>
+          <tr><td>Número do processo</td><td>Usado no assunto do e-mail e na comparação com a pauta de audiências.</td></tr>
+          <tr><td>Vínculo</td><td>Empregado ou Terceiro.</td></tr>
+          <tr><td>Tipo de perícia</td><td>Médica, Técnica ou Ergonômica — entra no assunto automático e no cartão.</td></tr>
+          <tr><td>Encaminhar — Para / Cópia</td><td>A lista de quem vai receber quando o destinatário (ex: Rodrigo) encaminhar internamente. Aceita nomes soltos, sem e-mail.</td></tr>
+          <tr><td>Textos do e-mail</td><td>Os parágrafos padrão (solicitação, responsabilidade, tolerância, orientações) já vêm preenchidos com o texto oficial — edite só se o caso exigir uma exceção.</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="callout callout-tip">
+        <span class="icon">💡</span>
+        <span>Se quiser voltar tudo ao texto padrão depois de mexer, use o botão <b>Limpar campos</b> — ele restaura os textos oficiais, não só apaga.</span>
+      </div>
+    </section>
+
+    <section id="cartao-texto">
+      <h2><span class="num">03</span>Cartão × Texto simples</h2>
+      <p class="sec-lede">A pré-visualização tem duas abas que mostram o <em>mesmo</em> conteúdo de formas diferentes:</p>
+      <div class="two-col">
+        <div class="card-mini">
+          <h4>🗂️ Cartão (visual)</h4>
+          <p>Versão com identidade visual (logos, cores, caixas). Serve pra conferir o conteúdo com calma ou anexar como HTML. Puxe o formulário e cole com <b>Copiar e-mail formatado</b> — mantém a formatação em clientes de e-mail que aceitam HTML colado.</p>
+        </div>
+        <div class="card-mini">
+          <h4>📝 Texto simples</h4>
+          <p>Exatamente o texto que sai no botão <b>Enviar e-mail</b> (mailto). É o que o Outlook realmente mostra, sem estilização — use pra conferir antes de mandar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="assunto">
+      <h2><span class="num">04</span>Assunto automático</h2>
+      <p class="sec-lede">O campo <span class="field-name">Assunto do e-mail</span> é editável, mas tem um gerador que monta o padrão a partir dos dados já preenchidos:</p>
+      <p style="font-family:var(--font-mono);font-size:12.5px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:12px 16px;max-width:64ch;">IMPORTANTE! – {TIPO DE PERÍCIA} – DIA: {data} - {hora} - {RECLAMANTE} - PROC. : {processo}</p>
+      <p>Clique em <em>"Gerar automaticamente a partir dos dados acima"</em> depois de preencher Reclamante, Processo, Data/Hora e Tipo de perícia. Se editar o assunto manualmente depois, ele não é sobrescrito sozinho — só ao clicar de novo no link.</p>
+    </section>
+
+    <section id="enviar">
+      <h2><span class="num">05</span>Enviar e copiar</h2>
+      <p class="sec-lede">Quatro botões, cada um pra uma situação:</p>
+      <ul>
+        <li><span class="btn-tag email">✉️ Enviar e-mail</span> — abre o Outlook (ou seu cliente padrão) com Para/Cópia/Assunto/Corpo já preenchidos, em texto simples. Exige o campo "Destinatário (Para) — e-mail" preenchido.</li>
+        <li><span class="btn-tag">Copiar e-mail formatado</span> — copia o cartão visual pra colar direto no corpo de um e-mail já aberto.</li>
+        <li><span class="btn-tag">Copiar destinatários</span> — copia só a lista de Para/Cópia como texto.</li>
+        <li><span class="btn-tag">Baixar como .html</span> — salva o cartão como arquivo, pra anexar ou arquivar.</li>
+      </ul>
+      <div class="callout callout-warn">
+        <span class="icon">⚠️</span>
+        <span>O botão "Enviar e-mail" usa <code>mailto:</code> — se a mensagem for muito longa, alguns navegadores/Outlook podem truncar o corpo. Nesses casos, use "Copiar e-mail formatado" ou "Copiar destinatários" + cole manualmente.</span>
+      </div>
+    </section>
+
+    <section id="historico">
+      <h2><span class="num">06</span>Salvar e exportar</h2>
+      <p class="sec-lede">O botão <b>Salvar comunicado</b> grava o caso inteiro (todos os campos) numa tabela na nuvem — isso é o que alimenta o histórico e o cruzamento com a pauta.</p>
+      <ol class="steps">
+        <li>Preencha o caso e confira a pré-visualização.</li>
+        <li>Clique em <b>Salvar comunicado</b> — aparece um aviso de confirmação.</li>
+        <li>A tabela "Histórico de comunicados salvos" atualiza sozinha; use <b>Atualizar histórico</b> se não aparecer na hora.</li>
+        <li><span class="btn-tag export">⬇ Exportar Excel</span> baixa todo o histórico salvo até agora num <code>.xlsx</code>.</li>
+      </ol>
+      <div class="callout callout-info">
+        <span class="icon">ℹ️</span>
+        <span>Salvar não substitui enviar, e enviar não salva sozinho — são duas ações independentes. Se o caso foi enviado, salve também, senão ele não entra no cruzamento com a pauta.</span>
+      </div>
+    </section>
+
+    <section id="pauta">
+      <h2><span class="num">07</span>Cruzamento com a pauta</h2>
+      <p class="sec-lede">Serve pra responder uma pergunta: <em>"o que já está marcado, mas ainda não teve aviso enviado?"</em></p>
+      <ol class="steps">
+        <li>Prepare a planilha da pauta com colunas de Processo, Reclamante, Data da perícia, Hora da perícia e Tipo de perícia (os nomes das colunas podem variar um pouco — a ferramenta reconhece por aproximação).</li>
+        <li>Na seção "Cruzamento com a pauta de audiências", escolha o arquivo (.xlsx, .xls ou .csv).</li>
+        <li>Clique em <b>Cruzar com o histórico</b>.</li>
+      </ol>
+      <p>O resultado vem em dois blocos:</p>
+      <ul>
+        <li><b>Na pauta, mas sem comunicado enviado</b> — o que precisa de ação sua.</li>
+        <li><b>Comunicado enviado, mas não consta na pauta</b> — pode indicar uma perícia cancelada, remarcada, ou um número de processo digitado diferente.</li>
+      </ul>
+      <p>Datas já passadas são descartadas dos dois lados automaticamente — o cruzamento só olha pra frente.</p>
+    </section>
+
+    <section id="duvidas">
+      <h2><span class="num">08</span>Dúvidas comuns</h2>
+      <h3>Preenchi tudo mas "Enviar e-mail" não faz nada</h3>
+      <p>Confira se o campo <span class="field-name">Destinatário (Para) — e-mail</span> está preenchido — sem ele, a ferramenta avisa e não abre o Outlook.</p>
+      <h3>O histórico não carrega / dá erro</h3>
+      <p>Normalmente é a conexão com o Supabase. Confira sua internet e recarregue a página; se persistir, é sinal de mudança na tabela do banco — fale com quem mantém a ferramenta.</p>
+      <h3>Mudei o texto de um campo e quero voltar ao original</h3>
+      <p><b>Limpar campos</b> restaura tudo, inclusive os textos padrão — não precisa redigitar.</p>
+      <h3>Posso usar pra outro cliente, não só Bridgestone?</h3>
+      <p>O texto e os destinatários são todos editáveis, mas os logos e alguns termos (ex: "Bridgestone" nas orientações padrão) são fixos hoje — pra outro cliente, o ideal é pedir uma adaptação em vez de reaproveitar direto.</p>
+    </section>
+
+    <footer>
+      Dúvidas ou ajustes na ferramenta: fale com a Controladoria. Este manual acompanha a versão da ferramenta publicada em <code>peixotoecury.github.io/comunicadodepericias</code>.
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>
