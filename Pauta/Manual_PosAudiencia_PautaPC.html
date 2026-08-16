@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<title>Manual do Pós-Audiência · LAWgico Pauta</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#F4FAFD;color:#1A2E3B;width:1100px;margin:0 auto;padding:32px 24px 48px;}
+
+  /* HEADER */
+  .header{background:linear-gradient(135deg,#002236 0%,#003B5C 55%,#004E7C 100%);border-radius:16px;padding:36px 48px;display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;position:relative;overflow:hidden;}
+  .header::before{content:'';position:absolute;right:-40px;top:-60px;width:280px;height:280px;border-radius:50%;background:rgba(0,174,239,.12);}
+  .header::after{content:'';position:absolute;right:60px;bottom:-50px;width:180px;height:180px;border-radius:50%;background:rgba(0,174,239,.10);}
+  .logo-wordmark{display:flex;align-items:flex-end;line-height:1;margin-bottom:2px;position:relative;z-index:1;}
+  .logo-law{font-size:44px;font-weight:900;color:#fff;letter-spacing:-2px;}
+  .logo-gico-col{display:flex;flex-direction:column;align-items:flex-start;}
+  .logo-module{font-size:9px;font-weight:400;color:rgba(255,255,255,.8);letter-spacing:1px;align-self:flex-end;margin-bottom:-1px;}
+  .logo-gico{font-size:44px;font-weight:300;color:#fff;letter-spacing:-2px;line-height:1;}
+  .logo-tagline{font-size:9px;color:rgba(255,255,255,.75);letter-spacing:3px;font-weight:400;margin-top:3px;position:relative;z-index:1;}
+  .logo-sub{font-size:11px;font-weight:300;color:rgba(255,255,255,.5);letter-spacing:3px;text-transform:uppercase;margin-top:6px;position:relative;z-index:1;}
+  .header-right{text-align:right;position:relative;z-index:1;}
+  .header-tagline{font-size:24px;font-weight:700;color:#fff;line-height:1.3;max-width:380px;}
+  .header-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:8px;}
+  .header-badge{display:inline-block;margin-top:14px;background:#00AEEF;color:#fff;font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:.5px;}
+
+  .sec-title{font-size:12px;font-weight:700;color:#00AEEF;text-transform:uppercase;letter-spacing:2px;margin:30px 0 14px;display:flex;align-items:center;gap:8px;}
+  .sec-title .num{width:22px;height:22px;border-radius:50%;background:#003B5C;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+  .lead{font-size:13.5px;color:#2D2926;line-height:1.7;background:#fff;border:1px solid #BFD6E4;border-radius:12px;padding:18px 22px;margin-bottom:8px;}
+  .lead strong{color:#003B5C;}
+
+  /* CALLOUT */
+  .callout{border-radius:12px;padding:18px 22px;margin:14px 0 28px;border:1px solid;}
+  .callout.warn{background:rgba(230,126,34,.08);border-color:rgba(230,126,34,.35);}
+  .callout.info{background:rgba(0,174,239,.07);border-color:rgba(0,174,239,.3);}
+  .callout-title{font-size:12.5px;font-weight:700;color:#003B5C;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .callout ul{margin:0;padding-left:18px;}
+  .callout li{font-size:12px;color:#2D2926;line-height:1.7;margin-bottom:4px;}
+  .callout li b{color:#003B5C;}
+
+  /* STEP CARDS */
+  .steps{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+  .step{background:#fff;border:1px solid #BFD6E4;border-radius:12px;padding:16px 20px;display:flex;gap:16px;align-items:flex-start;}
+  .step-num{width:30px;height:30px;border-radius:50%;background:#003B5C;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .step-body{flex:1;}
+  .step-title{font-size:13px;font-weight:700;color:#003B5C;margin-bottom:4px;}
+  .step-desc{font-size:12px;color:#557789;line-height:1.6;}
+  .step-desc b{color:#2D2926;}
+  .field-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+  .field-tag{font-size:10.5px;font-weight:600;color:#006080;background:#E8F4FA;border:1px solid #BFD6E4;border-radius:8px;padding:3px 9px;}
+  .field-tag.req::after{content:' *';color:#C0392B;font-weight:900;}
+
+  /* BADGES demo */
+  .badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+  .badge{font-size:10.5px;font-weight:700;border-radius:12px;padding:4px 11px;display:inline-flex;align-items:center;gap:4px;}
+  .badge.done{background:rgba(39,174,96,.15);color:#117A65;border:1px solid rgba(39,174,96,.3);}
+  .badge.pending{background:rgba(230,126,34,.15);color:#B9660B;border:1px solid rgba(230,126,34,.3);}
+  .badge.late{background:#C0392B;color:#fff;}
+  .badge.soon{background:rgba(230,126,34,.18);color:#B9660B;border:1px solid rgba(230,126,34,.45);}
+  .badge.deal{background:rgba(39,174,96,.15);color:#117A65;border:1px solid rgba(39,174,96,.3);}
+
+  /* KPI GRID */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px;}
+  .kpi-card{background:#fff;border:1px solid #BFD6E4;border-radius:12px;padding:16px;text-align:center;}
+  .kpi-num{font-size:26px;font-weight:800;color:#003B5C;}
+  .kpi-label{font-size:10px;color:#7E98AA;text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-top:4px;}
+
+  /* MOBILE GRID */
+  .mob-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px;}
+  .mob-card{background:#fff;border:1px solid #BFD6E4;border-radius:12px;padding:16px 18px;}
+  .mob-card-title{font-size:12.5px;font-weight:700;color:#003B5C;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .mob-nav{display:flex;gap:6px;background:#EFF6FA;border-radius:10px;padding:6px;margin:8px 0;}
+  .mob-nav div{flex:1;text-align:center;font-size:9px;color:#557789;padding:6px 2px;border-radius:8px;}
+  .mob-nav div.active{background:#003B5C;color:#fff;font-weight:700;}
+  .mob-card-desc{font-size:11.5px;color:#557789;line-height:1.6;}
+
+  /* FAQ */
+  .faq{background:#fff;border:1px solid #BFD6E4;border-radius:12px;padding:4px 0;margin-bottom:8px;overflow:hidden;}
+  .faq-item{padding:14px 20px;border-bottom:1px solid #EFF6FA;}
+  .faq-item:last-child{border-bottom:none;}
+  .faq-q{font-size:12.5px;font-weight:700;color:#003B5C;margin-bottom:5px;display:flex;gap:8px;}
+  .faq-q::before{content:"?";background:#00AEEF;color:#fff;width:18px;height:18px;border-radius:50%;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .faq-a{font-size:11.5px;color:#557789;line-height:1.7;padding-left:26px;}
+
+  /* FOOTER */
+  .footer{background:#003B5C;border-radius:12px;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;color:rgba(255,255,255,.6);font-size:11px;margin-top:20px;}
+  .footer strong{color:#00AEEF;}
+
+  @media print{
+    body{width:100%;padding:0;}
+    .step,.kpi-card,.mob-card,.faq,.lead,.callout{break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="logo-wordmark">
+      <span class="logo-law">LAW</span>
+      <div class="logo-gico-col">
+        <span class="logo-module">pauta</span>
+        <span class="logo-gico">gico</span>
+      </div>
+    </div>
+    <div class="logo-tagline">lawyers at work</div>
+    <div class="logo-sub">Peixoto &amp; Cury Advogados</div>
+  </div>
+  <div class="header-right">
+    <div class="header-tagline">Manual do<br/>Pós-Audiência</div>
+    <div class="header-sub">Guia para gestores e usuários · Sistema Pauta de Audiências</div>
+    <div class="header-badge">Controladoria Jurídica · 2026</div>
+  </div>
+</div>
+
+<!-- 1. OBJETIVO -->
+<div class="sec-title"><span class="num">1</span> O que é o Pós-Audiência</div>
+<div class="lead">
+  A aba <strong>📝 Pós-Audiência</strong> é onde o advogado registra o que aconteceu depois de uma audiência já realizada: se houve acordo, se ficou algum prazo em ata, quem foi o preposto, quais testemunhas compareceram e qualquer outra informação relevante para o processo. Esse registro é o que permite à Controladoria acompanhar prazos, cobrar pendências e manter um histórico confiável de todas as audiências do escritório.
+  <br/><br/>
+  <strong>Foi criado um workflow para que o preenchimento do Pós-Audiência seja obrigatório na Pauta Digital do escritório.</strong> Toda audiência já realizada precisa desse registro concluído, com envio do e-mail à Controladoria, para ser considerada finalizada no sistema.
+</div>
+
+<!-- 2. NOVIDADES -->
+<div class="callout warn">
+  <div class="callout-title">⚠️ O que muda a partir de agora</div>
+  <ul>
+    <li><b>O registro do Pós-Audiência é agora uma etapa obrigatória da Pauta Digital</b>, e não mais um preenchimento opcional.</li>
+    <li><b>Todos os campos passam a ser obrigatórios.</b> Quando a informação não existir ou não se aplicar, preencha/selecione <b>N/A</b>: não é mais possível deixar em branco.</li>
+    <li><b>Enviar o e-mail para a Controladoria passa a ser obrigatório</b> antes de conseguir salvar o registro (veja o Passo 6).</li>
+    <li><b>Testemunhas entram automaticamente na base da aba 🔍 Testemunhas</b> assim que o nome é digitado, sem depender mais de terminar e salvar o formulário inteiro.</li>
+    <li><b>Tipo e Avaliação da testemunha também passam a ser obrigatórios</b> assim que o nome dela é preenchido.</li>
+    <li><b>A lista de audiências passa a ser ordenada da mais recente para a mais antiga.</b></li>
+    <li><b>A aba 🔍 Testemunhas agora aparece no menu do celular</b> (antes não era possível abri-la no mobile).</li>
+    <li><b>Novo alerta ao entrar no sistema:</b> quem tem sigla própria vê, uma vez por dia, um resumo com as audiências que vai realizar hoje, as que é responsável pela pasta e as pendências de Pós-Audiência.</li>
+  </ul>
+</div>
+
+<!-- 3. COMO ACESSAR -->
+<div class="sec-title"><span class="num">2</span> Como acessar</div>
+<div class="mob-grid">
+  <div class="mob-card">
+    <div class="mob-card-title">💻 No computador</div>
+    <div class="mob-card-desc">No menu superior do sistema, clique em <b>📝 Pós-Audiência</b>. A aba mostra o painel executivo no topo e, abaixo, a lista de audiências elegíveis para preenchimento.</div>
+  </div>
+  <div class="mob-card">
+    <div class="mob-card-title">📱 No celular</div>
+    <div class="mob-nav">
+      <div>📊 Dashboard</div><div>🎯 Pauta</div><div>⚖️ Audiência</div><div>⚠️ Conflitos</div><div class="active">📝 Pós-Aud.</div><div>☰ Mais</div>
+    </div>
+    <div class="mob-card-desc">O atalho <b>Pós-Aud.</b> já está na barra inferior. A aba <b>🔍 Testemunhas</b> fica dentro do botão <b>☰ Mais</b>.</div>
+  </div>
+</div>
+
+<!-- 3. ALERTA DE LOGIN -->
+<div class="sec-title"><span class="num">3</span> Alerta ao entrar no sistema</div>
+<div class="lead" style="margin-bottom:12px">
+  Quem tem sigla própria vê, uma vez por dia, um resumo pessoal logo ao entrar: quantas audiências vai realizar hoje, de quantos processos é responsável pela pasta hoje, e quantos registros de Pós-Audiência ainda estão pendentes. Basta clicar em cada número para ir direto pra aba correspondente. Esse alerta aparece só uma vez por dia; ao logar de novo no mesmo dia, ele não é exibido outra vez.
+</div>
+
+<!-- 4. PAINEL EXECUTIVO -->
+<div class="sec-title"><span class="num">4</span> Painel executivo (topo da aba)</div>
+<div class="lead" style="margin-bottom:12px">
+  Ao abrir a aba, o topo mostra um resumo de todas as audiências elegíveis para preenchimento (as que já aconteceram, dentro do prazo de controle). Esse painel é o mesmo que os gestores usam para cobrar pendências.
+</div>
+<div class="kpi-grid">
+  <div class="kpi-card"><div class="kpi-num">465</div><div class="kpi-label">Elegíveis até D+1</div></div>
+  <div class="kpi-card"><div class="kpi-num">221</div><div class="kpi-label">Concluídos</div></div>
+  <div class="kpi-card"><div class="kpi-num">244</div><div class="kpi-label">Pendentes</div></div>
+  <div class="kpi-card"><div class="kpi-num">48%</div><div class="kpi-label">Aderência</div></div>
+</div>
+<div class="lead">
+  O card <strong>🚨 Pendências por Responsável</strong> lista quem tem mais registros em aberto. O botão <strong>📧 Notificar quem não preencheu</strong> (uso dos gestores) abre um painel com um botão de e-mail pronto para cada responsável pendente.
+</div>
+
+<!-- 5. STATUS E PRAZOS -->
+<div class="sec-title"><span class="num">5</span> Status e prazos de cada audiência</div>
+<div class="lead" style="margin-bottom:10px">Cada audiência da lista mostra selos (badges) indicando a situação:</div>
+<div class="badge-row">
+  <span class="badge pending">⏳ Pendente</span>
+  <span class="badge done">✅ Preenchido</span>
+  <span class="badge soon">⚠️ Vence em 5d</span>
+  <span class="badge late">🚨 Prazo esgotado</span>
+  <span class="badge deal">🤝 Acordo</span>
+</div>
+<div class="callout info" style="margin-top:14px">
+  <div class="callout-title">🗓️ Prazo de preenchimento</div>
+  <ul>
+    <li>Você tem até <b>30 dias</b> após a data da audiência para preencher o Pós-Audiência.</li>
+    <li>Faltando 7 dias ou menos, aparece o alerta <b>⚠️ Vence em Xd</b>.</li>
+    <li>Depois do prazo, aparece <b>🚨 Prazo esgotado</b>, mas o preenchimento continua sendo possível e necessário.</li>
+  </ul>
+</div>
+
+<!-- 6. PASSO A PASSO -->
+<div class="sec-title"><span class="num">6</span> Passo a passo do preenchimento</div>
+<div class="steps">
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <div class="step-title">Localize a audiência e abra o card</div>
+      <div class="step-desc">Use os filtros (dia, grupo, busca por processo/parte/advogado) ou role a lista, que vem ordenada da <b>mais recente para a mais antiga</b>. Clique no título do card para abrir o formulário.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <div class="step-title">Preencha as informações da audiência</div>
+      <div class="step-desc">Todos os campos abaixo são obrigatórios. Quando não se aplicar, preencha/selecione <b>N/A</b>.</div>
+      <div class="field-tags">
+        <span class="field-tag req">Prazo em Ata? (Sim/Não)</span>
+        <span class="field-tag req">Nova Data de Audiência? (Sim/Não)</span>
+        <span class="field-tag req">Houve Acordo? (Sim/Não)</span>
+        <span class="field-tag req">Nome do Juiz</span>
+        <span class="field-tag req">Advogado que realizou</span>
+        <span class="field-tag req">Advogado da parte contrária</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <div class="step-title">Preposto</div>
+      <div class="step-desc">Informe o nome do preposto e avalie o desempenho dele na audiência.</div>
+      <div class="field-tags">
+        <span class="field-tag req">Nome do Preposto</span>
+        <span class="field-tag req">Avaliação do Preposto</span>
+      </div>
+      <div class="step-desc" style="margin-top:6px">Se a avaliação for <b>"Não atendeu"</b>, um campo extra pede uma breve explicação do motivo.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <div class="step-title">Testemunhas: agora com base automática</div>
+      <div class="step-desc">Preencha nome, tipo (Reclamante/Reclamada/Judicial) e avaliação de cada testemunha. <b>Assim que o nome é preenchido, Tipo e Avaliação passam a ser obrigatórios</b> para aquela linha. <b>Ao digitar o nome, ela já entra automaticamente na base da aba 🔍 Testemunhas</b>, sem que seja preciso terminar e salvar o formulário inteiro para isso acontecer. Se não houve testemunha de um dos lados, marque a caixa <b>"Não teve testemunha do Reclamante/Reclamada"</b> em vez de deixar em branco.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <div class="step-title">Ata / Documentos e Observações</div>
+      <div class="step-desc">Anexe a ata da audiência (PDF, Word ou imagem) se já estiver disponível, e escreva as observações relevantes. O campo de observações também é obrigatório: use <b>N/A</b> se não houver nada a registrar.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-body">
+      <div class="step-title">Envie o e-mail para a Controladoria (obrigatório)</div>
+      <div class="step-desc">Clique em <b>📧 Enviar e-mail para Controladoria</b>. Isso abre seu cliente de e-mail já com o assunto e o corpo preenchidos, endereçado a <b>audiencia.trabalhista@peixotoecury.com.br</b>. Confirme o envio no seu e-mail. O botão fica verde (<b>✅ E-mail enviado</b>) depois disso.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">7</div>
+    <div class="step-body">
+      <div class="step-title">Salve o registro</div>
+      <div class="step-desc">Clique em <b>💾 Salvar Registro</b>. Se algum campo obrigatório estiver vazio, ou se o e-mail para a Controladoria ainda não tiver sido enviado, o sistema avisa exatamente o que falta antes de deixar salvar.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 7. BUSCA DE TESTEMUNHAS -->
+<div class="sec-title"><span class="num">7</span> Consultando a base de testemunhas</div>
+<div class="lead">
+  Na aba <strong>🔍 Testemunhas</strong>, digite ao menos 3 letras do nome para buscar. O sistema mostra em quais processos aquela pessoa já apareceu como testemunha e de qual lado (Reclamante/Reclamada), o que é útil para checar o histórico de uma testemunha indicada pela parte contrária antes da audiência. A base é alimentada automaticamente pelos registros de Pós-Audiência de toda a equipe, e pode ser exportada em Excel pelo botão <strong>📥 Exportar Excel</strong>.
+</div>
+
+<!-- 8. PARA GESTORES -->
+<div class="sec-title"><span class="num">8</span> Para gestores</div>
+<div class="lead">
+  O painel executivo do topo (KPIs de Elegíveis, Concluídos, Pendentes e Aderência) e o ranking de <strong>Pendências por Responsável</strong> servem para acompanhar a equipe. O botão <strong>📧 Notificar quem não preencheu</strong> gera, para cada responsável com pendências, um e-mail de cobrança já pronto: basta clicar em <strong>"Abrir e-mail"</strong> ao lado do nome da pessoa. O botão <strong>📊 Exportar Excel</strong>, na lista de audiências, gera uma planilha com todos os registros de Pós-Audiência preenchidos até o momento.
+</div>
+
+<!-- 9. FAQ -->
+<div class="sec-title"><span class="num">9</span> Perguntas frequentes</div>
+<div class="faq">
+  <div class="faq-item">
+    <div class="faq-q">Não sei o nome do juiz ou o advogado da parte contrária. O que eu faço?</div>
+    <div class="faq-a">Digite <b>N/A</b> no campo. O importante é que o campo não fique vazio.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Preciso enviar o e-mail para a Controladoria toda vez que eu editar o registro?</div>
+    <div class="faq-a">Não. Depois do primeiro envio, o sistema já reconhece que o e-mail daquela audiência foi enviado e não pede de novo, mesmo que você volte para editar outros campos depois.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Não consigo achar a aba Testemunhas no celular.</div>
+    <div class="faq-a">Ela está dentro do botão <b>☰ Mais</b>, na barra inferior. Se ainda não aparecer, feche o app completamente (não só minimize) e abra de novo para carregar a versão mais recente.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Errei um campo depois de já ter salvado. Posso corrigir?</div>
+    <div class="faq-a">Sim. Abra o card novamente, corrija o que for preciso e clique em <b>💾 Salvar Registro</b> de novo.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">A audiência foi cancelada ou não aconteceu. Preciso preencher o Pós-Audiência mesmo assim?</div>
+    <div class="faq-a">Sim, registre a situação nas Observações (ex.: "Audiência cancelada/redesignada") e preencha os demais campos com N/A quando não se aplicarem.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Preenchi o nome de uma testemunha e não consigo salvar. O que falta?</div>
+    <div class="faq-a">Toda testemunha com nome preenchido também precisa ter <b>Tipo</b> e <b>Avaliação</b> selecionados. O sistema avisa o nome da testemunha com esses campos pendentes.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">O alerta com meu resumo do dia não apareceu ao entrar.</div>
+    <div class="faq-a">Ele só aparece uma vez por dia. Se você já entrou no sistema mais cedo hoje, é esperado não ver de novo até amanhã.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>Peixoto &amp; Cury Advogados &nbsp;·&nbsp; <strong>Controladoria Jurídica</strong> &nbsp;·&nbsp; 2026</div>
+  <div>Dúvidas: <strong>audiencia.trabalhista@peixotoecury.com.br</strong></div>
+</div>
+
+</body>
+</html>
