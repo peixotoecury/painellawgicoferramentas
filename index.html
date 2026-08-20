@@ -1,633 +1,954 @@
-<html lang="pt-BR"><head>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LAWgico — Sistemas Ativos · Peixoto &amp; Cury Advogados</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compromissos — Time B e Controladoria | LAWgico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+:root {
+  --azul-pc:  #00A9E0;
+  --cyan-lt:  rgba(0,169,224,.12);
+  --escuro-pc:#003B5C;
+  --preto-pc: #2D2926;
+  --bg:       #F4F9FC;
+  --surface:  #FFFFFF;
+  --surface2: #F7FCFF;
+  --border2:  #D8E7F0;
+  --text:     #2D2926;
+  --muted:    #5F7E92;
+  --muted2:   #7E98AA;
+  --red:      #C0392B;
+  --red-lt:   rgba(192,57,43,.10);
+  --orange:   #B85C00;
+  --orange-lt:rgba(230,126,34,.10);
+  --green:    #117A65;
+  --green-lt: rgba(17,122,101,.10);
+  --shadow-pc:0 8px 22px rgba(0,59,92,.08);
+  --font:     'Sora', sans-serif;
+  --mono:     'IBM Plex Mono', monospace;
+  --radius:   8px;
+  --radius-lg:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow-x:hidden;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(0,169,224,.25);border-radius:4px;}
 
-:root{
-  --navy:  #001e36;
-  --navy2: #002d4d;
-  --navy3: #003B5C;
-  --cyan:  #00AEEF;
-  --teal:  #006080;
-  --white: #FFFFFF;
-  --text:  #E8F4FA;
-  --muted: #7EB8D4;
-  --border:rgba(0,174,239,.18);
-  --green: #00C896;
-  --shadow:0 12px 40px rgba(0,0,0,.4);
-}
+.topbar{background:linear-gradient(90deg,var(--escuro-pc),#00557B 72%,var(--azul-pc));border-bottom:4px solid var(--azul-pc);box-shadow:0 4px 18px rgba(0,59,92,.22);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:100;}
+.topbar-left{display:flex;align-items:center;gap:16px;}
+.tb-lawgico{display:inline-block;line-height:1;position:relative;}
+.tb-law{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.5px;}
+.tb-gico{font-size:18px;font-weight:300;color:#fff;letter-spacing:-.5px;}
+.tb-modulo{font-size:9px;font-weight:300;color:rgba(255,255,255,.75);position:absolute;top:-11px;right:0;white-space:nowrap;}
+.tb-tagline{font-size:7.5px;font-weight:300;letter-spacing:3px;color:rgba(255,255,255,.65);margin-top:1px;}
+.topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.25);}
+.topbar-title{font-size:13px;font-weight:600;color:rgba(255,255,255,.85);}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.hub-link{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;text-decoration:none;font-family:'Sora',sans-serif;white-space:nowrap;}
 
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{
-  font-family:'Inter',sans-serif;
-  background:var(--navy);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-}
+.tab-bar{background:var(--surface);border-bottom:1px solid var(--border2);padding:0 24px;display:flex;gap:4px;box-shadow:0 2px 10px rgba(0,59,92,.05);overflow-x:auto;}
+.tab-btn{background:none;border:none;padding:15px 18px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;font-family:var(--font);border-bottom:3px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap;}
+.tab-btn:hover{color:var(--escuro-pc);}
+.tab-btn.active{color:var(--escuro-pc);border-bottom-color:var(--azul-pc);}
 
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;
-  background:
-    radial-gradient(ellipse 70% 50% at 15% 0%,  rgba(0,174,239,.12) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 60% at 85% 100%, rgba(0,96,128,.18)  0%, transparent 55%);
-  pointer-events:none;
-}
+.main{max-width:1200px;margin:0 auto;padding:24px 24px 60px;}
 
-/* ── HEADER ── */
-.header{
-  position:relative;z-index:10;
-  padding:28px 64px;
-  border-bottom:1px solid var(--border);
-  background:rgba(0,30,54,.75);
-  backdrop-filter:blur(16px);
-  display:flex;align-items:center;justify-content:space-between;
-  gap:24px;
-}
-.logo-wordmark{display:flex;align-items:flex-end;line-height:1;margin-bottom:2px;}
-.logo-law{font-size:44px;font-weight:900;color:#fff;letter-spacing:-2px;}
-.logo-gico-col{display:flex;flex-direction:column;align-items:flex-start;}
-.logo-module{font-size:10px;font-weight:400;color:rgba(255,255,255,.8);letter-spacing:1px;align-self:flex-end;margin-bottom:-1px;}
-.logo-gico{font-size:44px;font-weight:300;color:#fff;letter-spacing:-2px;line-height:1;}
-.logo-tagline{font-size:9px;color:rgba(255,255,255,.75);letter-spacing:3px;font-weight:400;margin-top:3px;}
-.header-right{text-align:right;}
-.firm-name{font-size:13px;font-weight:600;color:#fff;opacity:.85;}
-.firm-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+.filters-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);box-shadow:var(--shadow-pc);padding:20px 22px;margin-bottom:20px;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;position:relative;overflow:hidden;}
+.filters-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--azul-pc),var(--escuro-pc));}
+.filter-group{display:flex;flex-direction:column;gap:5px;min-width:180px;}
+.filter-group label{font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.filter-group select, .filter-group input{border:1px solid var(--border2);border-radius:var(--radius);padding:9px 12px;font-size:13px;font-family:var(--font);background:var(--surface2);color:var(--text);transition:border-color .15s,box-shadow .15s;}
+.filter-group select:focus, .filter-group input:focus{outline:none;border-color:var(--azul-pc);box-shadow:0 0 0 3px rgba(0,169,224,.14);}
+.btn-cyan{background:var(--azul-pc);color:#fff;border:none;border-radius:var(--radius);padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background .15s,transform .1s;}
+.btn-cyan:hover{background:var(--escuro-pc);}
+.btn-cyan:active{transform:scale(.97);}
+.btn-cyan.btn-green{background:var(--green);}
+.btn-cyan.btn-green:hover{background:#0d5f52;}
+.export-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--escuro-pc);cursor:pointer;font-family:var(--font);margin-left:10px;transition:background .15s,border-color .15s;}
+.export-btn:hover{background:var(--cyan-lt);border-color:var(--azul-pc);}
 
-/* ── HERO ── */
-.hero{
-  position:relative;z-index:5;
-  padding:64px 64px 48px;
-  text-align:center;
-}
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.3);
-  color:var(--green);font-size:11px;font-weight:700;
-  padding:5px 16px;border-radius:20px;letter-spacing:1.2px;
-  text-transform:uppercase;margin-bottom:22px;
-}
-.hero-eyebrow::before{
-  content:'';width:6px;height:6px;border-radius:50%;
-  background:var(--green);animation:pulse 2s infinite;
-}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
-.hero-title{font-size:46px;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-1.5px;margin-bottom:14px;}
-.hero-title span{
-  background:linear-gradient(90deg,var(--cyan),#60d8ff);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.hero-desc{font-size:15px;color:var(--muted);max-width:560px;margin:0 auto;line-height:1.7;}
+.resumo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-bottom:22px;}
+.resumo-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);box-shadow:var(--shadow-pc);padding:16px 18px;position:relative;overflow:hidden;transition:transform .12s,box-shadow .12s;cursor:pointer;}
+.resumo-card:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,59,92,.14);border-color:var(--azul-pc);}
+.resumo-card:active{transform:translateY(0) scale(.98);}
+.resumo-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--rc,linear-gradient(90deg,var(--azul-pc),var(--escuro-pc)));}
+.resumo-card .nome{font-size:13.5px;font-weight:800;color:var(--escuro-pc);margin-bottom:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.resumo-card .contagem{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.resumo-card .stat{text-align:center;border-radius:9px;padding:8px 4px 7px;}
+.resumo-card .stat .num{display:block;font-size:18px;font-weight:800;line-height:1.15;font-family:var(--mono);}
+.resumo-card .stat .lbl{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.2px;margin-top:3px;white-space:nowrap;}
+.resumo-card .stat.atrasados{background:var(--red-lt);}
+.resumo-card .stat.atrasados .num, .resumo-card .stat.atrasados .lbl{color:var(--red);}
+.resumo-card .stat.pendentes{background:var(--orange-lt);}
+.resumo-card .stat.pendentes .num, .resumo-card .stat.pendentes .lbl{color:var(--orange);}
+.resumo-card .stat.entregues{background:var(--green-lt);}
+.resumo-card .stat.entregues .num, .resumo-card .stat.entregues .lbl{color:var(--green);}
 
-/* ── GRID ── */
-.grid-section{
-  position:relative;z-index:5;
-  padding:48px 64px 64px;
-}
-.cards-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-  gap:20px;
-  max-width:1200px;
-  margin:0 auto;
-}
+.dash-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);box-shadow:var(--shadow-pc);margin-bottom:18px;overflow:hidden;}
+.dash-card-head{background:var(--surface2);border-bottom:1px solid var(--border2);padding:15px 22px;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--escuro-pc);display:flex;align-items:center;justify-content:space-between;}
 
-/* ── CARD ── */
-.tool-card{
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--border);
-  border-radius:20px;
-  display:flex;flex-direction:column;
-  overflow:hidden;
-  transition:all .25s;
-  position:relative;
-}
-.tool-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
-  opacity:0;transition:opacity .3s;
-}
-.tool-card:hover{
-  background:rgba(255,255,255,.07);
-  border-color:rgba(0,174,239,.45);
-  transform:translateY(-3px);
-  box-shadow:var(--shadow);
-}
-.tool-card:hover::before{opacity:1;}
+.table-wrap{overflow-x:auto;}
+table.comp-table{width:100%;border-collapse:collapse;min-width:820px;}
+table.comp-table th{text-align:left;padding:11px 18px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#fff;background:var(--escuro-pc);white-space:nowrap;position:sticky;top:0;}
+table.comp-table td{padding:11px 18px;border-bottom:1px solid var(--border2);font-size:12.5px;vertical-align:middle;}
+table.comp-table tr:last-child td{border-bottom:none;}
+table.comp-table tr:hover td{background:var(--surface2);}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 11px;border-radius:20px;font-size:10.5px;font-weight:700;white-space:nowrap;border:1px solid transparent;}
+.badge-pendente{background:var(--orange-lt);color:var(--orange);border-color:rgba(230,126,34,.25);}
+.badge-atrasado{background:var(--red-lt);color:var(--red);border-color:rgba(192,57,43,.25);}
+.badge-entregue{background:var(--green-lt);color:var(--green);border-color:rgba(17,122,101,.25);}
+.row-btn{background:#fff;border:1px solid var(--border2);border-radius:7px;padding:6px 13px;font-size:11.5px;font-weight:700;color:var(--azul-pc);cursor:pointer;font-family:var(--font);white-space:nowrap;transition:background .15s,border-color .15s;}
+.row-btn:hover{background:var(--cyan-lt);border-color:var(--azul-pc);}
+.row-btn.entregue-btn{color:var(--green);border-color:rgba(17,122,101,.25);}
+.row-btn.entregue-btn:hover{background:var(--green-lt);border-color:var(--green);}
+.empty-state{text-align:center;padding:36px;color:var(--muted2);font-size:13px;}
+.mono{font-family:var(--mono);}
 
-/* Acento colorido lateral */
-.tool-card::after{
-  content:'';position:absolute;left:0;top:24px;bottom:24px;
-  width:3px;border-radius:0 3px 3px 0;
-  background:var(--cyan);opacity:0;transition:opacity .3s;
-}
-.tool-card:hover::after{opacity:1;}
+.info-box{background:var(--cyan-lt);border:1px solid rgba(0,169,224,.25);border-radius:var(--radius);padding:10px 14px;font-size:12px;color:var(--escuro-pc);margin-bottom:14px;}
 
-.card-body{padding:28px 28px 22px;display:flex;flex-direction:column;flex:1;}
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--escuro-pc);color:#fff;padding:12px 22px;border-radius:8px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:999;opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+#toast.error{background:var(--red);}
 
-.card-icon{
-  width:52px;height:52px;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;flex-shrink:0;
-}
-
-.badge-active{
-  font-size:10px;font-weight:700;padding:4px 11px;border-radius:10px;
-  letter-spacing:.5px;text-transform:uppercase;
-  background:rgba(0,200,150,.15);color:var(--green);border:1px solid rgba(0,200,150,.3);
-}
-
-.card-name{font-size:18px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.3;}
-.card-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:20px;flex:1;}
-
-.btn-open{
-  display:inline-flex;align-items:center;gap:8px;
-  background:linear-gradient(135deg,var(--cyan),var(--teal));
-  color:#fff;font-size:12px;font-weight:700;
-  padding:10px 20px;border-radius:10px;text-decoration:none;
-  transition:all .2s;letter-spacing:.3px;align-self:flex-start;
-}
-.btn-open:hover{box-shadow:0 6px 20px rgba(0,174,239,.4);transform:translateY(-1px);}
-.btn-open svg{width:14px;height:14px;flex-shrink:0;}
-
-.card-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px;}
-.chip{
-  font-size:10px;color:var(--muted);
-  background:rgba(255,255,255,.05);
-  border:1px solid var(--border);
-  padding:3px 10px;border-radius:6px;
-}
-
-/* ── DOCS ── */
-.card-docs{
-  border-top:1px solid var(--border);
-  padding:16px 28px 20px;
-  background:rgba(0,0,0,.1);
-  display:flex;flex-direction:column;gap:8px;
-}
-.card-docs-title{
-  font-size:9px;font-weight:700;color:var(--muted);
-  text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;
-}
-.doc-link{
-  display:flex;align-items:center;gap:10px;
-  padding:9px 12px;border-radius:9px;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.07);
-  text-decoration:none;color:var(--muted);font-size:11px;font-weight:500;
-  transition:all .2s;
-}
-.doc-link:hover{
-  background:rgba(0,174,239,.1);
-  border-color:rgba(0,174,239,.3);
-  color:var(--cyan);
-}
-.doc-link span:last-child{margin-left:auto;opacity:.5;transition:transform .2s;}
-.doc-link:hover span:last-child{transform:translateX(3px);opacity:1;}
-
-/* ── FOOTER ── */
-.footer{
-  position:relative;z-index:5;
-  margin:0 64px 48px;
-  padding:20px 32px;
-  background:rgba(255,255,255,.03);
-  border:1px solid var(--border);
-  border-radius:14px;
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:11px;color:var(--muted);
-}
-.footer strong{color:var(--cyan);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,59,92,.45);display:none;align-items:center;justify-content:center;z-index:500;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--surface);border-radius:var(--radius-lg);box-shadow:0 20px 50px rgba(0,0,0,.3);max-width:460px;width:100%;max-height:90vh;overflow-y:auto;}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;}
+.modal-head h3{font-size:14px;color:var(--escuro-pc);}
+.modal-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;line-height:1;}
+.modal-body{padding:18px 22px;}
+.modal-body .item-info{font-size:12px;color:var(--muted);background:var(--surface2);border-radius:var(--radius);padding:10px 12px;margin-bottom:16px;}
+.modal-body .item-info strong{color:var(--text);}
+.mc-form-group{margin-bottom:14px;}
+.mc-form-group label{display:block;font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;}
+.mc-form-group select, .mc-form-group input{width:100%;border:1px solid var(--border2);border-radius:var(--radius);padding:9px 12px;font-size:13px;font-family:var(--font);background:var(--surface2);color:var(--text);}
+.dias-semana-grid{display:flex;gap:6px;flex-wrap:wrap;}
+.dia-check{display:flex;align-items:center;gap:5px;font-size:11.5px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 9px;cursor:pointer;}
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:12.5px;margin-top:4px;}
+.modal-foot{padding:16px 22px;border-top:1px solid var(--border2);display:flex;justify-content:flex-end;gap:10px;}
 
 @media(max-width:768px){
-  /* Header */
-  .header{padding:18px 20px;flex-wrap:wrap;gap:12px;}
-  .logo-law,.logo-gico{font-size:32px;}
-  .logo-module{font-size:9px;}
-  .header-right{text-align:left;}
-  .firm-name{font-size:12px;}
-  .firm-sub{font-size:10px;}
+  .main{padding:14px 12px 40px;}
+  .filters-card{flex-direction:column;align-items:stretch;}
+}
 
-  /* Hero */
-  .hero{padding:40px 20px 32px;}
-  .hero-title{font-size:28px;letter-spacing:-1px;}
-  .hero-desc{font-size:13px;}
-
-  /* Grid */
-  .grid-section{padding:24px 16px 40px;}
-  .cards-grid{grid-template-columns:1fr;}
-
-  /* Cards */
-  .card-body{padding:20px 18px 16px;}
-  .card-docs{padding:14px 18px 16px;}
-  .card-name{font-size:16px;}
-  .btn-open{width:100%;justify-content:center;}
-
-  /* Footer */
-  .footer{margin:0 16px 32px;padding:16px 20px;flex-direction:column;gap:6px;text-align:center;}
+/* ── GATE DE SENHA + IDENTIFICAÇÃO (padrão split-screen LAWgico) ─────────── */
+#pwGate{position:fixed;inset:0;z-index:9999;background:#0B1E2D;overflow:auto;}
+html.gate-open #pwGate{display:none;}
+.lp-wrap{display:flex;width:100%;min-height:100%;}
+.lp-left{
+  flex:0 0 46%;background:linear-gradient(165deg,#0D2A45 0%,#0a1e30 55%,#071828 100%);
+  display:flex;flex-direction:column;justify-content:center;padding:60px 56px;position:relative;overflow:hidden;
+}
+.lp-left::before{content:'';position:absolute;right:-80px;bottom:-80px;width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,174,239,.06) 0%,transparent 70%);pointer-events:none;}
+.lp-lawgico{margin-bottom:28px;}
+.lp-logo-name{font-family:'Sora',sans-serif;line-height:1;display:inline-block;position:relative;}
+.lp-logo-name .lp-law{font-size:36px;font-weight:800;color:#fff;letter-spacing:-1px;}
+.lp-logo-name .lp-gico{font-size:36px;font-weight:300;color:#fff;letter-spacing:-1px;}
+.lp-tag{font-family:'Sora',sans-serif;font-size:10px;font-weight:300;color:#fff;letter-spacing:.4px;position:absolute;top:-6px;right:0;}
+.lp-tagline{font-size:10px;font-weight:300;letter-spacing:3.5px;color:rgba(255,255,255,.85);margin-top:4px;font-family:'Sora',sans-serif;}
+.lp-welcome{display:flex;align-items:center;gap:14px;margin-bottom:10px;}
+.lp-welcome-icon{width:38px;height:38px;border:1.5px solid rgba(0,174,239,.4);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lp-welcome-icon svg{width:20px;height:20px;stroke:#00AEEF;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.lp-welcome-text h2{font-size:15px;font-weight:700;color:#fff;margin:0 0 2px;font-family:'Sora',sans-serif;}
+.lp-welcome-text p{font-size:12px;color:rgba(255,255,255,.6);margin:0;font-family:'Sora',sans-serif;}
+.lp-welcome-divider{height:1px;background:rgba(255,255,255,.15);border:none;margin:18px 0;}
+.lp-features{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0;}
+.lp-features li{display:flex;align-items:flex-start;gap:16px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.lp-features li:first-child{padding-top:0;}
+.lp-features li:last-child{border-bottom:none;padding-bottom:0;}
+.lp-feat-icon{width:40px;height:40px;border-radius:10px;flex-shrink:0;background:rgba(0,174,239,.10);border:1px solid rgba(0,174,239,.18);display:flex;align-items:center;justify-content:center;}
+.lp-feat-icon svg{width:20px;height:20px;stroke:#00AEEF;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.lp-feat-text{flex:1;padding-top:2px;}
+.lp-feat-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:3px;font-family:'Sora',sans-serif;}
+.lp-feat-desc{font-size:11.5px;color:rgba(255,255,255,.4);line-height:1.55;font-family:'Sora',sans-serif;}
+.lp-right{flex:1;background:#fff;display:flex;align-items:center;justify-content:center;padding:60px 56px;}
+.lp-form-inner{width:100%;max-width:360px;}
+.lp-title{font-size:28px;font-weight:700;color:#0B1E2D;margin-bottom:6px;font-family:'Sora',sans-serif;}
+.lp-sub{font-size:13px;color:#8399ae;margin-bottom:32px;font-family:'Sora',sans-serif;}
+.lp-field-label{font-size:10.5px;font-weight:700;color:#00AEEF;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:7px;font-family:'Sora',sans-serif;}
+.lp-input-wrap{position:relative;margin-bottom:18px;}
+.lp-input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;}
+.lp-input-icon svg{width:16px;height:16px;stroke:#8399ae;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.lp-input-wrap input{width:100%;padding:12px 14px 12px 42px;background:#f7fafc;border:1.5px solid #dde8f0;border-radius:10px;
+  font-size:13.5px;color:#0B1E2D;font-family:'Sora',sans-serif;outline:none;transition:border .2s,box-shadow .2s;box-sizing:border-box;}
+.lp-input-wrap input:focus{border-color:#00AEEF;background:#fff;box-shadow:0 0 0 3px rgba(0,174,239,.08);}
+.lp-input-wrap input::placeholder{color:#b0bfcc;}
+.lp-eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:4px;color:#8399ae;}
+.lp-eye-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.lp-submit-btn{width:100%;padding:13px;background:linear-gradient(135deg,#0B1E2D 0%,#1a3a5c 100%);border:none;border-radius:10px;
+  color:#fff;font-size:14.5px;font-weight:600;font-family:'Sora',sans-serif;letter-spacing:.3px;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:10px;margin-top:6px;}
+.lp-submit-btn:hover{background:linear-gradient(135deg,#0d2540 0%,#1f4770 100%);box-shadow:0 4px 18px rgba(11,30,45,.3);transform:translateY(-1px);}
+.lp-submit-btn svg{width:18px;height:18px;stroke:#00AEEF;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.lp-err{color:#d94444;font-size:12px;text-align:center;min-height:16px;margin-top:10px;display:none;font-family:'Sora',sans-serif;}
+.lp-err.show{display:block;}
+.lp-restricted{text-align:center;margin-top:18px;}
+.lp-restricted span{font-size:12px;color:#8399ae;font-family:'Sora',sans-serif;}
+@media(max-width:768px){
+  .lp-wrap{flex-direction:column;}
+  .lp-left{flex:none;padding:36px 28px;}
+  .lp-features{display:none;}
+  .lp-right{padding:40px 28px;}
 }
 </style>
+<script>
+try{
+  if(localStorage.getItem('voeGateOk')==='1' && localStorage.getItem('compromissosEmail')){
+    document.documentElement.classList.add('gate-open');
+  }
+}catch(e){}
+</script>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div>
-    <div class="logo-wordmark">
-      <span class="logo-law">LAW</span>
-      <div class="logo-gico-col">
-        <span class="logo-module">ferramentas</span>
-        <span class="logo-gico">gico</span>
-      </div>
+<div id="pwGate">
+<div class="lp-wrap">
+  <!-- PAINEL ESQUERDO -->
+  <div class="lp-left">
+    <div class="lp-lawgico">
+      <div class="lp-logo-name"><span class="lp-law">LAW</span><span class="lp-gico">gico</span><span class="lp-tag">compromissos</span></div>
+      <div class="lp-tagline">lawyers at work</div>
     </div>
-    <div class="logo-tagline">lawyers at work</div>
+    <div class="lp-welcome">
+      <div class="lp-welcome-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div class="lp-welcome-text"><h2>Bem-vindo</h2><p>Peixoto &amp; Cury Advogados</p></div>
+    </div>
+    <hr class="lp-welcome-divider">
+    <ul class="lp-features">
+      <li>
+        <div class="lp-feat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div class="lp-feat-text"><div class="lp-feat-title">Seus compromissos do dia</div><div class="lp-feat-desc">Veja na hora o que vence hoje e o que está atrasado.</div></div>
+      </li>
+      <li>
+        <div class="lp-feat-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <div class="lp-feat-text"><div class="lp-feat-title">Marque como entregue</div><div class="lp-feat-desc">Um clique e o compromisso some da sua lista de pendências.</div></div>
+      </li>
+      <li>
+        <div class="lp-feat-icon"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+        <div class="lp-feat-text"><div class="lp-feat-title">Alertas automáticos</div><div class="lp-feat-desc">E-mail no horário certo do dia, sem precisar lembrar.</div></div>
+      </li>
+      <li>
+        <div class="lp-feat-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="lp-feat-text"><div class="lp-feat-title">Visão geral pra coordenação</div><div class="lp-feat-desc">Sócios e coordenadores acompanham o time todo, não só o próprio.</div></div>
+      </li>
+    </ul>
   </div>
-  <div class="header-right">
-    <div class="firm-name">Peixoto &amp; Cury Advogados</div>
-    <div class="firm-sub">Controladoria</div>
+  <!-- PAINEL DIREITO -->
+  <div class="lp-right">
+    <div class="lp-form-inner">
+      <div class="lp-title">Fazer login</div>
+      <div class="lp-sub">Acesse sua conta LAWgico Compromissos</div>
+
+      <div class="lp-field-label">SEU NOME</div>
+      <div class="lp-input-wrap">
+        <span class="lp-input-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+        <input type="text" id="gateNome" placeholder="Ex.: Ana Carolina" autocomplete="name">
+      </div>
+
+      <div class="lp-field-label">E-MAIL</div>
+      <div class="lp-input-wrap">
+        <span class="lp-input-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z" style="display:none"/><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg></span>
+        <input type="email" id="gateEmail" placeholder="seu.email@peixotoecury.com.br" autocomplete="username">
+      </div>
+
+      <div class="lp-field-label">SENHA</div>
+      <div class="lp-input-wrap">
+        <span class="lp-input-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+        <input type="password" id="gatePass" placeholder="Senha de acesso" style="padding-right:44px;" autocomplete="current-password">
+        <button type="button" class="lp-eye-btn" id="gateEyeBtn" aria-label="Mostrar senha">
+          <svg viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M9.88 5.72A8.8 8.8 0 0 1 12 5.25c6 0 9.75 6.75 9.75 6.75a17.9 17.9 0 0 1-3.1 3.86"/><path d="M14.12 18.28A8.8 8.8 0 0 1 12 18.75C6 18.75 2.25 12 2.25 12a17.9 17.9 0 0 1 3.1-3.86"/></svg>
+        </button>
+      </div>
+
+      <button class="lp-submit-btn" id="gateBtn" type="button">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Entrar
+      </button>
+      <div class="lp-err" id="gateErr">Preencha nome, e-mail e a senha correta.</div>
+      <div class="lp-restricted"><span>Acesso restrito — Peixoto &amp; Cury Advogados</span></div>
+    </div>
   </div>
 </div>
-
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-eyebrow">Sistemas em operação</div>
-  <h1 class="hero-title">Ferramentas <span>disponíveis</span><br>para o escritório</h1>
-  <p class="hero-desc">Plataformas desenvolvidas internamente pela Controladoria — acesse diretamente pelo navegador, sem instalação.</p>
 </div>
+<script>
+(function(){
+  var HASH='e839fc779b442d5393727d7af62bb94e3d892e44906d0f7d603702d01215f0c1';
+  async function sha256(msg){
+    var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));
+    return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+  }
+  async function tentar(){
+    var nome=document.getElementById('gateNome').value.trim();
+    var email=document.getElementById('gateEmail').value.trim().toLowerCase();
+    var pass=document.getElementById('gatePass').value;
+    var h=await sha256(pass);
+    if(h===HASH && nome && email.includes('@')){
+      try{
+        localStorage.setItem('voeGateOk','1');
+        localStorage.setItem('compromissosEmail', email);
+        localStorage.setItem('compromissosNome', nome);
+      }catch(e){}
+      document.documentElement.classList.add('gate-open');
+      if(window.aposLogin) window.aposLogin();
+    }else{
+      document.getElementById('gateErr').classList.add('show');
+    }
+  }
+  document.getElementById('gateBtn').addEventListener('click',tentar);
+  ['gateNome','gateEmail','gatePass'].forEach(function(id){
+    document.getElementById(id).addEventListener('keydown',function(ev){ if(ev.key==='Enter'){tentar();} });
+  });
+  document.getElementById('gateEyeBtn').addEventListener('click',function(){
+    var inp=document.getElementById('gatePass');
+    inp.type = inp.type==='password' ? 'text' : 'password';
+  });
+})();
+</script>
 
-<!-- CARDS -->
-<div class="grid-section">
-  <div class="cards-grid">
-
-    <!-- PAUTA -->
-    <div class="tool-card">
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(0,174,239,.15);">🎯</div>
-          <span class="badge-active">Ativo</span>
-        </div>
-        <div class="card-name">LAWgico Pauta</div>
-        <div class="card-desc">Sistema completo de gestão de audiências e designações. Controle de conflitos, histórico de alterações, pós-audiência e painel administrativo com 3 perfis de acesso.</div>
-        <a class="btn-open" href="https://peixotoecury.github.io/pauta-audiencias/" target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
-          Abrir sistema
-        </a>
-        <div class="card-chips">
-          <span class="chip">📋 Audiências</span>
-          <span class="chip">⚠️ Conflitos</span>
-          <span class="chip">👤 3 Perfis</span>
-          <span class="chip">📤 Excel</span>
-        </div>
-      </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
-        <a class="doc-link" href="Pauta/LAWgico_Pauta_Infografico.html" target="_blank">
-          <span>🌐</span><span style="flex:1">Infográfico interativo</span><span>→</span>
-        </a>
-        <a class="doc-link" href="Pauta/LAWgico_Pauta_Guia.pdf" target="_blank">
-          <span>📖</span><span style="flex:1">Guia do usuário (PDF)</span><span>→</span>
-        </a>
-        <a class="doc-link" href="Pauta/LAWgico_Pauta_Apresentacao.pptx">
-          <span>📎</span><span style="flex:1">Apresentação PowerPoint</span><span>→</span>
-        </a>
-        <a class="doc-link" href="Pauta/Manual_PosAudiencia_PautaPC.html" target="_blank">
-          <span>📝</span><span style="flex:1">Manual do Pós-Audiência</span><span>→</span>
-        </a>
-        <a class="doc-link" href="Pauta/Manual_PosAudiencia_CorpoEmail_Outlook.html" target="_blank">
-          <span>✉️</span><span style="flex:1">Pós-Audiência — corpo do e-mail (Outlook)</span><span>→</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- BAIXAS DE PRAZOS -->
-    <div class="tool-card">
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(248,113,113,.12);">📉</div>
-          <span class="badge-active">Ativo</span>
-        </div>
-        <div class="card-name">Protocolados</div>
-        <div class="card-desc">Gestão de protocolados do escritório com indicadores gerenciais, filtros por responsável e grupo, e importação de planilha Excel.</div>
-        <a class="btn-open" href="https://peixotoecury.github.io/prazosbaixados/" target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
-          Abrir sistema
-        </a>
-        <div class="card-chips">
-          <span class="chip">📊 Semanal</span>
-          <span class="chip">🔥 Fatais</span>
-          <span class="chip">✅ Antecipados</span>
-          <span class="chip">📥 Excel</span>
-        </div>
-      </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
-        <a class="doc-link" href="Baixados/Manual_Baixados.html" target="_blank">
-          <span>📖</span><span style="flex:1">Manual do usuário</span><span>→</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- CONTROLE DE PRAZOS E AGENDAS -->
-    <div class="tool-card">
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(0,169,224,.12);">📅</div>
-          <span class="badge-active">Ativo</span>
-        </div>
-        <div class="card-name">Controle de Prazos e Agendas</div>
-        <div class="card-desc">Base diária de atualização para sócios — controle de prazos processuais e agendas da Controladoria com acesso seguro por perfil de usuário.</div>
-        <a class="btn-open" href="https://peixotoecury.github.io/dashboard-juridico/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://peixotoecury.github.io/dashboard-juridico/','_blank','noopener,noreferrer');return false;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
-          Abrir sistema
-        </a>
-        <div class="card-chips">
-          <span class="chip">🔔 Prazos</span>
-          <span class="chip">📆 Agendas</span>
-          <span class="chip">🔐 Login</span>
-        </div>
-      </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
-        <a class="doc-link" href="PrazosAgendas/LAWgico_PrazosAgendas_Infografico.html" target="_blank">
-          <span>🌐</span><span style="flex:1">Infográfico interativo</span><span>→</span>
-        </a>
-        <a class="doc-link" href="PrazosAgendas/LAWgico_PrazosAgendas_Guia.pdf" target="_blank">
-          <span>📖</span><span style="flex:1">Guia do usuário (PDF)</span><span>→</span>
-        </a>
-        <a class="doc-link" href="PrazosAgendas/LAWgico_PrazosAgendas_Apresentacao.pptx">
-          <span>📎</span><span style="flex:1">Apresentação PowerPoint</span><span>→</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- CONTROLE DE INSERÇÃO DE CÁLCULOS -->
-    <div class="tool-card">
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(0,200,150,.12);">🧾</div>
-          <span class="badge-active">Ativo</span>
-        </div>
-        <div class="card-name">Controle de Decisões</div>
-        <div class="card-desc">Fluxo de solicitação e controle de inserção de cálculos entre advogados e assistentes — abertura de solicitação, lançamento e conclusão, com exportação em Excel. Inclui Lançamento IA (extração automática de PDF/planilha com correção monetária) e Ficha de Caso.</div>
-        <a class="btn-open" href="https://peixotoecury.github.io/controleinsercaovalores/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://peixotoecury.github.io/controleinsercaovalores/','_blank','noopener,noreferrer');return false;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
-          Abrir sistema
-        </a>
-        <div class="card-chips">
-          <span class="chip">📋 Solicitação</span>
-          <span class="chip">✅ Conclusão</span>
-          <span class="chip">🤖 Lançamento IA</span>
-          <span class="chip">🗂️ Ficha de Caso</span>
-          <span class="chip">📥 Excel</span>
-        </div>
-      </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
-        <a class="doc-link" href="InsercaoCalculos/LAWgico_InsercaoCalculos_Manual.html" target="_blank">
-          <span>🌐</span><span style="flex:1">Manual interativo</span><span>→</span>
-        </a>
-        <a class="doc-link" href="InsercaoCalculos/LAWgico_InsercaoCalculos_Manual.pdf" target="_blank">
-          <span>📖</span><span style="flex:1">Manual do usuário (PDF)</span><span>→</span>
-        </a>
-        <a class="doc-link" href="InsercaoCalculos/LAWgico_InsercaoCalculos_Manual.pptx">
-          <span>📎</span><span style="flex:1">Apresentação PowerPoint</span><span>→</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- CONTROLE DE DECISÕES — EMBRAER -->
-    <div class="tool-card">
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(0,169,224,.12);">🛩️</div>
-          <span class="badge-active">Ativo</span>
-        </div>
-        <div class="card-name">Controle de Decisões — Embraer</div>
-        <div class="card-desc">Centraliza o contencioso trabalhista Embraer: Reporte de Decisão, registros vivos de Reintegrados/Estratégicos/Insalubridade e Periculosidade/Doenças, solicitação de cálculos, determinação de reintegração, ajuste de fase/prognóstico no Elaw, agendamento de perícia e inscrição de sustentação oral.</div>
-        <a class="btn-open" href="https://peixotoecury.github.io/decisoesembraer/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://peixotoecury.github.io/decisoesembraer/','_blank','noopener,noreferrer');return false;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
-          Abrir sistema
-        </a>
-        <div class="card-chips">
-          <span class="chip">📑 Decisão</span>
-          <span class="chip">🔁 Reintegrados</span>
-          <span class="chip">🧪 Insalubridade</span>
-          <span class="chip">🧮 Cálculos</span>
-          <span class="chip">📥 Excel</span>
-        </div>
-      </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
-        <a class="doc-link" href="EmbraerDecisoes/LAWgico_EmbraerDecisoes_Manual.html" target="_blank">
-          <span>🌐</span><span style="flex:1">Manual interativo</span><span>→</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- COMUNICAÇÕES BRIDGESTONE -->
-    <div class="tool-card">
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(245,158,11,.12);">📨</div>
-          <span class="badge-active">Ativo</span>
-        </div>
-        <div class="card-name">Comunicações Bridgestone</div>
-        <div class="card-desc">Centraliza as comunicações e registros do contencioso trabalhista Bridgestone: perícias, solicitação de cálculos, reporte de decisões e acordos, inserção de valores e extração automática de Histórico/Provisão/Accrual por IA.</div>
-        <a class="btn-open" href="https://peixotoecury.github.io/comunicacoes-bridgestone/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://peixotoecury.github.io/comunicacoes-bridgestone/','_blank','noopener,noreferrer');return false;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
-          Abrir sistema
-        </a>
-        <div class="card-chips">
-          <span class="chip">🩺 Perícia</span>
-          <span class="chip">📑 Decisão</span>
-          <span class="chip">🤖 Lançamento IA</span>
-          <span class="chip">📊 Forecast Atual</span>
-          <span class="chip">💲 Valores</span>
-        </div>
-      </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
-        <a class="doc-link" href="ComunicacoesBridgestone/LAWgico_ComunicacoesBridgestone_Manual.html" target="_blank">
-          <span>🌐</span><span style="flex:1">Manual interativo</span><span>→</span>
-        </a>
-        <a class="doc-link" href="ComunicacoesBridgestone/LAWgico_ComunicacoesBridgestone_Manual.pdf" target="_blank">
-          <span>📖</span><span style="flex:1">Manual do usuário (PDF)</span><span>→</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- COMUNICADO DE PERÍCIA -->
-    <div class="tool-card">
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(0,174,239,.15);">✉️</div>
-          <span class="badge-active">Ativo</span>
-        </div>
-        <div class="card-name">Comunicado de Perícia</div>
-        <div class="card-desc">Monta e envia o aviso de nova perícia da Bridgestone a partir de um formulário — assunto automático, envio por e-mail, histórico salvo e cruzamento com a pauta de audiências pra achar o que ainda não foi avisado.</div>
-        <a class="btn-open" href="https://peixotoecury.github.io/comunicadodepericias/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://peixotoecury.github.io/comunicadodepericias/','_blank','noopener,noreferrer');return false;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
-          Abrir sistema
-        </a>
-        <div class="card-chips">
-          <span class="chip">✉️ Envio automático</span>
-          <span class="chip">📊 Cruzamento com pauta</span>
-          <span class="chip">📥 Excel</span>
-        </div>
-      </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
-        <a class="doc-link" href="ComunicadoPericia/Manual_Comunicado_Pericia.html" target="_blank">
-          <span>📖</span><span style="flex:1">Manual do usuário</span><span>→</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- LAWGICO CADASTRO -->
-    <div class="tool-card">
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(0,169,224,.12);">📋</div>
-          <span class="badge-active">Ativo</span>
-        </div>
-        <div class="card-name">LAWgico Cadastro</div>
-        <div class="card-desc">Cadastro de processos a reportar à Deloitte, com campos condicionais, e-mail automático (destinatários fixos + cópia por grupo A1-E2), histórico e exportação em Excel.</div>
-        <a class="btn-open" href="https://peixotoecury.github.io/cadastro/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://peixotoecury.github.io/cadastro/','_blank','noopener,noreferrer');return false;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
-          Abrir sistema
-        </a>
-        <div class="card-chips">
-          <span class="chip">📝 Cadastro</span>
-          <span class="chip">✉️ E-mail automático</span>
-          <span class="chip">📥 Excel</span>
-        </div>
-      </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
-        <a class="doc-link" href="Cadastro/LAWgico_Cadastro_Manual.html" target="_blank">
-          <span>📖</span><span style="flex:1">Manual do usuário</span><span>→</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- PROMPT INJECT -->
-    <div class="tool-card">
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(220,38,38,.10);">🔍</div>
-          <span class="badge-active">Ativo</span>
-        </div>
-        <div class="card-name">LAWgico Prompt Injection</div>
-        <div class="card-desc">Detecção de prompt injection e análise de risco jurídico em peças processuais. Scan estático 100% local — sem envio de dados. Identifica texto oculto, metadados suspeitos, citações fabricadas e má-fé processual.</div>
-        <a class="btn-open" href="https://peixotoecury.github.io/promptinjection/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://peixotoecury.github.io/promptinjection/','_blank','noopener,noreferrer');return false;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
-          Abrir sistema
-        </a>
-        <div class="card-chips">
-          <span class="chip">🛡️ Injection</span>
-          <span class="chip">⚖️ Risco jurídico</span>
-          <span class="chip">📄 Qualquer peça</span>
-          <span class="chip">🤖 Claude Opus</span>
-        </div>
-      </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
-        <a class="doc-link" href="PromptInject/Manual_Detector_PromptInjection.html" target="_blank">
-          <span>📖</span><span style="flex:1">Manual do usuário</span><span>→</span>
-        </a>
-        <a class="doc-link" href="PromptInject/Apresentacao_PromptInjection_PC.html" target="_blank">
-          <span>📎</span><span style="flex:1">Apresentação (slides)</span><span>→</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- VISÃO GERAL DO ESCRITÓRIO -->
-    <div class="tool-card">
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(16,185,129,.12);">🏢</div>
-          <span class="badge-active">Ativo</span>
-        </div>
-        <div class="card-name">Visão Geral do Escritório</div>
-        <div class="card-desc">Painel executivo em tempo real do contencioso trabalhista: entradas e saídas por dia, carga por grupo, valores de causa, mapa por estado, funil por fase e a Divisão Trabalhista completa (Equipe → Grupo → Clientes/Advogados).</div>
-        <a class="btn-open" href="https://peixotoecury.github.io/visao-escritorio/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://peixotoecury.github.io/visao-escritorio/','_blank','noopener,noreferrer');return false;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
-          Abrir sistema
-        </a>
-        <div class="card-chips">
-          <span class="chip">📊 Tempo real</span>
-          <span class="chip">🗺️ Mapa por Estado</span>
-          <span class="chip">🧭 Divisão Trabalhista</span>
-          <span class="chip">🚨 Alertas</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- CONTROLE DE INCIDÊNCIAS -->
-    <div class="tool-card">
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(234,88,12,.12);">🚨</div>
-          <span class="badge-active">Ativo</span>
-        </div>
-        <div class="card-name">Controle de Incidências</div>
-        <div class="card-desc">Registro de ocorrências com classificação de gravidade (impacto, probabilidade de recorrência e prejuízo), visão por equipe — cada acesso vê as ocorrências da sua equipe, controladoria vê tudo — e aprendizado contínuo com lição aprendida e plano de ação por incidente.</div>
-        <a class="btn-open" href="https://peixotoecury.github.io/controledeincidencias/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://peixotoecury.github.io/controledeincidencias/','_blank','noopener,noreferrer');return false;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
-          Abrir sistema
-        </a>
-        <div class="card-chips">
-          <span class="chip">📋 Ocorrências</span>
-          <span class="chip">⚠️ Gravidade</span>
-          <span class="chip">👥 Visão por equipe</span>
-          <span class="chip">📚 Lição aprendida</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- COMPROMISSOS -->
-    <div class="tool-card">
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-icon" style="background:rgba(0,169,224,.15);">📋</div>
-          <span class="badge-active">Ativo</span>
-        </div>
-        <div class="card-name">Compromissos — Time B e Controladoria</div>
-        <div class="card-desc">Calcula todo dia o que cada pessoa do Time B e da Controladoria Geral precisa entregar (pautas, relatórios, atividades recorrentes), manda lembrete automático por e-mail e deixa marcar como entregue — visão por pessoa e visão da coordenação de quem cumpriu e quem não cumpriu.</div>
-        <a class="btn-open" href="https://peixotoecury.github.io/compromissos/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://peixotoecury.github.io/compromissos/','_blank','noopener,noreferrer');return false;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
-          Abrir sistema
-        </a>
-        <div class="card-chips">
-          <span class="chip">📅 Pauta</span>
-          <span class="chip">📊 Relatórios</span>
-          <span class="chip">✉️ E-mail automático</span>
-          <span class="chip">✅ Marcar entregue</span>
-        </div>
-      </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
-        <a class="doc-link" href="Compromissos/LAWgico_Compromissos_Manual.html" target="_blank">
-          <span>📖</span><span style="flex:1">Manual do usuário</span><span>→</span>
-        </a>
-      </div>
-    </div>
-
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="tb-lawgico"><span class="tb-law">LAW</span><span class="tb-gico">gico</span><span class="tb-modulo">compromissos</span></div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-title">Compromissos — Time B e Controladoria</div>
+  </div>
+  <div class="topbar-right">
+    <a class="hub-link" href="manual.html" target="_blank">📖 Manual</a>
   </div>
 </div>
 
-<!-- FOOTER -->
-<div class="footer">
-  <div>Peixoto &amp; Cury Advogados &nbsp;·&nbsp; <strong>Controladoria</strong> &nbsp;·&nbsp; Desenvolvido internamente</div>
-  <div>LAWgico &nbsp;·&nbsp; <strong id="footer-year">2026</strong></div>
+<div class="tab-bar">
+  <button class="tab-btn active" id="tab-btn-geral" onclick="mudarAba('geral')">📋 Geral</button>
+  <button class="tab-btn" id="tab-btn-relatorio" onclick="mudarAba('relatorio')">📊 Relatórios</button>
+  <button class="tab-btn" id="tab-btn-pauta" onclick="mudarAba('pauta')">📅 Pauta</button>
+</div>
+
+<div class="main">
+
+  <div class="info-box" id="erro-conexao"></div>
+
+  <div class="filters-card">
+    <div class="filter-group">
+      <label>Pessoa</label>
+      <select id="f-pessoa" onchange="renderTudo()">
+        <option value="">Todos (visão coordenadora)</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Status</label>
+      <select id="f-status" onchange="renderTudo()">
+        <option value="">Todos</option>
+        <option value="pendente" selected>Pendentes + Atrasados</option>
+        <option value="atrasado">Só atrasados</option>
+        <option value="entregue">Entregues</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>De</label>
+      <input type="date" id="f-data-de" onchange="renderTudo()">
+    </div>
+    <div class="filter-group">
+      <label>Até</label>
+      <input type="date" id="f-data-ate" onchange="renderTudo()">
+    </div>
+    <div class="filter-group" style="min-width:220px;">
+      <label>Buscar</label>
+      <input type="text" id="f-busca" placeholder="Cliente, item, responsável…" oninput="renderTudo()">
+    </div>
+    <button class="btn-cyan" onclick="limparFiltros()">✕ Limpar filtros</button>
+    <button class="btn-cyan btn-green" id="btn-novo" onclick="abrirNovo()">+ Novo compromisso</button>
+  </div>
+  <div class="info-box" id="minha-visao-info" style="display:none;"></div>
+
+  <div id="resumo-wrap" class="resumo-grid"></div>
+
+  <div class="dash-card">
+    <div class="dash-card-head">
+      <span>📋 Compromissos <span id="contagem-titulo"></span></span>
+      <button class="export-btn" onclick="exportarExcel()">⬇ Exportar Excel</button>
+    </div>
+    <div class="table-wrap">
+      <table class="comp-table">
+        <thead>
+          <tr><th>Data</th><th>Responsável</th><th>Grupo/Cliente</th><th>Item</th><th>Etapa</th><th>Status</th><th>Ações</th></tr>
+        </thead>
+        <tbody id="tbody-principal"><tr><td colspan="7" class="empty-state">Carregando…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<div class="modal-overlay" id="modal-editar">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>⚙️ Editar regra do compromisso</h3>
+      <button class="modal-close" onclick="fecharEdicao()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="item-info" id="edit-info"></div>
+      <div class="mc-form-group">
+        <label>Recorrência</label>
+        <select id="edit-regra-tipo" onchange="atualizarCamposEdicao()">
+          <option value="diaria">Diária (todo dia útil)</option>
+          <option value="dias_semana">Dia(s) específico(s) da semana</option>
+          <option value="fim_de_mes">Todo final de mês</option>
+          <option value="dia_mes">Dia específico do mês</option>
+          <option value="indefinida">Sem lembrete automático (só referência no painel)</option>
+        </select>
+      </div>
+      <div class="mc-form-group" id="edit-dias-semana-wrap" style="display:none;">
+        <label>Dias da semana</label>
+        <div class="dias-semana-grid">
+          <label class="dia-check"><input type="checkbox" value="0" class="edit-dia-semana"> Seg</label>
+          <label class="dia-check"><input type="checkbox" value="1" class="edit-dia-semana"> Ter</label>
+          <label class="dia-check"><input type="checkbox" value="2" class="edit-dia-semana"> Qua</label>
+          <label class="dia-check"><input type="checkbox" value="3" class="edit-dia-semana"> Qui</label>
+          <label class="dia-check"><input type="checkbox" value="4" class="edit-dia-semana"> Sex</label>
+          <label class="dia-check"><input type="checkbox" value="5" class="edit-dia-semana"> Sáb</label>
+          <label class="dia-check"><input type="checkbox" value="6" class="edit-dia-semana"> Dom</label>
+        </div>
+      </div>
+      <div class="mc-form-group" id="edit-dia-mes-wrap" style="display:none;">
+        <label>Dia do mês (1-31)</label>
+        <input type="number" id="edit-dia-mes" min="1" max="31">
+      </div>
+      <div class="mc-form-group">
+        <div class="checkbox-row">
+          <input type="checkbox" id="edit-ativo">
+          <label for="edit-ativo" style="margin:0;text-transform:none;font-weight:600;color:var(--text);">Compromisso ativo (desmarque pra parar de gerar lembrete/pendência sem apagar o histórico)</label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="row-btn" onclick="fecharEdicao()">Cancelar</button>
+      <button class="btn-cyan" onclick="salvarEdicao()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-novo">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>➕ Novo compromisso</h3>
+      <button class="modal-close" onclick="fecharNovo()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mc-form-group" id="novo-responsavel-wrap">
+        <label>Responsável</label>
+        <input type="text" id="novo-nome" placeholder="Nome">
+      </div>
+      <div class="mc-form-group" id="novo-email-wrap">
+        <label>E-mail do responsável</label>
+        <input type="email" id="novo-email" placeholder="nome@peixotoecury.com.br">
+      </div>
+      <div class="mc-form-group">
+        <label>Grupo</label>
+        <input type="text" id="novo-grupo" placeholder="Ex: B1, B2, Controladoria...">
+      </div>
+      <div class="mc-form-group">
+        <label>Cliente</label>
+        <input type="text" id="novo-cliente" placeholder="Ex: Bridgestone, Embraer...">
+      </div>
+      <div class="mc-form-group">
+        <label>Item / atividade</label>
+        <input type="text" id="novo-item" placeholder="O que precisa ser feito">
+      </div>
+      <div class="mc-form-group">
+        <label>Etapa (opcional)</label>
+        <input type="text" id="novo-etapa" placeholder="Ex: Corte, Revisão, Envio ao cliente...">
+      </div>
+      <div class="mc-form-group">
+        <label>Tipo</label>
+        <select id="novo-tipo" onchange="atualizarCamposNovo()">
+          <option value="pontual">Pontual — uma data específica</option>
+          <option value="diaria">Recorrente — todo dia útil</option>
+          <option value="dias_semana">Recorrente — dia(s) específico(s) da semana</option>
+          <option value="fim_de_mes">Recorrente — todo final de mês</option>
+          <option value="dia_mes">Recorrente — dia específico do mês</option>
+        </select>
+      </div>
+      <div class="mc-form-group" id="novo-data-wrap">
+        <label>Data</label>
+        <input type="date" id="novo-data">
+      </div>
+      <div class="mc-form-group" id="novo-dias-semana-wrap" style="display:none;">
+        <label>Dias da semana</label>
+        <div class="dias-semana-grid">
+          <label class="dia-check"><input type="checkbox" value="0" class="novo-dia-semana"> Seg</label>
+          <label class="dia-check"><input type="checkbox" value="1" class="novo-dia-semana"> Ter</label>
+          <label class="dia-check"><input type="checkbox" value="2" class="novo-dia-semana"> Qua</label>
+          <label class="dia-check"><input type="checkbox" value="3" class="novo-dia-semana"> Qui</label>
+          <label class="dia-check"><input type="checkbox" value="4" class="novo-dia-semana"> Sex</label>
+          <label class="dia-check"><input type="checkbox" value="5" class="novo-dia-semana"> Sáb</label>
+          <label class="dia-check"><input type="checkbox" value="6" class="novo-dia-semana"> Dom</label>
+        </div>
+      </div>
+      <div class="mc-form-group" id="novo-dia-mes-wrap" style="display:none;">
+        <label>Dia do mês (1-31)</label>
+        <input type="number" id="novo-dia-mes" min="1" max="31">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="row-btn" onclick="fecharNovo()">Cancelar</button>
+      <button class="btn-cyan btn-green" onclick="salvarNovo()">💾 Salvar</button>
+    </div>
+  </div>
 </div>
 
 <script>
-document.getElementById('footer-year').textContent = new Date().getFullYear();
+const SUPABASE_URL = 'https://rpibvjcnrseuugpkfmdj.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwaWJ2amNucnNldXVncGtmbWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1NTc3MTcsImV4cCI6MjA5NzEzMzcxN30.ecihol8JESMH7cgFSvWKIzp-OwoPRFqdK3aCDwpCeg8';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmtData(d){ if(!d) return '—'; const [y,m,day] = d.split('-'); return `${day}/${m}/${y}`; }
+function hojeStr(){ const d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+
+function toast(msg, isError){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = isError ? 'show error' : 'show';
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+let ENTREGAS = [];
+let ABA_ATIVA = 'geral';
+
+// ── Identificação / escopo de visão ──────────────────────────────────────
+const VISAO_GERAL_EMAILS = [
+  'nicolau.coelho@peixotoecury.com.br',
+  'anacarolina.martini@peixotoecury.com.br',
+  'poliana.banqueri@peixotoecury.com.br',
+];
+function lerStorage(chave){
+  try{ return localStorage.getItem(chave) || ''; }catch(e){ return ''; }
+}
+let MEU_EMAIL = lerStorage('compromissosEmail').toLowerCase();
+let MEU_NOME = lerStorage('compromissosNome');
+let VISAO_GERAL = VISAO_GERAL_EMAILS.includes(MEU_EMAIL);
+
+function aplicarEscopoNaTela(){
+  const grupoPessoa = document.getElementById('f-pessoa').closest('.filter-group');
+  const infoBox = document.getElementById('minha-visao-info');
+  if(VISAO_GERAL){
+    grupoPessoa.style.display = '';
+    infoBox.style.display = 'none';
+  }else{
+    grupoPessoa.style.display = 'none';
+    infoBox.style.display = 'block';
+    infoBox.innerHTML = `Mostrando só os compromissos de <strong>${esc(MEU_NOME || MEU_EMAIL)}</strong>. Quem tem visão geral: coordenação e sócios.`;
+  }
+}
+window.aposLogin = function(){
+  MEU_EMAIL = (localStorage.getItem('compromissosEmail') || '').toLowerCase();
+  MEU_NOME = localStorage.getItem('compromissosNome') || '';
+  VISAO_GERAL = VISAO_GERAL_EMAILS.includes(MEU_EMAIL);
+  aplicarEscopoNaTela();
+  popularSelectPessoas();
+  renderTudo();
+};
+
+function mudarAba(aba){
+  ABA_ATIVA = aba;
+  ['geral','relatorio','pauta'].forEach(a => document.getElementById('tab-btn-'+a).classList.toggle('active', a === aba));
+  popularSelectPessoas();
+  renderTudo();
+}
+
+function entregasDaAba(){
+  const base = ABA_ATIVA === 'geral' ? ENTREGAS : ENTREGAS.filter(e => e.compromissos_definicoes.origem === ABA_ATIVA);
+  if(VISAO_GERAL) return base;
+  if(!MEU_EMAIL) return []; // sem login ainda -- nao mostra nada (evita "combinar" com definicoes sem e-mail)
+  return base.filter(e => (e.compromissos_definicoes.responsavel_email || '').toLowerCase() === MEU_EMAIL);
+}
+
+async function carregar(){
+  try{
+    const { data, error } = await sb
+      .from('compromissos_entregas')
+      .select('*, compromissos_definicoes(*)')
+      .order('data', { ascending: false })
+      .limit(2000);
+    if(error) throw error;
+    ENTREGAS = (data || []).filter(e => e.compromissos_definicoes); // ignora orfãos (definição desativada e removida)
+    document.getElementById('erro-conexao').innerHTML = '';
+    popularSelectPessoas();
+    renderTudo();
+  }catch(err){
+    console.error(err);
+    document.getElementById('erro-conexao').innerHTML =
+      `<strong>Não foi possível carregar os compromissos.</strong> A tabela pode ainda não existir, ou o script diário ainda não rodou hoje. (${esc(err.message||err)})`;
+    document.getElementById('tbody-principal').innerHTML = '<tr><td colspan="7" class="empty-state">Nenhum dado carregado.</td></tr>';
+  }
+}
+
+function popularSelectPessoas(){
+  const sel = document.getElementById('f-pessoa');
+  const atual = sel.value;
+  const nomes = [...new Set(entregasDaAba().map(e => e.compromissos_definicoes.responsavel_nome).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+  sel.innerHTML = '<option value="">Todos (visão coordenadora)</option>' + nomes.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+  sel.value = atual;
+}
+
+function classificar(e){
+  if(e.status === 'entregue') return 'entregue';
+  return e.data < hojeStr() ? 'atrasado' : 'pendente';
+}
+
+function filtrarEntregas(){
+  const pessoa = document.getElementById('f-pessoa').value;
+  const status = document.getElementById('f-status').value;
+  const de = document.getElementById('f-data-de').value;
+  const ate = document.getElementById('f-data-ate').value;
+  const busca = document.getElementById('f-busca').value.toLowerCase();
+
+  return entregasDaAba().filter(e => {
+    const d = e.compromissos_definicoes;
+    const classe = classificar(e);
+    if(pessoa && d.responsavel_nome !== pessoa) return false;
+    if(status === 'pendente' && classe === 'entregue') return false;
+    if(status === 'atrasado' && classe !== 'atrasado') return false;
+    if(status === 'entregue' && classe !== 'entregue') return false;
+    if(de && e.data < de) return false;
+    if(ate && e.data > ate) return false;
+    if(busca){
+      const alvo = `${d.cliente||''} ${d.item||''} ${d.responsavel_nome||''} ${d.etapa||''}`.toLowerCase();
+      if(!alvo.includes(busca)) return false;
+    }
+    return true;
+  }).sort((a,b) => a.data.localeCompare(b.data) || (a.compromissos_definicoes.responsavel_nome||'').localeCompare(b.compromissos_definicoes.responsavel_nome||'', 'pt-BR'));
+}
+
+function renderResumo(){
+  const porPessoa = {};
+  for(const e of entregasDaAba()){
+    const nome = e.compromissos_definicoes.responsavel_nome || '—';
+    porPessoa[nome] = porPessoa[nome] || { pendente:0, atrasado:0, entregue:0 };
+    porPessoa[nome][classificar(e)]++;
+  }
+  const wrap = document.getElementById('resumo-wrap');
+  const nomes = Object.keys(porPessoa).sort((a,b)=>a.localeCompare(b,'pt-BR'));
+  if(!nomes.length){ wrap.innerHTML = ''; return; }
+  wrap.innerHTML = nomes.map(nome => {
+    const c = porPessoa[nome];
+    return `<div class="resumo-card" onclick="filtrarPorPessoaNoResumo('${esc(nome).replace(/'/g,"\\'")}')" title="Ver os compromissos de ${esc(nome)}">
+      <div class="nome" title="${esc(nome)}">${esc(nome)}</div>
+      <div class="contagem">
+        <div class="stat atrasados"><span class="num">${c.atrasado}</span><span class="lbl">Atrasado${c.atrasado!==1?'s':''}</span></div>
+        <div class="stat pendentes"><span class="num">${c.pendente}</span><span class="lbl">Pendente${c.pendente!==1?'s':''}</span></div>
+        <div class="stat entregues"><span class="num">${c.entregue}</span><span class="lbl">Entregue${c.entregue!==1?'s':''}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filtrarPorPessoaNoResumo(nome){
+  if(VISAO_GERAL){
+    document.getElementById('f-pessoa').value = nome;
+    document.getElementById('f-status').value = '';
+    renderTudo();
+  }
+  const card = document.querySelector('.dash-card');
+  if(card) card.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function renderTabela(){
+  const filtradas = filtrarEntregas();
+  window._FILTRADAS = filtradas;
+  document.getElementById('contagem-titulo').textContent = `(${filtradas.length})`;
+  const tbody = document.getElementById('tbody-principal');
+  if(!filtradas.length){ tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Nenhum compromisso encontrado com esses filtros.</td></tr>'; return; }
+  tbody.innerHTML = filtradas.map(e => {
+    const d = e.compromissos_definicoes;
+    const classe = classificar(e);
+    const badge = classe === 'entregue' ? '<span class="badge badge-entregue">✔ Entregue</span>'
+                : classe === 'atrasado' ? '<span class="badge badge-atrasado">⚠ Atrasado</span>'
+                : '<span class="badge badge-pendente">Pendente</span>';
+    return `<tr>
+      <td class="mono">${fmtData(e.data)}</td>
+      <td>${esc(d.responsavel_nome)}</td>
+      <td>${esc(d.grupo||'')}${d.cliente ? ' · ' + esc(d.cliente) : ''}</td>
+      <td>${esc(d.item||'')}</td>
+      <td>${esc(d.etapa||'—')}</td>
+      <td>${badge}</td>
+      <td style="white-space:nowrap;">
+        ${classe !== 'entregue' ? `<button class="row-btn entregue-btn" onclick="marcarEntregue(${e.id})">✅ Entreguei</button>` : `<button class="row-btn" onclick="desmarcarEntregue(${e.id})">↩ Desfazer</button>`}
+        <button class="row-btn" onclick="abrirEdicao(${d.id})" style="margin-left:6px;">⚙️ Editar regra</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderTudo(){
+  renderResumo();
+  renderTabela();
+}
+
+function limparFiltros(){
+  document.getElementById('f-pessoa').value = '';
+  document.getElementById('f-status').value = 'pendente';
+  document.getElementById('f-data-de').value = '';
+  document.getElementById('f-data-ate').value = '';
+  document.getElementById('f-busca').value = '';
+  renderTudo();
+}
+
+async function marcarEntregue(id){
+  try{
+    const { error } = await sb.from('compromissos_entregas')
+      .update({ status: 'entregue', entregue_em: new Date().toISOString() })
+      .eq('id', id);
+    if(error) throw error;
+    const e = ENTREGAS.find(x => x.id === id);
+    if(e){ e.status = 'entregue'; e.entregue_em = new Date().toISOString(); }
+    toast('Marcado como entregue.');
+    renderTudo();
+  }catch(err){
+    console.error(err);
+    toast('Não foi possível marcar como entregue: ' + (err.message||err), true);
+  }
+}
+
+async function desmarcarEntregue(id){
+  try{
+    const { error } = await sb.from('compromissos_entregas')
+      .update({ status: 'pendente', entregue_em: null })
+      .eq('id', id);
+    if(error) throw error;
+    const e = ENTREGAS.find(x => x.id === id);
+    if(e){ e.status = 'pendente'; e.entregue_em = null; }
+    toast('Desfeito — voltou pra pendente.');
+    renderTudo();
+  }catch(err){
+    console.error(err);
+    toast('Não foi possível desfazer: ' + (err.message||err), true);
+  }
+}
+
+const DIA_SEMANA_LABEL = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
+let EDIT_DEFINICAO_ID = null;
+
+function abrirEdicao(definicaoId){
+  const entrega = ENTREGAS.find(e => e.compromissos_definicoes.id === definicaoId);
+  if(!entrega){ toast('Não encontrei os dados desse compromisso.', true); return; }
+  const d = entrega.compromissos_definicoes;
+  EDIT_DEFINICAO_ID = definicaoId;
+
+  const partesInfo = [`<strong>${esc(d.responsavel_nome)}</strong>`, esc(d.item||'')];
+  if(d.etapa) partesInfo.push(`(${esc(d.etapa)})`);
+  if(d.cliente) partesInfo.push('— ' + esc(d.cliente));
+  document.getElementById('edit-info').innerHTML = partesInfo.join(' ') +
+    (d.periodicidade_original ? `<br><span style="opacity:.75">Texto original da planilha: "${esc(d.periodicidade_original)}"</span>` : '');
+
+  document.getElementById('edit-regra-tipo').value = d.regra_tipo || 'indefinida';
+  document.querySelectorAll('.edit-dia-semana').forEach(cb => {
+    cb.checked = (d.regra_dias_semana || []).includes(Number(cb.value));
+  });
+  document.getElementById('edit-dia-mes').value = d.regra_dia_mes || '';
+  document.getElementById('edit-ativo').checked = d.ativo !== false;
+
+  atualizarCamposEdicao();
+  document.getElementById('modal-editar').classList.add('show');
+}
+
+function atualizarCamposEdicao(){
+  const tipo = document.getElementById('edit-regra-tipo').value;
+  document.getElementById('edit-dias-semana-wrap').style.display = tipo === 'dias_semana' ? 'block' : 'none';
+  document.getElementById('edit-dia-mes-wrap').style.display = tipo === 'dia_mes' ? 'block' : 'none';
+}
+
+function fecharEdicao(){
+  document.getElementById('modal-editar').classList.remove('show');
+  EDIT_DEFINICAO_ID = null;
+}
+
+async function salvarEdicao(){
+  if(!EDIT_DEFINICAO_ID) return;
+  const tipo = document.getElementById('edit-regra-tipo').value;
+  const patch = {
+    regra_tipo: tipo,
+    regra_dias_semana: null,
+    regra_dia_mes: null,
+    ativo: document.getElementById('edit-ativo').checked,
+  };
+  if(tipo === 'dias_semana'){
+    const dias = [...document.querySelectorAll('.edit-dia-semana:checked')].map(cb => Number(cb.value));
+    if(!dias.length){ toast('Selecione ao menos um dia da semana.', true); return; }
+    patch.regra_dias_semana = dias;
+  }
+  if(tipo === 'dia_mes'){
+    const dia = Number(document.getElementById('edit-dia-mes').value);
+    if(!dia || dia < 1 || dia > 31){ toast('Informe um dia do mês válido (1-31).', true); return; }
+    patch.regra_dia_mes = dia;
+  }
+  try{
+    const { error } = await sb.from('compromissos_definicoes').update(patch).eq('id', EDIT_DEFINICAO_ID);
+    if(error) throw error;
+    toast('Regra atualizada — vale a partir do próximo cálculo diário (ainda não afeta pendências já criadas).');
+    fecharEdicao();
+    carregar();
+  }catch(err){
+    console.error(err);
+    toast('Não foi possível salvar a edição: ' + (err.message||err), true);
+  }
+}
+
+function exportarExcel(){
+  const linhas = (window._FILTRADAS||[]).map(e => {
+    const d = e.compromissos_definicoes;
+    return {
+      Data: fmtData(e.data), Responsável: d.responsavel_nome, Grupo: d.grupo, Cliente: d.cliente,
+      Item: d.item, Etapa: d.etapa||'', Status: classificar(e), 'Entregue em': e.entregue_em||'',
+    };
+  });
+  if(!linhas.length){ toast('Nada pra exportar com esses filtros.', true); return; }
+  const ws = XLSX.utils.json_to_sheet(linhas);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Compromissos');
+  XLSX.writeFile(wb, `Compromissos_${hojeStr()}.xlsx`);
+}
+
+// ── Novo compromisso (pontual ou recorrente) ─────────────────────────────
+const DIAS_SEMANA_LABEL_NOVO = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
+
+function ultimoDiaDoMes(ano, mes){ return new Date(ano, mes, 0).getDate(); }
+
+function valeHojeRegra(d, hoje){
+  if(d.regra_tipo === 'diaria') return true;
+  if(d.regra_tipo === 'dias_semana') return (d.regra_dias_semana||[]).includes(hoje.getDay()===0?6:hoje.getDay()-1);
+  if(d.regra_tipo === 'fim_de_mes') return hoje.getDate() === ultimoDiaDoMes(hoje.getFullYear(), hoje.getMonth()+1);
+  if(d.regra_tipo === 'dia_mes'){
+    if(d.regra_dia_mes == null) return false;
+    const ajustado = Math.min(d.regra_dia_mes, ultimoDiaDoMes(hoje.getFullYear(), hoje.getMonth()+1));
+    return hoje.getDate() === ajustado;
+  }
+  return false;
+}
+
+function abrirNovo(){
+  document.getElementById('novo-nome').value = VISAO_GERAL ? '' : MEU_NOME;
+  document.getElementById('novo-email').value = VISAO_GERAL ? '' : MEU_EMAIL;
+  document.getElementById('novo-nome').readOnly = !VISAO_GERAL;
+  document.getElementById('novo-email').readOnly = !VISAO_GERAL;
+  document.getElementById('novo-grupo').value = '';
+  document.getElementById('novo-cliente').value = '';
+  document.getElementById('novo-item').value = '';
+  document.getElementById('novo-etapa').value = '';
+  document.getElementById('novo-tipo').value = 'pontual';
+  document.getElementById('novo-data').value = hojeStr();
+  document.getElementById('novo-dia-mes').value = '';
+  document.querySelectorAll('.novo-dia-semana').forEach(cb => cb.checked = false);
+  atualizarCamposNovo();
+  document.getElementById('modal-novo').classList.add('show');
+}
+
+function fecharNovo(){
+  document.getElementById('modal-novo').classList.remove('show');
+}
+
+function atualizarCamposNovo(){
+  const tipo = document.getElementById('novo-tipo').value;
+  document.getElementById('novo-data-wrap').style.display = tipo === 'pontual' ? 'block' : 'none';
+  document.getElementById('novo-dias-semana-wrap').style.display = tipo === 'dias_semana' ? 'block' : 'none';
+  document.getElementById('novo-dia-mes-wrap').style.display = tipo === 'dia_mes' ? 'block' : 'none';
+}
+
+async function salvarNovo(){
+  const nome = document.getElementById('novo-nome').value.trim();
+  const email = document.getElementById('novo-email').value.trim().toLowerCase();
+  const item = document.getElementById('novo-item').value.trim();
+  const tipo = document.getElementById('novo-tipo').value;
+
+  if(!nome || !email.includes('@')){ toast('Preencha o responsável e um e-mail válido.', true); return; }
+  if(!item){ toast('Descreva o item / atividade.', true); return; }
+
+  const payload = {
+    origem: 'manual',
+    responsavel_nome: nome,
+    responsavel_sigla: null,
+    responsavel_email: email,
+    grupo: document.getElementById('novo-grupo').value.trim() || null,
+    cliente: document.getElementById('novo-cliente').value.trim() || null,
+    item,
+    etapa: document.getElementById('novo-etapa').value.trim() || null,
+    ativo: true,
+  };
+
+  let dataPontual = null;
+  if(tipo === 'pontual'){
+    dataPontual = document.getElementById('novo-data').value;
+    if(!dataPontual){ toast('Escolha uma data.', true); return; }
+    payload.regra_tipo = 'indefinida';
+    payload.periodicidade_original = `Pontual — ${fmtData(dataPontual)}`;
+  }else if(tipo === 'dias_semana'){
+    const dias = [...document.querySelectorAll('.novo-dia-semana:checked')].map(cb => Number(cb.value));
+    if(!dias.length){ toast('Selecione ao menos um dia da semana.', true); return; }
+    payload.regra_tipo = 'dias_semana';
+    payload.regra_dias_semana = dias;
+    payload.periodicidade_original = dias.map(d => DIAS_SEMANA_LABEL_NOVO[d]).join(', ');
+  }else if(tipo === 'dia_mes'){
+    const dia = Number(document.getElementById('novo-dia-mes').value);
+    if(!dia || dia < 1 || dia > 31){ toast('Informe um dia do mês válido (1-31).', true); return; }
+    payload.regra_tipo = 'dia_mes';
+    payload.regra_dia_mes = dia;
+    payload.periodicidade_original = `Todo dia ${dia} do mês`;
+  }else{
+    payload.regra_tipo = tipo; // 'diaria' | 'fim_de_mes'
+    payload.periodicidade_original = tipo === 'diaria' ? 'Diariamente' : 'Todo final de mês';
+  }
+
+  try{
+    const { data, error } = await sb.from('compromissos_definicoes').insert(payload).select().single();
+    if(error) throw error;
+
+    const hoje = new Date();
+    const dataEntrega = tipo === 'pontual' ? dataPontual : (valeHojeRegra(data, hoje) ? hojeStr() : null);
+    if(dataEntrega){
+      const { error: err2 } = await sb.from('compromissos_entregas')
+        .insert({ definicao_id: data.id, data: dataEntrega, status: 'pendente' });
+      if(err2 && err2.code !== '23505') throw err2; // ignora duplicidade (unique definicao_id+data)
+    }
+
+    toast('Compromisso criado.');
+    fecharNovo();
+    carregar();
+  }catch(err){
+    console.error(err);
+    toast('Não foi possível salvar: ' + (err.message||err), true);
+  }
+}
+
+// Deep-link opcional: ?pessoa=Nome%20Completo (usado no link do e-mail diário)
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const pessoa = params.get('pessoa');
+  if(pessoa) window._pessoaDeepLink = pessoa;
+})();
+
+aplicarEscopoNaTela();
+carregar().then(() => {
+  if(window._pessoaDeepLink && VISAO_GERAL){
+    document.getElementById('f-pessoa').value = window._pessoaDeepLink;
+    renderTudo();
+  }
+});
+
+// Realtime: qualquer mudança na tabela recarrega (outra pessoa marcando entregue, por exemplo)
+sb.channel('compromissos-realtime')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'compromissos_entregas' }, () => carregar())
+  .subscribe();
 </script>
 
-
-</body></html>
+</body>
+</html>
