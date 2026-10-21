@@ -234,6 +234,7 @@ const nivel = m => m<2.5?'alto':m<3.5?'moderado':'baixo';
 const NIV = {alto:'Alto',moderado:'Moderado',baixo:'Baixo'};
 const COR = {alto:'var(--alto)',moderado:'var(--mod)',baixo:'var(--baixo)'};
 const MEDIDAS = D.dims.map((d,i)=>['Inexistentes','Parciais','Eficazes'][[0,1,0,1,1,2,0,1,0,1,0,2,1][i]]);
+const MEDIDAS0 = [...MEDIDAS], SEV0 = D.dims.map(d=>d.sev);
 function exig(m){return m<2.5?3:m<3.5?2:1;}
 function prob(m,di){const e=exig(m), md=di===undefined?'Inexistentes':MEDIDAS[di];
   if(e===3) return md==='Inexistentes'?3:2; if(e===2) return md==='Eficazes'?1:2; return 1;}
@@ -538,10 +539,12 @@ function nav(){ $('#nav').innerHTML = VIEWS.map(v=>v.g?`<div class="navg">${v.g}
 let CUR='painel';
 const SUB = {copsoq:'Questionário oficial validado no Brasil (40 questões), com complemento P&C para fechar os 13 fatores do guia do MTE.',copsoqres:'Semáforo seguro, atenção e risco por dimensão, conforme a Fundacentro, e leitura pelos 13 fatores do guia do MTE.',documento:'AEP psicossocial, inventário de riscos e plano de ação gerados a partir das respostas, prontos para o PGR.',painel:'Resultado consolidado da consulta aos trabalhadores e situação do gerenciamento de riscos.',questionario:'Parte A · consulta aos trabalhadores sobre os fatores de risco psicossociais.',pulso:'Acompanhamento trimestral, versão curta.',lideranca:'Autoavaliação de sócios, gestores e coordenadores.',assedio:'Questionário confidencial sobre assédio moral, assédio sexual e violência.',checklist:'Parte B · fatores de risco a partir de dados objetivos.',avaliacao:'Parte C · classificação do risco por probabilidade e severidade.',inventario:'Parte D · riscos psicossociais para o inventário do PGR.',plano:'Parte E · medidas de prevenção, responsáveis e prazos.',cronograma:'Parte F · acompanhamento, comunicação e revisão.',biblioteca:'Fontes oficiais, questionários validados no Brasil e correspondência com a NR-01.'};
 function render(id){ const v=VIEWS.find(x=>x.id===id); const filt=['painel','avaliacao','copsoqres'].includes(id);
-  $('#main').innerHTML = `<div class="top"><div><h1>${v.t}</h1><p>${SUB[id]}</p></div><div class="chips"><span class="chip demo">Dados de demonstração</span><span class="chip">Empresa Demonstração S.A.</span>${filt?`<span class="chip">Área <select id="areaSel" aria-label="Filtrar área">${['Todas',...AREAS].map(a=>`<option ${a===AREA?'selected':''}>${a}</option>`).join('')}</select></span>${AREA!=='Todas'?'<button class="chip" id="areaLimpa" type="button" style="cursor:pointer">Limpar filtro ✕</button>':''}`:''}<span class="chip">Ciclo 2026</span></div></div><section class="view on">${V[id]()}</section>`;
+  $('#main').innerHTML = `<div class="top"><div><h1>${v.t}</h1><p>${SUB[id]}</p></div><div class="chips"><span class="chip demo">Dados de demonstração</span><span class="chip">Empresa Demonstração S.A.</span>${filt?`<span class="chip">Área <select id="areaSel" aria-label="Filtrar área">${['Todas',...AREAS].map(a=>`<option ${a===AREA?'selected':''}>${a}</option>`).join('')}</select></span><button class="chip" id="areaLimpa" type="button" style="cursor:pointer" title="${id==='avaliacao'?'Volta para todas as áreas e desfaz as alterações de medidas e severidade':'Volta para todas as áreas'}">Limpar filtro ✕</button>`:''}<span class="chip">Ciclo 2026</span></div></div><section class="view on">${V[id]()}</section>`;
   if(V[id].bind) V[id].bind();
   if($('#areaSel')) $('#areaSel').onchange=e=>{AREA=e.target.value;render(id);};
-  if($('#areaLimpa')) $('#areaLimpa').onclick=()=>{AREA='Todas';render(id);};
+  if($('#areaLimpa')) $('#areaLimpa').onclick=()=>{AREA='Todas';
+    if(id==='avaliacao'){MEDIDAS.splice(0,MEDIDAS.length,...MEDIDAS0);D.dims.forEach((d,i)=>d.sev=SEV0[i]);}
+    render(id);toast(id==='avaliacao'?'Filtro e ajustes de medidas e severidade desfeitos.':'Filtro limpo: todas as áreas.');};
   document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
 }
 function go(id){CUR=id;document.querySelectorAll('[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===id));render(id);window.scrollTo(0,0);try{history.replaceState(null,'','#'+id)}catch(e){}}
