@@ -276,15 +276,19 @@ function sparkPulse(){const W=300,H=90,v=PULSO_HIST.map(p=>p.v.reduce((a,b)=>a+b
 
 function likertBlock(items, labels, start, name){
   const n=labels.length;
-  return `<div class="lk hd" style="--n:${n}"><span></span><span></span>${labels.map((l,i)=>`<span>${i+1}<br>${esc(l)}</span>`).join('')}</div>`+
+  return `<div class="lk hd" style="--n:${n}"><span></span><span></span>${labels.map((l,i)=>`<span>${i+1}<br>${esc(l).replace(/(\w{5,})(mente)$/i,'$1&shy;$2')}</span>`).join('')}</div>`+
    items.map((t,k)=>`<div class="lk" style="--n:${n}"><span class="n">${start+k}</span><span>${esc(t)}</span><span class="opts5">${labels.map((l,i)=>`<label title="${esc(l)}"><input type="radio" name="${name}${start+k}" value="${i+1}" aria-label="${esc(t)}: ${esc(l)}"></label>`).join('')}</span></div>`).join('');
 }
 function formWrap(id, total, intro, body, submit){
-  return `<div class="card"><div class="form-head"><div class="note" style="flex:1;min-width:260px">${intro}</div><div class="prog"><small id="${id}P">0 de ${total} respondidas</small><div class="bar"><i id="${id}B" style="width:0;background:var(--ac)"></i></div></div></div>
+  return `<div class="card"><div class="form-head"><div class="note" style="flex:1;min-width:260px">${intro}</div><div class="prog"><small id="${id}P">0 de ${total} respondidas</small><div class="bar"><i id="${id}B" style="width:0;background:var(--ac)"></i></div></div><button class="btn ghost" type="button" data-limpa="${id}">Limpar respostas</button></div>
   <form id="${id}F">${body}<div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><button class="btn ac" type="submit">${submit}</button><button class="btn ghost" type="reset">Limpar respostas</button></div></form></div>`;
 }
-function bindForm(id,total,onSubmit){const f=$('#'+id+'F');const up=()=>{const k=new Set([...f.querySelectorAll('input[type=radio]:checked')].map(i=>i.name)).size;$('#'+id+'P').textContent=`${Math.min(k,total)} de ${total} respondidas`;$('#'+id+'B').style.width=Math.min(100,k/total*100)+'%';};
-  f.addEventListener('change',up);f.addEventListener('reset',()=>setTimeout(up));f.addEventListener('submit',ev=>{ev.preventDefault();onSubmit(f);f.reset();up();});}
+function bindForm(id,total,onSubmit){const f=$('#'+id+'F');const up=()=>{const k=new Set([...f.querySelectorAll('input[type=radio]:checked:not([name^=perf])')].map(i=>i.name)).size;$('#'+id+'P').textContent=`${Math.min(k,total)} de ${total} respondidas`;$('#'+id+'B').style.width=Math.min(100,k/total*100)+'%';};
+  f.addEventListener('change',up);f.addEventListener('reset',()=>setTimeout(up));
+  const lb=document.querySelector(`[data-limpa="${id}"]`);if(lb)lb.onclick=()=>f.reset();
+  // clicar de novo na opção marcada desmarca
+  f.addEventListener('pointerdown',ev=>{const l=ev.target.closest('label');const r=l&&l.querySelector('input[type=radio]');if(r)r.dataset.era=r.checked?'1':'';});
+  f.addEventListener('click',ev=>{const r=ev.target.matches('input[type=radio]')?ev.target:null;if(r&&r.dataset.era==='1'){r.checked=false;r.dataset.era='';up();}});f.addEventListener('submit',ev=>{ev.preventDefault();onSubmit(f);f.reset();up();});}
 
 V.questionario = () => {
   const total = D.dims.reduce((a,d)=>a+d.itens.length,0); let n=1;
@@ -534,9 +538,10 @@ function nav(){ $('#nav').innerHTML = VIEWS.map(v=>v.g?`<div class="navg">${v.g}
 let CUR='painel';
 const SUB = {copsoq:'Questionário oficial validado no Brasil (40 questões), com complemento P&C para fechar os 13 fatores do guia do MTE.',copsoqres:'Semáforo seguro, atenção e risco por dimensão, conforme a Fundacentro, e leitura pelos 13 fatores do guia do MTE.',documento:'AEP psicossocial, inventário de riscos e plano de ação gerados a partir das respostas, prontos para o PGR.',painel:'Resultado consolidado da consulta aos trabalhadores e situação do gerenciamento de riscos.',questionario:'Parte A · consulta aos trabalhadores sobre os fatores de risco psicossociais.',pulso:'Acompanhamento trimestral, versão curta.',lideranca:'Autoavaliação de sócios, gestores e coordenadores.',assedio:'Questionário confidencial sobre assédio moral, assédio sexual e violência.',checklist:'Parte B · fatores de risco a partir de dados objetivos.',avaliacao:'Parte C · classificação do risco por probabilidade e severidade.',inventario:'Parte D · riscos psicossociais para o inventário do PGR.',plano:'Parte E · medidas de prevenção, responsáveis e prazos.',cronograma:'Parte F · acompanhamento, comunicação e revisão.',biblioteca:'Fontes oficiais, questionários validados no Brasil e correspondência com a NR-01.'};
 function render(id){ const v=VIEWS.find(x=>x.id===id); const filt=['painel','avaliacao','copsoqres'].includes(id);
-  $('#main').innerHTML = `<div class="top"><div><h1>${v.t}</h1><p>${SUB[id]}</p></div><div class="chips"><span class="chip demo">Dados de demonstração</span><span class="chip">Empresa Demonstração S.A.</span>${filt?`<span class="chip">Área <select id="areaSel" aria-label="Filtrar área">${['Todas',...AREAS].map(a=>`<option ${a===AREA?'selected':''}>${a}</option>`).join('')}</select></span>`:''}<span class="chip">Ciclo 2026</span></div></div><section class="view on">${V[id]()}</section>`;
+  $('#main').innerHTML = `<div class="top"><div><h1>${v.t}</h1><p>${SUB[id]}</p></div><div class="chips"><span class="chip demo">Dados de demonstração</span><span class="chip">Empresa Demonstração S.A.</span>${filt?`<span class="chip">Área <select id="areaSel" aria-label="Filtrar área">${['Todas',...AREAS].map(a=>`<option ${a===AREA?'selected':''}>${a}</option>`).join('')}</select></span>${AREA!=='Todas'?'<button class="chip" id="areaLimpa" type="button" style="cursor:pointer">Limpar filtro ✕</button>':''}`:''}<span class="chip">Ciclo 2026</span></div></div><section class="view on">${V[id]()}</section>`;
   if(V[id].bind) V[id].bind();
   if($('#areaSel')) $('#areaSel').onchange=e=>{AREA=e.target.value;render(id);};
+  if($('#areaLimpa')) $('#areaLimpa').onclick=()=>{AREA='Todas';render(id);};
   document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
 }
 function go(id){CUR=id;document.querySelectorAll('[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===id));render(id);window.scrollTo(0,0);try{history.replaceState(null,'','#'+id)}catch(e){}}
