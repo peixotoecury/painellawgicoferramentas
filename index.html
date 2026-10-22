@@ -1,4 +1,34 @@
 <html lang="pt-BR"><head>
+<script>/*lawgico-gate*/(function(){
+var HASH='8b58b4b44c09b96e969de0f54a4b65d95f0f38aa8854d1d7b5468b5a293471b6',NOME="Painel de Ferramentas",ok=false,g=null;
+var css="#lwGate{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,#0E2841,#00557B 72%,#00AEEF);font-family:'Segoe UI',system-ui,Arial,sans-serif}"
++"#lwGate .c{background:#fff;border-radius:16px;padding:34px 36px;width:min(340px,88vw);box-shadow:0 20px 50px rgba(0,0,0,.35);text-align:center;color:#0E2841}"
++"#lwGate .w{font-size:22px;font-weight:800;letter-spacing:.5px}#lwGate .w i{font-style:normal;font-weight:300;color:#00AEEF}"
++"#lwGate h2{font-size:15px;font-weight:700;margin:8px 0 2px}#lwGate p{font-size:12px;color:#5f7286;margin:0 0 18px}"
++"#lwGate input{box-sizing:border-box;width:100%;padding:10px 12px;border:1px solid #c9d6e2;border-radius:8px;font-size:14px;margin:0 0 10px;text-align:center;letter-spacing:2px;color:#0E2841;background:#fff}"
++"#lwGate input:focus{outline:none;border-color:#00AEEF}"
++"#lwGate button{width:100%;padding:10px;border:none;border-radius:8px;background:#00AEEF;color:#fff;font-weight:700;font-size:13px;cursor:pointer}"
++"#lwGate button:hover{background:#0E2841}#lwGate .e{color:#c0483a;font-size:11.5px;margin-top:10px;display:none}#lwGate .e.s{display:block}";
+function sha256(m){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(m)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')})}
+function montar(){
+  if(ok)return;
+  if(g&&document.documentElement.contains(g))return;
+  g=document.createElement('div');g.id='lwGate';
+  g.innerHTML='<style>'+css+'</style><div class="c"><div class="w">LAW<i>gico</i></div><h2></h2><p>Acesso restrito. Digite a senha para continuar.</p>'
+   +'<input type="password" placeholder="Senha" autocomplete="off"><button type="button">Entrar</button><div class="e">Senha incorreta.</div></div>';
+  g.querySelector('h2').textContent=NOME;
+  var inp=g.querySelector('input'),err=g.querySelector('.e');
+  function tentar(){sha256(inp.value).then(function(h){if(h===HASH){ok=true;g.remove();try{obs.disconnect()}catch(e){}}else{err.classList.add('s')}}).catch(function(){err.textContent='Abra pelo link https do painel.';err.classList.add('s')})}
+  g.querySelector('button').addEventListener('click',tentar);
+  inp.addEventListener('keydown',function(ev){if(ev.key==='Enter')tentar()});
+  document.documentElement.appendChild(g);setTimeout(function(){try{inp.focus()}catch(e){}},50);
+}
+var obs=new MutationObserver(montar);
+montar();obs.observe(document.documentElement,{childList:true,subtree:false});
+document.addEventListener('DOMContentLoaded',montar);window.addEventListener('load',montar);
+setInterval(montar,800);
+})();</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LAWgico — Sistemas Ativos · Peixoto &amp; Cury Advogados</title>
@@ -373,6 +403,28 @@ body::before{
           <span class="chip">📜 Cláusulas</span>
           <span class="chip">📈 Reajustes</span>
           <span class="chip">⚖️ Comparativo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- JORNADA 40 (EC 141) -->
+    <div class="tool-card">
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-icon" style="background:rgba(0,174,239,.15);">🗓️</div>
+          <span class="badge-active">Ativo</span>
+        </div>
+        <div class="card-name">LAWgico Jornada 40</div>
+        <div class="card-desc">Adequação da empresa à EC 141 (fim da escala 6x1, 42 h e depois 40 h, dois repousos): diagnóstico dos empregados, custos e cenários, triagem de normas coletivas, escalas 5x2 com IA, calculadoras de folha, plano de ação e biblioteca jurídica.</div>
+        <a class="btn-open" href="Jornada40/Plataforma_Jornada_40.html" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
+          Abrir sistema
+        </a>
+        <div class="card-chips">
+          <span class="chip">👥 Diagnóstico</span>
+          <span class="chip">📅 Escalas 5x2</span>
+          <span class="chip">🧮 Folha</span>
+          <span class="chip">📚 Biblioteca</span>
         </div>
       </div>
     </div>
