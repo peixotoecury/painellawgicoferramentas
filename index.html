@@ -585,7 +585,7 @@ body::before{
         </div>
         <div class="card-name">LAWgico Dados, Jurimetria e Decisões · Ribeirão Pires</div>
         <div class="card-desc">Base completa da Vara do Trabalho de Ribeirão Pires, atualizada todo dia pelo DJEN e pelo PJe: jurimetria de juízes, peritos e desembargadores, movimentação do mês, audiências, prazos e casos da CBC, modelos de peças com jurisprudência da vara e precedentes do STF e do TST, perguntas rápidas e painéis para baixar.</div>
-        <a class="btn-open" href="https://basededadospc.web.app/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://basededadospc.web.app/','_blank','noopener,noreferrer');return false;">
+        <a class="btn-open" href="#" onclick="abreCofre();return false;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
           Abrir sistema
         </a>
@@ -929,4 +929,44 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
 </script>
 
 
+<!-- acesso restrito à plataforma de Ribeirão Pires: o endereço só existe cifrado com a senha (AES-GCM + PBKDF2) -->
+<div id="cofre" style="display:none;position:fixed;inset:0;background:rgba(0,20,36,.72);z-index:9999;align-items:center;justify-content:center;padding:16px">
+  <form id="cofreForm" style="background:#fff;border-radius:16px;padding:26px 24px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.35);font-family:'Inter',sans-serif">
+    <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#0084b8;font-weight:700">Acesso restrito</div>
+    <div style="font-size:18px;font-weight:700;color:#0E2841;margin:6px 0 4px">Dados, Jurimetria e Decisões · Ribeirão Pires</div>
+    <div style="font-size:13px;color:#5B6B7B;margin-bottom:14px">Digite a senha de acesso a esta ferramenta.</div>
+    <input id="cofreSenha" type="password" autocomplete="off" placeholder="Senha" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1px solid #D5DCE8;border-radius:10px;font:inherit;font-size:14px">
+    <div id="cofreErro" style="display:none;color:#C0392B;font-size:12.5px;margin-top:8px">Senha incorreta.</div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button type="button" onclick="fechaCofre()" style="border:1px solid #D5DCE8;background:#fff;border-radius:9px;padding:9px 14px;font:inherit;font-weight:600;color:#0E2841;cursor:pointer">Cancelar</button>
+      <button type="submit" style="border:0;background:#0E2841;color:#fff;border-radius:9px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer">Entrar</button>
+    </div>
+  </form>
+</div>
+<script>
+(function(){
+  const C = {sal:'yVhGxmWjIdnw0IgU1vNuiw==', iv:'rcrohH8s+roG4XrX', dado:'jiGoohHjAGVpA8KoRdy//asj6AizbgL9GZnJLIW5xzhsrhr5XmE0xRDaql4PpQ=='};
+  const b = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const cofre = document.getElementById('cofre'), senha = document.getElementById('cofreSenha'), erro = document.getElementById('cofreErro');
+  window.abreCofre = () => { erro.style.display = 'none'; senha.value = ''; cofre.style.display = 'flex'; setTimeout(() => senha.focus(), 50); };
+  window.fechaCofre = () => { cofre.style.display = 'none'; };
+  cofre.addEventListener('click', e => { if (e.target === cofre) fechaCofre(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') fechaCofre(); });
+  document.getElementById('cofreForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    // abre a aba já no clique (senão o navegador bloqueia como pop-up) e só depois põe o endereço
+    const aba = window.open('', '_blank');
+    try {
+      const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(senha.value), 'PBKDF2', false, ['deriveKey']);
+      const chave = await crypto.subtle.deriveKey({name:'PBKDF2', salt:b(C.sal), iterations:250000, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['decrypt']);
+      const url = new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM', iv:b(C.iv)}, chave, b(C.dado)));
+      if (aba){ aba.opener = null; aba.location = url; } else window.location = url;
+      fechaCofre();
+    } catch(err) {
+      if (aba) aba.close();
+      erro.style.display = 'block'; senha.select();
+    }
+  });
+})();
+</script>
 </body></html>
