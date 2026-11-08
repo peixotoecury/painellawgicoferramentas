@@ -3,7 +3,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LAWgico — Sistemas Ativos · Peixoto &amp; Cury Advogados</title>
+<title>LAWgico · Sistemas Ativos · Peixoto &amp; Cury Advogados</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
@@ -62,7 +62,7 @@ body::before{
 /* ── HERO ── */
 .hero{
   position:relative;z-index:5;
-  padding:64px 64px 48px;
+  padding:40px 64px 30px;
   text-align:center;
 }
 .hero-eyebrow{
@@ -77,7 +77,7 @@ body::before{
   background:var(--green);animation:pulse 2s infinite;
 }
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
-.hero-title{font-size:46px;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-1.5px;margin-bottom:14px;}
+.hero-title{font-size:40px;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-1.5px;margin-bottom:14px;}
 .hero-title span{
   background:linear-gradient(90deg,var(--cyan),#60d8ff);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
@@ -87,7 +87,7 @@ body::before{
 /* ── GRID ── */
 .grid-section{
   position:relative;z-index:5;
-  padding:48px 64px 64px;
+  padding:28px 64px 56px;
 }
 .cards-grid{
   display:grid;
@@ -191,6 +191,27 @@ body::before{
 .doc-link span:last-child{margin-left:auto;opacity:.5;transition:transform .2s;}
 .doc-link:hover span:last-child{transform:translateX(3px);opacity:1;}
 
+/* ── MATERIAIS RECOLHÍVEIS, BUSCA E TOPO ── */
+details.card-docs{display:block;padding:0;gap:0;}
+details.card-docs>summary{list-style:none;cursor:pointer;padding:14px 28px;margin:0;display:flex;align-items:center;gap:8px;user-select:none;}
+details.card-docs>summary::-webkit-details-marker{display:none;}
+details.card-docs>summary::after{content:'▾';margin-left:auto;font-size:12px;transition:transform .2s;}
+details.card-docs[open]>summary::after{transform:rotate(180deg);}
+details.card-docs>summary:hover{color:var(--cyan);}
+.docs-list{display:flex;flex-direction:column;gap:8px;padding:0 28px 18px;}
+.barra-busca{position:sticky;top:0;z-index:20;background:rgba(0,30,54,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);border-top:1px solid var(--border);}
+.barra-in{max-width:1328px;margin:0 auto;padding:12px 64px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+#busca{flex:1 1 280px;min-width:0;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:#fff;font:inherit;font-size:13px;outline:none;}
+#busca:focus{border-color:var(--cyan);}
+#busca::placeholder{color:var(--muted);}
+.cats{display:flex;gap:6px;flex-wrap:wrap;}
+.cats button{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);border-radius:20px;padding:7px 14px;font:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;}
+.cats button:hover{color:#fff;border-color:rgba(0,174,239,.45);}
+.cats button.on{background:var(--cyan);border-color:var(--cyan);color:#001e36;}
+.cats button b{font-weight:800;margin-left:3px;}
+.sem-res{position:relative;z-index:5;text-align:center;color:var(--muted);font-size:14px;margin:-30px 0 50px;}
+.topo{position:fixed;right:22px;bottom:22px;z-index:30;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--navy3);color:#fff;font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .25s;box-shadow:var(--shadow);}
+.topo.vis{opacity:1;pointer-events:auto;}
 /* ── FOOTER ── */
 .footer{
   position:relative;z-index:5;
@@ -219,7 +240,13 @@ body::before{
   .hero-desc{font-size:13px;}
 
   /* Grid */
-  .grid-section{padding:24px 16px 40px;}
+  .grid-section{padding:18px 16px 40px;}
+  .barra-in{padding:10px 16px;gap:10px;}
+  .cats{flex-wrap:nowrap;overflow-x:auto;width:100%;padding-bottom:2px;}
+  .cats button{white-space:nowrap;}
+  details.card-docs>summary{padding:12px 18px;}
+  .docs-list{padding:0 18px 14px;}
+  .hero{padding:28px 20px 22px;}
   .cards-grid{grid-template-columns:1fr;}
 
   /* Cards */
@@ -257,7 +284,20 @@ body::before{
 <div class="hero">
   <div class="hero-eyebrow">Sistemas em operação</div>
   <h1 class="hero-title">Ferramentas <span>disponíveis</span><br>para o escritório</h1>
-  <p class="hero-desc">Plataformas desenvolvidas internamente pela Controladoria — acesse diretamente pelo navegador, sem instalação.</p>
+  <p class="hero-desc">Plataformas desenvolvidas internamente pela Controladoria, acessadas direto pelo navegador, sem instalação.</p>
+</div>
+
+<!-- BUSCA E CATEGORIAS (fica presa no topo ao rolar) -->
+<div class="barra-busca">
+  <div class="barra-in">
+    <input id="busca" type="search" placeholder="Buscar ferramenta (ex.: prazos, perícia, NR-01)" autocomplete="off">
+    <div class="cats">
+      <button class="on" data-cat="">Todas <b id="nTodas"></b></button>
+      <button data-cat="contencioso">Contencioso e jurimetria</button>
+      <button data-cat="clientes">Soluções para clientes</button>
+      <button data-cat="interno">Gestão interna</button>
+    </div>
+  </div>
 </div>
 
 <!-- CARDS -->
@@ -265,7 +305,7 @@ body::before{
   <div class="cards-grid">
 
     <!-- NR-01 RISCOS PSICOSSOCIAIS -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="clientes">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">🧠</div>
@@ -284,8 +324,7 @@ body::before{
           <span class="chip">📤 PDF e Word</span>
         </div>
       </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
+      <details class="card-docs"><summary class="card-docs-title">Materiais (8)</summary><div class="docs-list">
         <a class="doc-link" href="NR01/Kit_NR01_riscos_psicossociais.pdf" target="_blank">
           <span>📕</span><span style="flex:1">Kit NR-01 riscos psicossociais (PDF)</span><span>→</span>
         </a>
@@ -310,11 +349,11 @@ body::before{
         <a class="doc-link" href="NR01/Mapa_item_a_item_das_fontes.xlsx" target="_blank">
           <span>📊</span><span style="flex:1">Mapa item a item das fontes (Excel)</span><span>→</span>
         </a>
-      </div>
+      </div></details>
     </div>
 
     <!-- GTT -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="clientes">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">👷</div>
@@ -336,7 +375,7 @@ body::before{
     </div>
 
     <!-- MAPA DE VULNERABILIDADES -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="clientes">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">🎯</div>
@@ -358,7 +397,7 @@ body::before{
     </div>
 
     <!-- PLATAFORMA SINDICAL -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="clientes">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">🤝</div>
@@ -380,7 +419,7 @@ body::before{
     </div>
 
     <!-- JORNADA 40 (EC 141) -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="clientes">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">🗓️</div>
@@ -402,7 +441,7 @@ body::before{
     </div>
 
     <!-- PORTAL DE ACORDOS -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="clientes">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">🤲</div>
@@ -424,7 +463,7 @@ body::before{
     </div>
 
     <!-- DUE DILIGENCE SST -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="clientes">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">🦺</div>
@@ -446,7 +485,7 @@ body::before{
     </div>
 
     <!-- SIMULADOR DUE DILIGENCE M&A -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="clientes">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">🏢</div>
@@ -467,7 +506,7 @@ body::before{
     </div>
 
     <!-- SIMULADOR DE COTAS -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="clientes">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">♿</div>
@@ -488,7 +527,7 @@ body::before{
     </div>
 
     <!-- LITIGIOSIDADE BANCOS -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="clientes">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">🏦</div>
@@ -509,7 +548,7 @@ body::before{
     </div>
 
     <!-- RELATÓRIO DE CONTINGÊNCIA -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="clientes">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">📑</div>
@@ -528,16 +567,15 @@ body::before{
           <span class="chip">📤 Excel</span>
         </div>
       </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
+      <details class="card-docs"><summary class="card-docs-title">Materiais (1)</summary><div class="docs-list">
         <a class="doc-link" href="RelatorioContingencia/Manual_RelatorioContingencia.html" target="_blank">
           <span>📖</span><span style="flex:1">Manual do usuário</span><span>→</span>
         </a>
-      </div>
+      </div></details>
     </div>
 
     <!-- PAUTA -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="contencioso">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">🎯</div>
@@ -556,8 +594,7 @@ body::before{
           <span class="chip">📤 Excel</span>
         </div>
       </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
+      <details class="card-docs"><summary class="card-docs-title">Materiais (5)</summary><div class="docs-list">
         <a class="doc-link" href="Pauta/LAWgico_Pauta_Infografico.html" target="_blank">
           <span>🌐</span><span style="flex:1">Infográfico interativo</span><span>→</span>
         </a>
@@ -573,11 +610,11 @@ body::before{
         <a class="doc-link" href="Pauta/Manual_PosAudiencia_CorpoEmail_Outlook.html" target="_blank">
           <span>✉️</span><span style="flex:1">Pós-Audiência — corpo do e-mail (Outlook)</span><span>→</span>
         </a>
-      </div>
+      </div></details>
     </div>
 
     <!-- DADOS, JURIMETRIA E DECISÕES · RIBEIRÃO PIRES (hospedada no Firebase com senha; aqui só o link) -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="contencioso">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">⚖️</div>
@@ -599,7 +636,7 @@ body::before{
     </div>
 
     <!-- BAIXAS DE PRAZOS -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="contencioso">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(248,113,113,.12);">📉</div>
@@ -618,16 +655,15 @@ body::before{
           <span class="chip">📥 Excel</span>
         </div>
       </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
+      <details class="card-docs"><summary class="card-docs-title">Materiais (1)</summary><div class="docs-list">
         <a class="doc-link" href="Baixados/Manual_Baixados.html" target="_blank">
           <span>📖</span><span style="flex:1">Manual do usuário</span><span>→</span>
         </a>
-      </div>
+      </div></details>
     </div>
 
     <!-- CONTROLE DE PRAZOS E AGENDAS -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="contencioso">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,169,224,.12);">📅</div>
@@ -645,8 +681,7 @@ body::before{
           <span class="chip">🔐 Login</span>
         </div>
       </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
+      <details class="card-docs"><summary class="card-docs-title">Materiais (3)</summary><div class="docs-list">
         <a class="doc-link" href="PrazosAgendas/LAWgico_PrazosAgendas_Infografico.html" target="_blank">
           <span>🌐</span><span style="flex:1">Infográfico interativo</span><span>→</span>
         </a>
@@ -656,11 +691,11 @@ body::before{
         <a class="doc-link" href="PrazosAgendas/LAWgico_PrazosAgendas_Apresentacao.pptx">
           <span>📎</span><span style="flex:1">Apresentação PowerPoint</span><span>→</span>
         </a>
-      </div>
+      </div></details>
     </div>
 
     <!-- CONTROLE DE INSERÇÃO DE CÁLCULOS -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="contencioso">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,200,150,.12);">🧾</div>
@@ -680,8 +715,7 @@ body::before{
           <span class="chip">📥 Excel</span>
         </div>
       </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
+      <details class="card-docs"><summary class="card-docs-title">Materiais (3)</summary><div class="docs-list">
         <a class="doc-link" href="InsercaoCalculos/LAWgico_InsercaoCalculos_Manual.html" target="_blank">
           <span>🌐</span><span style="flex:1">Manual interativo</span><span>→</span>
         </a>
@@ -691,17 +725,17 @@ body::before{
         <a class="doc-link" href="InsercaoCalculos/LAWgico_InsercaoCalculos_Manual.pptx">
           <span>📎</span><span style="flex:1">Apresentação PowerPoint</span><span>→</span>
         </a>
-      </div>
+      </div></details>
     </div>
 
     <!-- CONTROLE DE DECISÕES — EMBRAER -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="contencioso">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,169,224,.12);">🛩️</div>
           <span class="badge-active">Ativo</span>
         </div>
-        <div class="card-name">Controle de Decisões — Embraer</div>
+        <div class="card-name">Controle de Decisões · Embraer</div>
         <div class="card-desc">Centraliza o contencioso trabalhista Embraer: Reporte de Decisão, registros vivos de Reintegrados/Estratégicos/Insalubridade e Periculosidade/Doenças, solicitação de cálculos, determinação de reintegração, ajuste de fase/prognóstico no Elaw, agendamento de perícia e inscrição de sustentação oral.</div>
         <a class="btn-open" href="https://peixotoecury.github.io/decisoesembraer/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://peixotoecury.github.io/decisoesembraer/','_blank','noopener,noreferrer');return false;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
@@ -715,16 +749,15 @@ body::before{
           <span class="chip">📥 Excel</span>
         </div>
       </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
+      <details class="card-docs"><summary class="card-docs-title">Materiais (1)</summary><div class="docs-list">
         <a class="doc-link" href="EmbraerDecisoes/LAWgico_EmbraerDecisoes_Manual.html" target="_blank">
           <span>🌐</span><span style="flex:1">Manual interativo</span><span>→</span>
         </a>
-      </div>
+      </div></details>
     </div>
 
     <!-- COMUNICAÇÕES BRIDGESTONE -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="contencioso">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(245,158,11,.12);">📨</div>
@@ -744,19 +777,18 @@ body::before{
           <span class="chip">💲 Valores</span>
         </div>
       </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
+      <details class="card-docs"><summary class="card-docs-title">Materiais (2)</summary><div class="docs-list">
         <a class="doc-link" href="ComunicacoesBridgestone/LAWgico_ComunicacoesBridgestone_Manual.html" target="_blank">
           <span>🌐</span><span style="flex:1">Manual interativo</span><span>→</span>
         </a>
         <a class="doc-link" href="ComunicacoesBridgestone/LAWgico_ComunicacoesBridgestone_Manual.pdf" target="_blank">
           <span>📖</span><span style="flex:1">Manual do usuário (PDF)</span><span>→</span>
         </a>
-      </div>
+      </div></details>
     </div>
 
     <!-- COMUNICADO DE PERÍCIA -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="contencioso">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,174,239,.15);">✉️</div>
@@ -774,16 +806,15 @@ body::before{
           <span class="chip">📥 Excel</span>
         </div>
       </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
+      <details class="card-docs"><summary class="card-docs-title">Materiais (1)</summary><div class="docs-list">
         <a class="doc-link" href="ComunicadoPericia/Manual_Comunicado_Pericia.html" target="_blank">
           <span>📖</span><span style="flex:1">Manual do usuário</span><span>→</span>
         </a>
-      </div>
+      </div></details>
     </div>
 
     <!-- LAWGICO CADASTRO -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="interno">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,169,224,.12);">📋</div>
@@ -801,16 +832,15 @@ body::before{
           <span class="chip">📥 Excel</span>
         </div>
       </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
+      <details class="card-docs"><summary class="card-docs-title">Materiais (1)</summary><div class="docs-list">
         <a class="doc-link" href="Cadastro/LAWgico_Cadastro_Manual.html" target="_blank">
           <span>📖</span><span style="flex:1">Manual do usuário</span><span>→</span>
         </a>
-      </div>
+      </div></details>
     </div>
 
     <!-- PROMPT INJECT -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="interno">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(220,38,38,.10);">🔍</div>
@@ -829,19 +859,18 @@ body::before{
           <span class="chip">🤖 Claude Opus</span>
         </div>
       </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
+      <details class="card-docs"><summary class="card-docs-title">Materiais (2)</summary><div class="docs-list">
         <a class="doc-link" href="PromptInject/Manual_Detector_PromptInjection.html" target="_blank">
           <span>📖</span><span style="flex:1">Manual do usuário</span><span>→</span>
         </a>
         <a class="doc-link" href="PromptInject/Apresentacao_PromptInjection_PC.html" target="_blank">
           <span>📎</span><span style="flex:1">Apresentação (slides)</span><span>→</span>
         </a>
-      </div>
+      </div></details>
     </div>
 
     <!-- VISÃO GERAL DO ESCRITÓRIO -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="interno">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(16,185,129,.12);">🏢</div>
@@ -863,7 +892,7 @@ body::before{
     </div>
 
     <!-- CONTROLE DE INCIDÊNCIAS -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="contencioso">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(234,88,12,.12);">🚨</div>
@@ -885,13 +914,13 @@ body::before{
     </div>
 
     <!-- COMPROMISSOS -->
-    <div class="tool-card">
+    <div class="tool-card" data-cat="interno">
       <div class="card-body">
         <div class="card-top">
           <div class="card-icon" style="background:rgba(0,169,224,.15);">📋</div>
           <span class="badge-active">Ativo</span>
         </div>
-        <div class="card-name">Compromissos — Time B e Controladoria</div>
+        <div class="card-name">Compromissos · Time B e Controladoria</div>
         <div class="card-desc">Calcula todo dia o que cada pessoa do Time B e da Controladoria Geral precisa entregar (pautas, relatórios, atividades recorrentes, alertas pontuais no horário certo), manda lembrete automático por e-mail e deixa marcar como entregue. Login por nome + e-mail: cada um vê só os próprios compromissos, e coordenação/sócios têm a visão geral de quem cumpriu e quem não cumpriu.</div>
         <a class="btn-open" href="https://peixotoecury.github.io/compromissos/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://peixotoecury.github.io/compromissos/','_blank','noopener,noreferrer');return false;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="5"></circle><path d="M15.5 7.5 19 4l.5.5L18 6l1.5 1.5-.5.5L17.5 6.5 16 8z"></path><path d="M15 12h7"></path></svg>
@@ -907,16 +936,35 @@ body::before{
           <span class="chip">✅ Marcar entregue</span>
         </div>
       </div>
-      <div class="card-docs">
-        <div class="card-docs-title">Materiais</div>
+      <details class="card-docs"><summary class="card-docs-title">Materiais (1)</summary><div class="docs-list">
         <a class="doc-link" href="Compromissos/LAWgico_Compromissos_Manual.html" target="_blank">
           <span>📖</span><span style="flex:1">Manual do usuário</span><span>→</span>
         </a>
-      </div>
+      </div></details>
     </div>
 
   </div>
 </div>
+
+<div id="semResultado" class="sem-res" style="display:none">Nenhuma ferramenta encontrada.</div>
+<button id="topo" class="topo" title="Voltar ao topo" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+(function(){
+  const cards = [...document.querySelectorAll('.tool-card')], busca = document.getElementById('busca'), btns = [...document.querySelectorAll('.cats button')];
+  const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  let cat = '';
+  document.getElementById('nTodas').textContent = cards.length;
+  function filtra(){
+    const q = norm(busca.value.trim()); let n = 0;
+    cards.forEach(c=>{ const ok = (!cat || c.dataset.cat===cat) && (!q || norm(c.textContent).includes(q)); c.style.display = ok ? '' : 'none'; if (ok) n++; });
+    document.getElementById('semResultado').style.display = n ? 'none' : 'block';
+  }
+  busca.addEventListener('input', filtra);
+  btns.forEach(b=>b.addEventListener('click', ()=>{ cat = b.dataset.cat; btns.forEach(x=>x.classList.toggle('on', x===b)); filtra();
+    const g = document.querySelector('.grid-section'); if (scrollY > g.offsetTop) scrollTo({top:g.offsetTop-70, behavior:'smooth'}); }));
+  const topo = document.getElementById('topo'); addEventListener('scroll', ()=>topo.classList.toggle('vis', scrollY>600), {passive:true});
+})();
+</script>
 
 <!-- FOOTER -->
 <div class="footer">
