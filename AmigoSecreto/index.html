@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Amigo Secreto Time B 2026</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Figtree:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: noite de dezembro, convite à esquerda e inscrição à direita; uma coluna no celular. Visual único escuro, de propósito. */
+:root{
+  --noite:#001E36; --noite2:#00294A; --papel:#F4EBDD; --ouro:#F2C46D; --ouro2:#F2C46D; --vinho:#C9302C; --nevoa:#7FD8FF; --linha:rgba(127,216,255,.22);
+  --display:'Sora','Trebuchet MS',sans-serif; --texto:'Figtree',system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--noite);color:var(--papel);font-family:var(--texto);font-size:17px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0;
+  background-image:radial-gradient(900px 520px at 85% -10%,rgba(233,182,92,.18),transparent 60%),radial-gradient(700px 500px at -10% 110%,rgba(181,54,59,.20),transparent 60%)}
+canvas#neve{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding-block:56px 40px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:start}
+@media (max-width:860px){.wrap{grid-template-columns:1fr;gap:32px;padding-block:36px 28px}}
+.selo{display:inline-flex;gap:10px;align-items:center;font:700 13px var(--texto);letter-spacing:.22em;text-transform:uppercase;color:var(--ouro)}
+.selo i{width:28px;height:1.5px;background:var(--ouro)}
+h1{font:800 clamp(44px,7.4vw,86px)/.98 var(--display);letter-spacing:-.02em;margin:18px 0 0;text-wrap:balance}
+h1 em{font-style:normal;font-weight:800;color:var(--ouro2)}
+.lead{margin:22px 0 0;font-size:20px;color:#DCE6EF;max-width:34em}
+.fatos{margin-top:34px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--linha);border-bottom:1px solid var(--linha)}
+@media (max-width:520px){.fatos{grid-template-columns:1fr}}
+.fato{padding:18px 18px 18px 0;min-width:0}
+.fato+.fato{border-left:1px solid var(--linha);padding-left:18px}
+@media (max-width:520px){.fato+.fato{border-left:0;border-top:1px solid var(--linha);padding-left:0}}
+.fato small{display:block;font:700 12px var(--texto);letter-spacing:.2em;text-transform:uppercase;color:var(--nevoa)}
+.fato b{display:block;margin-top:6px;font:800 26px/1.15 var(--display);font-variant-numeric:tabular-nums}
+.fato span{color:#C9D6E2;font-size:15px}
+.regras{margin-top:30px;display:flex;gap:18px;align-items:flex-start}
+.laco{flex:0 0 64px;height:64px;border-radius:14px;background:var(--ouro);position:relative;box-shadow:0 10px 30px rgba(233,182,92,.25)}
+.laco:before{content:"";position:absolute;left:27px;top:0;bottom:0;width:10px;background:var(--vinho)}
+.laco:after{content:"";position:absolute;top:21px;left:0;right:0;height:10px;background:var(--vinho)}
+.regras h2{margin:0;font:800 24px var(--display);color:var(--ouro2)}
+.regras p{margin:6px 0 0;color:#DCE6EF}
+.regras ol{margin:10px 0 0;padding-left:20px;color:#C9D6E2}
+.regras li+li{margin-top:4px}
+/* cartão de inscrição: o único objeto destacado da página */
+.cartao{background:var(--papel);color:var(--noite);border-radius:18px;padding:30px 28px;box-shadow:0 30px 80px rgba(0,0,0,.45);position:relative}
+.cartao:before{content:"";position:absolute;inset:10px;border:1.5px dashed rgba(11,27,46,.22);border-radius:12px;pointer-events:none}
+.cartao h2{margin:0;font:800 30px/1.1 var(--display)}
+.cartao .sub{margin:8px 0 18px;color:#3A4C60;font-size:15.5px}
+label{display:block;font:700 13px var(--texto);letter-spacing:.06em;text-transform:uppercase;color:#3A4C60;margin-top:14px}
+input[type=text],input[type=email]{width:100%;margin-top:6px;padding:13px 14px;border:1.5px solid #CDBFA9;border-radius:10px;background:#FFFCF6;font:400 17px var(--texto);color:var(--noite)}
+input:focus-visible,button:focus-visible{outline:3px solid var(--ouro);outline-offset:2px}
+.opc{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:15.5px;color:#22344A;text-transform:none;letter-spacing:0;font-weight:600}
+.opc input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--vinho);flex:0 0 auto}
+button.envia{margin-top:22px;width:100%;padding:15px;border:0;border-radius:12px;background:var(--vinho);color:#fff;font:700 17px var(--texto);cursor:pointer}
+button.envia:hover{filter:brightness(1.08)}
+button.envia:disabled{opacity:.6;cursor:default}
+.msg{margin-top:14px;font-size:15px;min-height:1.4em}
+.msg.ok{color:#1F6B3A;font-weight:700}
+.msg.erro{color:var(--vinho);font-weight:700}
+.lista{margin-top:22px;padding-top:16px;border-top:1px solid #DCCDB4}
+.lista h3{margin:0;font:700 13px var(--texto);letter-spacing:.14em;text-transform:uppercase;color:#3A4C60}
+.lista .num{font:800 34px var(--display);color:var(--vinho);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chips span{background:#EADCC4;border-radius:20px;padding:4px 11px;font-size:14px;color:#22344A}
+.chips span.as{background:var(--ouro2)}
+.orgbtn{position:relative;z-index:1;display:block;max-width:1120px;margin:0 auto 18px;text-align:right}
+.orgbtn button{background:none;border:0;color:var(--nevoa);font:600 14px var(--texto);cursor:pointer;text-decoration:underline}
+.org{position:relative;z-index:1;max-width:1120px;margin:0 auto 28px;background:rgba(255,255,255,.06);border:1px solid var(--linha);border-radius:18px;padding:22px 24px}
+.org h2{margin:0;font:800 22px var(--display);color:var(--ouro2)}
+.org .res{display:flex;flex-wrap:wrap;gap:22px;margin:12px 0 14px;color:#DCE6EF}
+.org .res b{font:800 28px var(--display);color:#fff;display:block;font-variant-numeric:tabular-nums}
+.org .tab{overflow-x:auto}
+.org table{width:100%;border-collapse:collapse;font-size:15px;min-width:520px}
+.org th{text-align:left;font:700 12px var(--texto);letter-spacing:.14em;text-transform:uppercase;color:var(--nevoa);padding:8px 10px;border-bottom:1px solid var(--linha)}
+.org td{padding:8px 10px;border-bottom:1px solid rgba(127,216,255,.10)}
+.org .sim{color:var(--ouro2);font-weight:700}
+.org button{margin-top:14px;padding:10px 16px;border-radius:10px;border:1px solid var(--ouro);background:transparent;color:var(--ouro2);font:700 15px var(--texto);cursor:pointer}
+.rodape{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding-block:8px 36px;color:var(--nevoa);font-size:14px;border-top:1px solid var(--linha)}
+@media (prefers-reduced-motion:reduce){canvas#neve{display:none}}
+</style>
+</head><body>
+<canvas id="neve" aria-hidden="true"></canvas>
+<main class="wrap">
+  <section>
+    <span class="selo"><i></i>Time B e Controladoria</span>
+    <h1>Confraternização e <em>amigo secreto</em></h1>
+    <p class="lead">Fechamos 2026 juntos: um happy hour com os times E1 e E2, cada time com o seu amigo secreto, para celebrar o ano e brindar à equipe.</p>
+    <div class="fatos">
+      <div class="fato"><small>Quando</small><b>04/12/2026</b><span>sexta-feira</span></div>
+      <div class="fato"><small>Horário</small><b>19h</b><span>a partir das</span></div>
+      <div class="fato"><small>Onde</small><b>TAG Burger</b><span>R. Maria Figueiredo, 181, Paraíso</span></div>
+    </div>
+    <div class="regras">
+      <div class="laco" aria-hidden="true"></div>
+      <div>
+        <h2>Amigo secreto</h2>
+        <p>Presente a partir de <b>R$ 50,00</b>.</p>
+        <ol>
+          <li>Inscreva-se ao lado com seu nome e e-mail.</li>
+          <li>Na quinta-feira, 19/11, a plataforma faz o sorteio.</li>
+          <li>Cada participante recebe por e-mail, só para si, o nome de quem tirou.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <aside class="cartao" aria-labelledby="tInsc">
+    <h2 id="tInsc">Confirme sua presença</h2>
+    <p class="sub">Responda o quanto antes: o sorteio é na <b>quinta-feira, 19/11/2026</b>. Para alterar depois, é só se inscrever de novo com o mesmo e-mail.</p>
+    <form id="form" novalidate>
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" autocomplete="name" placeholder="Como você quer ser chamado(a)" required>
+      <label for="email">E-mail</label>
+      <input type="email" id="email" autocomplete="email" placeholder="nome.sobrenome@peixotoecury.com.br" required>
+      <label class="opc"><input type="checkbox" id="vai" checked> Vou à confraternização</label>
+      <label class="opc"><input type="checkbox" id="amigo" checked> Quero participar do amigo secreto</label>
+      <button class="envia" id="btn" type="submit">Confirmar inscrição</button>
+      <div class="msg" id="msg" role="status"></div>
+    </form>
+    <div class="lista">
+      <h3>Já confirmaram</h3>
+      <div class="num" id="total">0</div>
+      <div class="chips" id="chips"><span>As inscrições aparecem aqui.</span></div>
+    </div>
+  </aside>
+</main>
+<div class="orgbtn"><button type="button" id="abreOrg">Área da organização</button></div>
+<section class="org" id="org" hidden aria-labelledby="tOrg">
+  <h2 id="tOrg">Lista de confirmação (organização)</h2>
+  <div class="res"><span><b id="nVai">0</b>vão à confraternização</span><span><b id="nAmigo">0</b>no amigo secreto</span><span><b id="nTot">0</b>inscrições</span></div>
+  <div class="tab"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Confraternização</th><th>Amigo secreto</th><th>Atualizado</th></tr></thead><tbody id="orgLinhas"></tbody></table></div>
+  <button type="button" id="copiar">Copiar lista</button> <span id="copiado" class="msg"></span>
+</section>
+<footer class="rodape">Os e-mails ficam visíveis só para a organização e servem apenas para enviar o resultado do sorteio. Os nomes em dourado participam do amigo secreto.</footer>
+<script>
+(function(){
+  const SB='https://sydamnqagkdmczmgkvso.supabase.co', KEY='sb_publishable_kA_IDYtEdATSygg7EajrdQ_cEi4d57N';
+  const rpc=(fn,args)=>fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify(args||{})})
+    .then(async r=>{ const t=await r.text(); if(!r.ok) throw new Error(t); return t?JSON.parse(t):null; });
+  const $=s=>document.querySelector(s);
+  const msg=(t,c)=>{const m=$('#msg'); m.textContent=t; m.className='msg '+(c||'');};
+  const mem={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+  // neve discreta
+  const cv=$('#neve'), cx=cv.getContext('2d'); let F=[];
+  function tam(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;F=Array.from({length:70},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:(Math.random()*1.8+.6)*devicePixelRatio,v:(Math.random()*.4+.15)*devicePixelRatio}));}
+  tam(); addEventListener('resize',tam);
+  (function anda(){cx.clearRect(0,0,cv.width,cv.height);cx.fillStyle='rgba(244,235,221,.55)';
+    F.forEach(f=>{f.y+=f.v;f.x+=Math.sin(f.y/60)*.3;if(f.y>cv.height){f.y=-4;f.x=Math.random()*cv.width;}cx.beginPath();cx.arc(f.x,f.y,f.r,0,7);cx.fill();});
+    if(!matchMedia('(prefers-reduced-motion:reduce)').matches) requestAnimationFrame(anda);})();
+
+  function desenha(lista){
+    $('#total').textContent=lista.length;
+    const chips=$('#chips'); chips.innerHTML='';
+    if(!lista.length){const s=document.createElement('span');s.textContent='Ninguém ainda. Seja o primeiro!';chips.appendChild(s);return;}
+    lista.forEach(x=>{const s=document.createElement('span');s.textContent=(x.nome||'').split(' ')[0]||'Participante';if(x.amigo)s.className='as';chips.appendChild(s);});
+  }
+  function carrega(){ return rpc('amigo_publico').then(desenha).catch(()=>{}); }
+  carrega(); setInterval(carrega,30000);
+
+  // lembra os dados de quem já se inscreveu neste navegador
+  const salvo=JSON.parse(mem.get('amigoSecreto2026')||'null');
+  if(salvo){ $('#nome').value=salvo.nome||''; $('#email').value=salvo.email||''; $('#vai').checked=!!salvo.vai; $('#amigo').checked=!!salvo.amigo; $('#btn').textContent='Atualizar minha inscrição'; }
+
+  $('#form').addEventListener('submit',async ev=>{
+    ev.preventDefault();
+    const nome=$('#nome').value.trim(), email=$('#email').value.trim().toLowerCase(), vai=$('#vai').checked, amigo=$('#amigo').checked;
+    if(nome.length<2){msg('Escreva seu nome.','erro');$('#nome').focus();return;}
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){msg('Confira o e-mail: ele recebe o resultado do sorteio.','erro');$('#email').focus();return;}
+    const btn=$('#btn'); btn.disabled=true; msg('Salvando…');
+    try{
+      await rpc('amigo_inscrever',{p_nome:nome,p_email:email,p_vai:vai,p_amigo:amigo});
+      mem.set('amigoSecreto2026',JSON.stringify({nome,email,vai,amigo}));
+      msg(amigo?'Inscrição confirmada! Você entra no sorteio do amigo secreto.':'Presença confirmada! Você ficou fora do amigo secreto.','ok');
+      btn.textContent='Atualizar minha inscrição'; carrega();
+    }catch(e){ msg('Não foi possível salvar. Tente de novo em instantes.','erro'); }
+    btn.disabled=false;
+  });
+
+  // área da organização (senha)
+  let linhas=[];
+  function desenhaOrg(){
+    $('#nTot').textContent=linhas.length; $('#nVai').textContent=linhas.filter(x=>x.vai).length; $('#nAmigo').textContent=linhas.filter(x=>x.amigo).length;
+    const tb=$('#orgLinhas'); tb.innerHTML='';
+    linhas.forEach(x=>{const tr=document.createElement('tr');
+      [x.nome,x.email,x.vai?'Sim':'Não',x.amigo?'Sim':'Não',new Date(x.atualizado).toLocaleDateString('pt-BR')].forEach((v,k)=>{const td=document.createElement('td');td.textContent=v;if((k===2||k===3)&&v==='Sim')td.className='sim';tr.appendChild(td);});
+      tb.appendChild(tr);});
+  }
+  $('#abreOrg').addEventListener('click',async()=>{
+    const senha=prompt('Senha da organização:'); if(!senha) return;
+    try{ linhas=await rpc('amigo_lista',{p_senha:senha}); $('#org').hidden=false; desenhaOrg(); $('#org').scrollIntoView({behavior:'smooth'}); }
+    catch(e){ alert('Senha incorreta.'); }
+  });
+  $('#copiar').addEventListener('click',async()=>{
+    const txt=['Nome\tE-mail\tConfraternização\tAmigo secreto'].concat(linhas.map(x=>[x.nome,x.email,x.vai?'Sim':'Não',x.amigo?'Sim':'Não'].join('\t'))).join('\n');
+    try{await navigator.clipboard.writeText(txt);$('#copiado').textContent='Lista copiada.';}catch(e){$('#copiado').textContent='Não foi possível copiar; selecione a tabela.';}
+  });
+})();
+</script>
+</body></html>
