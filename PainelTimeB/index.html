@@ -26,7 +26,7 @@ button:disabled{opacity:.6;cursor:wait}
     <div class="err" id="e"></div><button id="b">Entrar</button><div class="nota">Material interno do Peixoto &amp; Cury.</div></form>
 </div>
 <script>
-var SAL='/l22PM4eQH6O4pI57auqkA==',ITER=250000;
+var SAL='8lMYzd1U1YDhSG57j76qhA==',ITER=250000;
 function b64(s){return Uint8Array.from(atob(s),function(c){return c.charCodeAt(0)})}
 async function abre(senha){
   var k=await crypto.subtle.importKey('raw',new TextEncoder().encode(senha),'PBKDF2',false,['deriveKey']);
