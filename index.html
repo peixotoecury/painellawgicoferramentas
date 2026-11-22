@@ -318,7 +318,7 @@ $('#ano').textContent=new Date().getFullYear();
 $('#pclogo2').src=$('#pclogo').src;
 (function(){var a=1948,z=new Date().getFullYear(),h='',p=function(y){return ((y-a)/(z-a)*100).toFixed(2)+'%'};
   for(var y=1950;y<z;y+=10)h+='<i style="left:'+p(y)+'"></i>'+(y>1950&&y<z-5?'<b class="m" style="left:'+p(y)+'">'+y+'</b>':'');
-  h+='<b class="a" style="left:0">'+a+'</b><b class="z" style="left:100%">'+z+'</b><span class="lw" style="left:'+p(2024)+'">LAWgico · '+T.length+' ferramentas</span>';
+  h+='<b class="a" style="left:0">'+a+'</b><b class="z" style="left:100%">'+z+'</b><span class="lw" style="left:auto;right:0;transform:none">LAWgico · '+T.length+' ferramentas</span>';
   $('#tlm').innerHTML=h;var tl=$('#tl');
   if('IntersectionObserver' in window){var io=new IntersectionObserver(function(e){if(e[0].isIntersecting){tl.classList.add('on');io.disconnect()}},{threshold:.4});io.observe(tl)}else tl.classList.add('on')})();
 dots();render();relogio();setInterval(relogio,1000);verifica();setInterval(verifica,60000);
