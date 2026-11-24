@@ -43,8 +43,10 @@ h1 em{font-style:normal;font-weight:800;color:var(--ouro2)}
 .cartao h2{margin:0;font:800 30px/1.1 var(--display)}
 .cartao .sub{margin:8px 0 18px;color:#3A4C60;font-size:15.5px}
 label{display:block;font:700 13px var(--texto);letter-spacing:.06em;text-transform:uppercase;color:#3A4C60;margin-top:14px}
-input[type=text],input[type=email]{width:100%;margin-top:6px;padding:13px 14px;border:1.5px solid #CDBFA9;border-radius:10px;background:#FFFCF6;font:400 17px var(--texto);color:var(--noite)}
+input[type=text],input[type=email],textarea{width:100%;margin-top:6px;padding:13px 14px;border:1.5px solid #CDBFA9;border-radius:10px;background:#FFFCF6;font:400 17px var(--texto);color:var(--noite)}
 input:focus-visible,button:focus-visible{outline:3px solid var(--ouro);outline-offset:2px}
+textarea{resize:vertical;min-height:84px;line-height:1.4}
+.dica{margin:4px 0 0;font-size:13.5px;color:#5A6B7D}
 .opc{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:15.5px;color:#22344A;text-transform:none;letter-spacing:0;font-weight:600}
 .opc input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--vinho);flex:0 0 auto}
 button.envia{margin-top:22px;width:100%;padding:15px;border:0;border-radius:12px;background:var(--vinho);color:#fff;font:700 17px var(--texto);cursor:pointer}
@@ -66,7 +68,7 @@ button.envia:disabled{opacity:.6;cursor:default}
 .org .res{display:flex;flex-wrap:wrap;gap:22px;margin:12px 0 14px;color:#DCE6EF}
 .org .res b{font:800 28px var(--display);color:#fff;display:block;font-variant-numeric:tabular-nums}
 .org .tab{overflow-x:auto}
-.org table{width:100%;border-collapse:collapse;font-size:15px;min-width:520px}
+.org table{width:100%;border-collapse:collapse;font-size:15px;min-width:680px}
 .org th{text-align:left;font:700 12px var(--texto);letter-spacing:.14em;text-transform:uppercase;color:var(--nevoa);padding:8px 10px;border-bottom:1px solid var(--linha)}
 .org td{padding:8px 10px;border-bottom:1px solid rgba(127,216,255,.10)}
 .org .sim{color:var(--ouro2);font-weight:700}
@@ -93,8 +95,9 @@ button.envia:disabled{opacity:.6;cursor:default}
         <p>Presente a partir de <b>R$ 50,00</b>.</p>
         <ol>
           <li>Inscreva-se ao lado com seu nome e e-mail.</li>
-          <li>Na quinta-feira, 19/11, a plataforma faz o sorteio.</li>
-          <li>Cada participante recebe por e-mail, só para si, o nome de quem tirou.</li>
+          <li>Conte o que você gostaria de ganhar (ajuda muito quem tirar você).</li>
+          <li>A organização faz o sorteio pela plataforma.</li>
+          <li>Cada participante recebe por e-mail, só para si, o nome de quem tirou e o que essa pessoa gostaria de ganhar.</li>
         </ol>
       </div>
     </div>
@@ -102,12 +105,15 @@ button.envia:disabled{opacity:.6;cursor:default}
 
   <aside class="cartao" aria-labelledby="tInsc">
     <h2 id="tInsc">Confirme sua presença</h2>
-    <p class="sub">Responda o quanto antes: o sorteio é na <b>quinta-feira, 19/11/2026</b>. Para alterar depois, é só se inscrever de novo com o mesmo e-mail.</p>
+    <p class="sub">Responda o quanto antes: o resultado do sorteio chega por e-mail. Para alterar depois, é só se inscrever de novo com o mesmo e-mail.</p>
     <form id="form" novalidate>
       <label for="nome">Nome</label>
       <input type="text" id="nome" autocomplete="name" placeholder="Como você quer ser chamado(a)" required>
       <label for="email">E-mail</label>
       <input type="email" id="email" autocomplete="email" placeholder="nome.sobrenome@peixotoecury.com.br" required>
+      <label for="desejo">O que eu gostaria de ganhar</label>
+      <textarea id="desejo" maxlength="400" placeholder="Ex.: livro de suspense, caneca, chocolate amargo, algo para o home office"></textarea>
+      <p class="dica">Opcional. Vai junto no e-mail de quem tirar você. Já se inscreveu? Preencha com o mesmo e-mail e clique em atualizar.</p>
       <label class="opc"><input type="checkbox" id="vai" checked> Vou à confraternização</label>
       <label class="opc"><input type="checkbox" id="amigo" checked> Quero participar do amigo secreto</label>
       <button class="envia" id="btn" type="submit">Confirmar inscrição</button>
@@ -124,7 +130,7 @@ button.envia:disabled{opacity:.6;cursor:default}
 <section class="org" id="org" hidden aria-labelledby="tOrg">
   <h2 id="tOrg">Lista de confirmação (organização)</h2>
   <div class="res"><span><b id="nVai">0</b>vão à confraternização</span><span><b id="nAmigo">0</b>no amigo secreto</span><span><b id="nTot">0</b>inscrições</span></div>
-  <div class="tab"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Confraternização</th><th>Amigo secreto</th><th>Atualizado</th></tr></thead><tbody id="orgLinhas"></tbody></table></div>
+  <div class="tab"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Confraternização</th><th>Amigo secreto</th><th>Gostaria de ganhar</th><th>Atualizado</th></tr></thead><tbody id="orgLinhas"></tbody></table></div>
   <button type="button" id="copiar">Copiar lista</button> <span id="copiado" class="msg"></span>
 </section>
 <footer class="rodape">Os e-mails ficam visíveis só para a organização e servem apenas para enviar o resultado do sorteio. Os nomes em dourado participam do amigo secreto.</footer>
@@ -156,17 +162,18 @@ button.envia:disabled{opacity:.6;cursor:default}
 
   // lembra os dados de quem já se inscreveu neste navegador
   const salvo=JSON.parse(mem.get('amigoSecreto2026')||'null');
-  if(salvo){ $('#nome').value=salvo.nome||''; $('#email').value=salvo.email||''; $('#vai').checked=!!salvo.vai; $('#amigo').checked=!!salvo.amigo; $('#btn').textContent='Atualizar minha inscrição'; }
+  if(salvo){ $('#nome').value=salvo.nome||''; $('#email').value=salvo.email||''; $('#desejo').value=salvo.desejo||''; $('#vai').checked=!!salvo.vai; $('#amigo').checked=!!salvo.amigo; $('#btn').textContent='Atualizar minha inscrição'; }
 
   $('#form').addEventListener('submit',async ev=>{
     ev.preventDefault();
-    const nome=$('#nome').value.trim(), email=$('#email').value.trim().toLowerCase(), vai=$('#vai').checked, amigo=$('#amigo').checked;
+    const nome=$('#nome').value.trim(), email=$('#email').value.trim().toLowerCase(), vai=$('#vai').checked, amigo=$('#amigo').checked, desejo=$('#desejo').value.trim();
     if(nome.length<2){msg('Escreva seu nome.','erro');$('#nome').focus();return;}
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){msg('Confira o e-mail: ele recebe o resultado do sorteio.','erro');$('#email').focus();return;}
     const btn=$('#btn'); btn.disabled=true; msg('Salvando…');
     try{
-      await rpc('amigo_inscrever',{p_nome:nome,p_email:email,p_vai:vai,p_amigo:amigo});
-      mem.set('amigoSecreto2026',JSON.stringify({nome,email,vai,amigo}));
+      try{ await rpc('amigo_inscrever',{p_nome:nome,p_email:email,p_vai:vai,p_amigo:amigo,p_desejo:desejo}); }
+      catch(e1){ await rpc('amigo_inscrever',{p_nome:nome,p_email:email,p_vai:vai,p_amigo:amigo}); }
+      mem.set('amigoSecreto2026',JSON.stringify({nome,email,vai,amigo,desejo}));
       msg(amigo?'Inscrição confirmada! Você entra no sorteio do amigo secreto.':'Presença confirmada! Você ficou fora do amigo secreto.','ok');
       btn.textContent='Atualizar minha inscrição'; carrega();
     }catch(e){ msg('Não foi possível salvar. Tente de novo em instantes.','erro'); }
@@ -179,7 +186,7 @@ button.envia:disabled{opacity:.6;cursor:default}
     $('#nTot').textContent=linhas.length; $('#nVai').textContent=linhas.filter(x=>x.vai).length; $('#nAmigo').textContent=linhas.filter(x=>x.amigo).length;
     const tb=$('#orgLinhas'); tb.innerHTML='';
     linhas.forEach(x=>{const tr=document.createElement('tr');
-      [x.nome,x.email,x.vai?'Sim':'Não',x.amigo?'Sim':'Não',new Date(x.atualizado).toLocaleDateString('pt-BR')].forEach((v,k)=>{const td=document.createElement('td');td.textContent=v;if((k===2||k===3)&&v==='Sim')td.className='sim';tr.appendChild(td);});
+      [x.nome,x.email,x.vai?'Sim':'Não',x.amigo?'Sim':'Não',x.desejo||'',new Date(x.atualizado).toLocaleDateString('pt-BR')].forEach((v,k)=>{const td=document.createElement('td');td.textContent=v;if((k===2||k===3)&&v==='Sim')td.className='sim';tr.appendChild(td);});
       tb.appendChild(tr);});
   }
   $('#abreOrg').addEventListener('click',async()=>{
@@ -188,7 +195,7 @@ button.envia:disabled{opacity:.6;cursor:default}
     catch(e){ alert('Senha incorreta.'); }
   });
   $('#copiar').addEventListener('click',async()=>{
-    const txt=['Nome\tE-mail\tConfraternização\tAmigo secreto'].concat(linhas.map(x=>[x.nome,x.email,x.vai?'Sim':'Não',x.amigo?'Sim':'Não'].join('\t'))).join('\n');
+    const txt=['Nome\tE-mail\tConfraternização\tAmigo secreto\tGostaria de ganhar'].concat(linhas.map(x=>[x.nome,x.email,x.vai?'Sim':'Não',x.amigo?'Sim':'Não',(x.desejo||'').replace(/\s+/g,' ')].join('\t'))).join('\n');
     try{await navigator.clipboard.writeText(txt);$('#copiado').textContent='Lista copiada.';}catch(e){$('#copiado').textContent='Não foi possível copiar; selecione a tabela.';}
   });
 })();
