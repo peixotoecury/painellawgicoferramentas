@@ -61,6 +61,13 @@ button.envia:disabled{opacity:.6;cursor:default}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chips span{background:#EADCC4;border-radius:20px;padding:4px 11px;font-size:14px;color:#22344A}
 .chips span.as{background:var(--ouro2)}
+.desejos{position:relative;z-index:1;max-width:1120px;margin:0 auto 28px}
+.desejos h2{margin:0;font:800 26px var(--display);color:var(--ouro2)}
+.desejos>p{margin:6px 0 16px;color:#C9D6E2}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.dcard{background:rgba(255,255,255,.06);border:1px solid var(--linha);border-radius:14px;padding:14px 16px;min-width:0}
+.dcard b{display:block;font:700 16px var(--texto);color:var(--papel)}
+.dcard span{display:block;margin-top:4px;color:#DCE6EF;font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere}
 .orgbtn{position:relative;z-index:1;display:block;max-width:1120px;margin:0 auto 18px;text-align:right}
 .orgbtn button{background:none;border:0;color:var(--nevoa);font:600 14px var(--texto);cursor:pointer;text-decoration:underline}
 .org{position:relative;z-index:1;max-width:1120px;margin:0 auto 28px;background:rgba(255,255,255,.06);border:1px solid var(--linha);border-radius:18px;padding:22px 24px}
@@ -126,6 +133,11 @@ button.envia:disabled{opacity:.6;cursor:default}
     </div>
   </aside>
 </main>
+<section class="desejos" id="desejos" hidden aria-labelledby="tDes">
+  <h2 id="tDes">O que cada um gostaria de ganhar</h2>
+  <p>Sugestões de quem participa do amigo secreto. Ainda não colocou a sua? Preencha ao lado com o mesmo e-mail da inscrição.</p>
+  <div class="dgrid" id="dgrid"></div>
+</section>
 <div class="orgbtn"><button type="button" id="abreOrg">Área da organização</button></div>
 <section class="org" id="org" hidden aria-labelledby="tOrg">
   <h2 id="tOrg">Lista de confirmação (organização)</h2>
@@ -156,6 +168,9 @@ button.envia:disabled{opacity:.6;cursor:default}
     const chips=$('#chips'); chips.innerHTML='';
     if(!lista.length){const s=document.createElement('span');s.textContent='Ninguém ainda. Seja o primeiro!';chips.appendChild(s);return;}
     lista.forEach(x=>{const s=document.createElement('span');s.textContent=(x.nome||'').split(' ')[0]||'Participante';if(x.amigo)s.className='as';chips.appendChild(s);});
+    const ds=lista.filter(x=>x.amigo&&(x.desejo||'').trim()), g=$('#dgrid'); g.innerHTML='';
+    ds.forEach(x=>{const c=document.createElement('div');c.className='dcard';const b=document.createElement('b');b.textContent=x.nome;const t=document.createElement('span');t.textContent=x.desejo.trim();c.append(b,t);g.appendChild(c);});
+    $('#desejos').hidden=!ds.length;
   }
   function carrega(){ return rpc('amigo_publico').then(desenha).catch(()=>{}); }
   carrega(); setInterval(carrega,30000);
